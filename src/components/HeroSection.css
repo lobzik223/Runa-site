@@ -23,11 +23,33 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  pointer-events: none;
+  pointer-events: none !important;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Абсолютное скрытие всех элементов управления */
+.hero-video video::-webkit-media-controls,
+.hero-video video::-webkit-media-controls-enclosure,
+.hero-video video::-webkit-media-controls-panel,
+.hero-video video::-webkit-media-controls-play-button,
+.hero-video video::-webkit-media-controls-start-playback-button,
+.hero-video video::-webkit-media-controls-timeline,
+.hero-video video::-webkit-media-controls-current-time-display,
+.hero-video video::-webkit-media-controls-time-remaining-display,
+.hero-video video::-webkit-media-controls-mute-button,
+.hero-video video::-webkit-media-controls-volume-slider,
+.hero-video video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Скрытие элементов управления плеера */
@@ -97,8 +119,21 @@
   width: 100%;
   height: 100%;
   background: rgba(120, 143, 172, 0.1);
-  z-index: 1;
+  z-index: 10;
   pointer-events: none;
+}
+
+/* Скрытие любых элементов управления поверх видео */
+.hero-video-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  background: transparent;
 }
 
 /* Адаптивность для мобильных устройств */
@@ -112,7 +147,7 @@
     top: 60px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 75%;
     height: 60vh;
     min-height: 400px;
   }
@@ -135,7 +170,7 @@
     top: 50px;
     left: 50%;
     transform: translateX(-50%);
-    width: 85%;
+    width: 70%;
     height: 50vh;
     min-height: 350px;
   }
@@ -157,7 +192,7 @@
     top: 40px;
     left: 50%;
     transform: translateX(-50%);
-    width: 85%;
+    width: 70%;
     height: 45vh;
     min-height: 300px;
   }
