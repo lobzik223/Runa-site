@@ -9,11 +9,20 @@ const HeroSection: React.FC = () => {
     const video = videoRef.current;
     if (!video) return;
 
+    // Убеждаемся, что элементы управления скрыты
+    video.controls = false;
+    video.setAttribute('controls', 'false');
+
     // Функция для запуска видео
     const playVideo = () => {
       video.play().catch(() => {
         // Игнорируем ошибки автоплея
       });
+    };
+
+    // Обработчик загрузки видео
+    const handleLoadedData = () => {
+      playVideo();
     };
 
     // Обработчик взаимодействия пользователя
@@ -38,9 +47,12 @@ const HeroSection: React.FC = () => {
     const handlePause = () => {
       playVideo();
     };
+
+    video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('pause', handlePause);
 
     return () => {
+      video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('pause', handlePause);
       document.removeEventListener('touchstart', handleUserInteraction);
       document.removeEventListener('click', handleUserInteraction);
@@ -58,6 +70,9 @@ const HeroSection: React.FC = () => {
           muted
           playsInline
           preload="auto"
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           onError={(e) => {
             console.error('Ошибка загрузки видео:', e);
           }}
