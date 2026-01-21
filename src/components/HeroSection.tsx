@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import './HeroSection.css';
-import videoSrc from '../mov/sss.mp4';
+import videoSrc from '../mov/intro.mov';
 
 const HeroSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,7 +59,7 @@ const HeroSection: React.FC = () => {
           playsInline
           preload="auto"
         >
-          <source src={videoSrc} type="video/mp4" />
+          <source src={videoSrc} type="video/quicktime" />
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
