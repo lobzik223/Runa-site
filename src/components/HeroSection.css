@@ -136,26 +136,25 @@
   background: transparent;
 }
 
-/* МОБИЛЬНАЯ ВЕРСИЯ - УМЕНЬШЕННОЕ ВИДЕО БЕЗ КОНТРОЛОВ */
+/* МОБИЛЬНАЯ ВЕРСИЯ - ВИДЕО НА ВСЮ ШИРИНУ С ОТСТУПАМИ, ПОДНЯТО ВЫШЕ */
 @media (max-width: 768px) {
   .hero-section {
     padding-top: 60px;
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding-top: 60px;
   }
   
   .hero-video-container {
     position: relative;
-    width: 85%;
-    max-width: 500px;
-    height: 60vh;
-    max-height: 500px;
-    margin: 0 auto;
-    border-radius: 12px;
+    width: calc(100% - 32px);
+    margin: 20px 16px 0 16px;
+    height: 50vh;
+    min-height: 300px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 0;
   }
   
   .hero-video {
@@ -164,9 +163,10 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    pointer-events: none !important;
   }
   
-  /* АГРЕССИВНОЕ СКРЫТИЕ ВСЕХ КОНТРОЛОВ НА МОБИЛЬНЫХ - МАКСИМАЛЬНАЯ ЗАЩИТА */
+  /* АГРЕССИВНОЕ СКРЫТИЕ ВСЕХ КОНТРОЛОВ НА МОБИЛЬНЫХ - МАКСИМАЛЬНАЯ ЗАЩИТА ДЛЯ SAFARI И CHROME */
   .hero-video::-webkit-media-controls,
   .hero-video::-webkit-media-controls-enclosure,
   .hero-video::-webkit-media-controls-panel,
@@ -181,7 +181,8 @@
   .hero-video-container video::-webkit-media-controls,
   .hero-video-container video::-webkit-media-controls-enclosure,
   .hero-video-container video::-webkit-media-controls-panel,
-  .hero-video-container video::-webkit-media-controls-play-button {
+  .hero-video-container video::-webkit-media-controls-play-button,
+  .hero-video-container video::-webkit-media-controls-start-playback-button {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
@@ -192,6 +193,8 @@
     left: -9999px !important;
     top: -9999px !important;
     z-index: -9999 !important;
+    clip-path: inset(100%) !important;
+    clip: rect(0, 0, 0, 0) !important;
   }
   
   /* Дополнительное скрытие через псевдоэлементы */
@@ -202,11 +205,18 @@
   
   /* Скрытие любых кнопок внутри видео */
   .hero-video button,
-  .hero-video-container button {
+  .hero-video-container button,
+  .hero-video [role="button"],
+  .hero-video-container [role="button"] {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
   }
   
   /* Скрытие overlay на мобильных */
@@ -222,26 +232,29 @@
   }
   
   .hero-video-container {
-    width: 75%;
-    height: 50vh;
-    max-height: 400px;
+    width: calc(100% - 24px);
+    margin: 16px 12px 0 12px;
+    height: 45vh;
+    min-height: 280px;
   }
 }
 
 /* Очень маленькие экраны */
 @media (max-width: 360px) {
   .hero-video-container {
-    width: 70%;
-    height: 45vh;
-    max-height: 350px;
+    width: calc(100% - 20px);
+    margin: 12px 10px 0 10px;
+    height: 40vh;
+    min-height: 250px;
   }
 }
 
 /* Альбомная ориентация на мобильных */
 @media (orientation: landscape) and (max-width: 768px) {
   .hero-video-container {
-    width: 70%;
-    height: 70vh;
-    max-height: 400px;
+    width: calc(100% - 32px);
+    margin: 16px 16px 0 16px;
+    height: 60vh;
+    min-height: 300px;
   }
 }
