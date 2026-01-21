@@ -1,0 +1,128 @@
+.hero-section {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #788FAC;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(120, 143, 172, 0.1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Адаптивность для разных размеров экранов */
+@media (max-width: 1920px) {
+  .hero-video {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .hero-video {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-video {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 100vh;
+    padding-top: 60px;
+  }
+  
+  .hero-video-container {
+    height: 100vh;
+  }
+  
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    min-height: 100vh;
+    padding-top: 60px;
+  }
+  
+  .hero-video-container {
+    height: 100vh;
+  }
+  
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-section {
+    min-height: 100vh;
+  }
+  
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Портретная ориентация для мобильных */
+@media (orientation: portrait) and (max-width: 768px) {
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+/* Альбомная ориентация для мобильных */
+@media (orientation: landscape) and (max-height: 600px) {
+  .hero-video-container {
+    height: 100vh;
+  }
+  
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
