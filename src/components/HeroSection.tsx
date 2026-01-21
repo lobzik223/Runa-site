@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import './HeroSection.css';
-import videoSrc from '../mov/intro.mov';
+import videoSrc from '../mov/intro1.mov';
 
 const HeroSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
