@@ -1,7 +1,16 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Проверка существования dist папки при запуске
+const distPath = path.join(__dirname, 'dist');
+if (!fs.existsSync(distPath)) {
+  console.error('❌ ОШИБКА: Папка dist не найдена!');
+  console.error('📦 Запустите: npm run build');
+  process.exit(1);
+}
 
 // Правильные MIME типы
 express.static.mime.define({
@@ -21,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 // Раздача статических файлов из папки dist
-app.use(express.static(path.join(__dirname, 'dist'), {
+app.use(express.static(distPath, {
   maxAge: '1y',
   etag: true,
   lastModified: true,
@@ -44,12 +53,22 @@ app.use(express.static(path.join(__dirname, 'dist'), {
 }));
 
 // Все маршруты ведут на index.html (для SPA)
-app.get('*', (req, res, next) => {
-  const filePath = path.join(__dirname, 'dist', 'index.html');
+// express.static уже обработал все статические файлы, поэтому сюда попадут только HTML маршруты
+app.get('*', (req, res) => {
+  const filePath = path.join(distPath, 'index.html');
+  
+  // Проверка существования файла
+  if (!fs.existsSync(filePath)) {
+    console.error(`❌ Файл не найден: ${filePath}`);
+    return res.status(500).send('Ошибка: файл index.html не найден. Запустите: npm run build');
+  }
+  
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Ошибка отправки index.html:', err);
-      res.status(500).send('Ошибка загрузки страницы');
+      if (!res.headersSent) {
+        res.status(500).send('Ошибка загрузки страницы');
+      }
     }
   });
 });
@@ -63,5 +82,13 @@ app.use((err, req, res, next) => {
 app.listen(PORT, 'localhost', () => {
   console.log(`🚀 Сервер запущен на http://localhost:${PORT}`);
   console.log(`📦 Окружение: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📁 Статические файлы из: ${path.join(__dirname, 'dist')}`);
+  console.log(`📁 Статические файлы из: ${distPath}`);
+  
+  // Проверка наличия index.html
+  const indexPath = path.join(distPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    console.log(`✅ index.html найден`);
+  } else {
+    console.error(`❌ index.html НЕ найден! Запустите: npm run build`);
+  }
 });
