@@ -58,8 +58,12 @@ const HeroSection: React.FC = () => {
           muted
           playsInline
           preload="auto"
+          onError={(e) => {
+            console.error('Ошибка загрузки видео:', e);
+          }}
         >
           <source src={videoSrc} type="video/quicktime" />
+          <source src={videoSrc} type="video/mp4" />
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
