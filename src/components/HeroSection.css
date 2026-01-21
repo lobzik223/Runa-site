@@ -33,21 +33,60 @@
 /* Скрытие элементов управления плеера */
 .hero-video::-webkit-media-controls {
   display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .hero-video::-webkit-media-controls-enclosure {
   display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .hero-video::-webkit-media-controls-panel {
   display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .hero-video::-webkit-media-controls-play-button {
   display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .hero-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.hero-video::-webkit-media-controls-timeline {
+  display: none !important;
+}
+
+.hero-video::-webkit-media-controls-current-time-display {
+  display: none !important;
+}
+
+.hero-video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+}
+
+.hero-video::-webkit-media-controls-mute-button {
+  display: none !important;
+}
+
+.hero-video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+.hero-video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
+
+/* Для Firefox */
+.hero-video::-moz-media-controls {
   display: none !important;
 }
 
@@ -71,8 +110,9 @@
   .hero-video-container {
     position: absolute;
     top: 60px;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
     height: 60vh;
     min-height: 400px;
   }
@@ -93,6 +133,9 @@
   
   .hero-video-container {
     top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
     height: 50vh;
     min-height: 350px;
   }
@@ -112,6 +155,9 @@
   
   .hero-video-container {
     top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
     height: 45vh;
     min-height: 300px;
   }
