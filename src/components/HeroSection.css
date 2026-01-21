@@ -5,26 +5,22 @@
   padding-top: 80px;
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .hero-video-container {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 100%;
-  height: 70vh;
-  max-height: 800px;
+  height: 100vh;
   overflow: hidden;
   z-index: 0;
-  margin: 0 auto;
 }
 
 .hero-video {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   display: block;
 }
@@ -40,31 +36,26 @@
   pointer-events: none;
 }
 
-/* Адаптивность для планшетов */
-@media (max-width: 1024px) {
-  .hero-video-container {
-    height: 60vh;
-    max-height: 600px;
-  }
-}
-
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .hero-section {
-    min-height: auto;
     padding-top: 60px;
-    padding-bottom: 40px;
   }
   
   .hero-video-container {
-    height: 50vh;
-    max-height: 500px;
-    width: 95%;
-    margin: 0 auto;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    min-height: 400px;
   }
   
   .hero-video {
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 }
 
@@ -72,17 +63,18 @@
 @media (max-width: 480px) {
   .hero-section {
     padding-top: 50px;
-    padding-bottom: 30px;
   }
   
   .hero-video-container {
-    height: 40vh;
-    max-height: 400px;
-    width: 100%;
+    top: 50px;
+    height: calc(100vh - 50px);
+    min-height: 350px;
   }
   
   .hero-video {
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -90,42 +82,40 @@
 @media (max-width: 360px) {
   .hero-section {
     padding-top: 40px;
-    padding-bottom: 20px;
   }
   
   .hero-video-container {
-    height: 35vh;
-    max-height: 350px;
+    top: 40px;
+    height: calc(100vh - 40px);
+    min-height: 300px;
   }
 }
 
 /* Портретная ориентация для мобильных */
 @media (orientation: portrait) and (max-width: 768px) {
   .hero-video-container {
-    height: 45vh;
-    max-height: 450px;
+    width: 100%;
+    height: calc(100vh - 60px);
   }
   
   .hero-video {
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     object-position: center;
   }
 }
 
 /* Альбомная ориентация для мобильных */
 @media (orientation: landscape) and (max-height: 600px) {
-  .hero-section {
-    min-height: auto;
-    padding-top: 60px;
-    padding-bottom: 20px;
-  }
-  
   .hero-video-container {
-    height: 70vh;
-    max-height: 500px;
+    height: 100vh;
+    top: 0;
   }
   
   .hero-video {
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
