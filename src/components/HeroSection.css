@@ -5,22 +5,26 @@
   padding-top: 80px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-video-container {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  max-width: 100%;
+  height: 70vh;
+  max-height: 800px;
   overflow: hidden;
   z-index: 0;
+  margin: 0 auto;
 }
 
 .hero-video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
@@ -36,93 +40,92 @@
   pointer-events: none;
 }
 
-/* Адаптивность для разных размеров экранов */
-@media (max-width: 1920px) {
-  .hero-video {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-@media (max-width: 1440px) {
-  .hero-video {
-    width: 100%;
-    height: 100%;
-  }
-}
-
+/* Адаптивность для планшетов */
 @media (max-width: 1024px) {
-  .hero-video {
-    width: 100%;
-    height: 100%;
+  .hero-video-container {
+    height: 60vh;
+    max-height: 600px;
   }
 }
 
+/* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .hero-section {
-    min-height: 100vh;
+    min-height: auto;
     padding-top: 60px;
+    padding-bottom: 40px;
   }
   
   .hero-video-container {
-    height: 100vh;
+    height: 50vh;
+    max-height: 500px;
+    width: 95%;
+    margin: 0 auto;
   }
   
   .hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 
+/* Маленькие мобильные устройства */
 @media (max-width: 480px) {
   .hero-section {
-    min-height: 100vh;
-    padding-top: 60px;
+    padding-top: 50px;
+    padding-bottom: 30px;
   }
   
   .hero-video-container {
-    height: 100vh;
+    height: 40vh;
+    max-height: 400px;
+    width: 100%;
   }
   
   .hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 
+/* Очень маленькие экраны */
 @media (max-width: 360px) {
   .hero-section {
-    min-height: 100vh;
+    padding-top: 40px;
+    padding-bottom: 20px;
   }
   
-  .hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .hero-video-container {
+    height: 35vh;
+    max-height: 350px;
   }
 }
 
 /* Портретная ориентация для мобильных */
 @media (orientation: portrait) and (max-width: 768px) {
+  .hero-video-container {
+    height: 45vh;
+    max-height: 450px;
+  }
+  
   .hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
   }
 }
 
 /* Альбомная ориентация для мобильных */
 @media (orientation: landscape) and (max-height: 600px) {
+  .hero-section {
+    min-height: auto;
+    padding-top: 60px;
+    padding-bottom: 20px;
+  }
+  
   .hero-video-container {
-    height: 100vh;
+    height: 70vh;
+    max-height: 500px;
   }
   
   .hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
