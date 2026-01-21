@@ -1,5 +1,6 @@
 import React from 'react';
 import './HeroSection.css';
+import videoSrc from '../mov/sss.mp4';
 
 const HeroSection: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ const HeroSection: React.FC = () => {
           playsInline
           preload="auto"
         >
-          <source src="/src/mov/sss.mp4" type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
