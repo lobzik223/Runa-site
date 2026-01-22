@@ -23,13 +23,8 @@ const App: React.FC = () => {
           </div>
           <aside className="feature-advantages">
             <div className="glass-block"></div>
-            <div className="advantages-content">
-              <h3>Преимущества</h3>
-              <ul>
-                <li>Простота и скорость</li>
-                <li>Полный контроль финансов</li>
-                <li>Персональные советы, а не шаблоны</li>
-              </ul>
+            <div className="advantages-image">
+              <img src="/mov/analitiklogo.png" alt="RUNA Analytics" className="analytics-logo" />
             </div>
           </aside>
         </section>

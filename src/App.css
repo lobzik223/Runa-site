@@ -68,6 +68,10 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 0 40px rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .glass-block {
@@ -83,40 +87,25 @@
   z-index: -1;
 }
 
-.advantages-content {
+.advantages-image {
   position: relative;
   z-index: 1;
-  text-align: right;
-}
-
-.advantages-content h3 {
-  font-size: 2rem;
-  margin-bottom: 24px;
-  text-align: right;
-}
-
-.advantages-content ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  text-align: right;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
 }
 
-.advantages-content li {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.9);
-  position: relative;
-  padding-right: 24px;
-}
-
-.advantages-content li::before {
-  content: '→';
-  position: absolute;
-  right: 0;
-  color: rgba(255, 255, 255, 0.5);
+.analytics-logo {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.4));
+  border-radius: 12px;
 }
 
 .runa-problems {
@@ -279,8 +268,7 @@
 
   .feature-advantages {
     padding: 32px 24px;
-    min-height: auto;
-    text-align: left;
+    min-height: 300px;
   }
 
   .glass-block {
@@ -290,31 +278,12 @@
     right: -15px;
   }
 
-  .advantages-content {
-    text-align: left;
+  .advantages-image {
+    padding: 16px;
   }
 
-  .advantages-content h3 {
-    font-size: 1.6rem;
-    margin-bottom: 20px;
-    text-align: left;
-  }
-
-  .advantages-content ul {
-    text-align: left;
-    gap: 14px;
-  }
-
-  .advantages-content li {
-    font-size: 1rem;
-    padding-right: 0;
-    padding-left: 24px;
-  }
-
-  .advantages-content li::before {
-    content: '→';
-    left: 0;
-    right: auto;
+  .analytics-logo {
+    max-width: 100%;
   }
 
   .pricing-card {
