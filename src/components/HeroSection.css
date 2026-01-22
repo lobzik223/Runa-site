@@ -139,12 +139,13 @@
 /* МОБИЛЬНАЯ ВЕРСИЯ - ВИДЕО НА ВСЮ ШИРИНУ С ОТСТУПАМИ, ПОДНЯТО ВЫШЕ */
 @media (max-width: 768px) {
   .hero-section {
-    padding-top: 60px;
+    padding-top: 80px;
     min-height: 100vh;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 60px;
+    position: relative;
+    z-index: 1;
   }
   
   .hero-video-container {
@@ -155,6 +156,7 @@
     min-height: 300px;
     overflow: hidden;
     border-radius: 0;
+    z-index: 1;
   }
   
   .hero-video {
@@ -228,7 +230,7 @@
 /* Маленькие мобильные устройства */
 @media (max-width: 480px) {
   .hero-section {
-    padding-top: 56px;
+    padding-top: 76px;
   }
   
   .hero-video-container {
