@@ -109,14 +109,23 @@
 @media (max-width: 768px) {
   .header {
     padding: 16px 20px;
-    z-index: 1000;
-    background: rgba(120, 143, 172, 0.95);
+    z-index: 1000 !important;
+    background: rgba(120, 143, 172, 0.95) !important;
     backdrop-filter: blur(10px) saturate(150%);
     -webkit-backdrop-filter: blur(10px) saturate(150%);
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   .header-container {
     gap: 20px;
+    display: flex !important;
+    visibility: visible !important;
   }
   
   .header-nav {
@@ -124,28 +133,45 @@
     display: none;
   }
   
+  .header-logo {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  
   .logo-image {
     height: 24px;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   .header-download-btn {
     padding: 10px 20px;
     font-size: 14px;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
 
 @media (max-width: 480px) {
   .header {
     padding: 14px 16px;
-    background: rgba(120, 143, 172, 0.95);
+    background: rgba(120, 143, 172, 0.95) !important;
+    display: block !important;
+    visibility: visible !important;
   }
   
   .logo-image {
     height: 20px;
+    display: block !important;
+    visibility: visible !important;
   }
   
   .header-download-btn {
     padding: 8px 16px;
     font-size: 13px;
+    display: block !important;
+    visibility: visible !important;
   }
 }

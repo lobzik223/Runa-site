@@ -7,6 +7,14 @@
   overflow: hidden;
 }
 
+/* Мобильная версия - убираем overflow hidden чтобы контент был виден */
+@media (max-width: 768px) {
+  .hero-section {
+    overflow: visible;
+    overflow-x: hidden;
+  }
+}
+
 .hero-video-container {
   position: absolute;
   top: 0;
@@ -141,31 +149,37 @@
   .hero-section {
     padding-top: 80px;
     min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    display: block;
     position: relative;
     z-index: 1;
+    overflow: visible;
   }
   
   .hero-video-container {
-    position: relative;
-    width: calc(100% - 32px);
-    margin: 20px 16px 0 16px;
-    height: 50vh;
-    min-height: 300px;
+    position: relative !important;
+    width: calc(100% - 32px) !important;
+    margin: 20px 16px 0 16px !important;
+    height: 50vh !important;
+    min-height: 300px !important;
     overflow: hidden;
     border-radius: 0;
-    z-index: 1;
+    z-index: 2 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   .hero-video {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     object-fit: cover;
     object-position: center;
-    display: block;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     pointer-events: none !important;
+    position: relative !important;
+    z-index: 1 !important;
   }
   
   /* АГРЕССИВНОЕ СКРЫТИЕ ВСЕХ КОНТРОЛОВ НА МОБИЛЬНЫХ - МАКСИМАЛЬНАЯ ЗАЩИТА ДЛЯ SAFARI И CHROME */
@@ -225,29 +239,55 @@
   .hero-video-overlay {
     display: none;
   }
+  
+  /* Убираем псевдоэлемент который может скрывать контент */
+  .hero-video-container::before {
+    display: none !important;
+  }
 }
 
 /* Маленькие мобильные устройства */
 @media (max-width: 480px) {
   .hero-section {
     padding-top: 76px;
+    display: block !important;
+    visibility: visible !important;
   }
   
   .hero-video-container {
-    width: calc(100% - 24px);
-    margin: 16px 12px 0 12px;
-    height: 45vh;
-    min-height: 280px;
+    width: calc(100% - 24px) !important;
+    margin: 16px 12px 0 12px !important;
+    height: 45vh !important;
+    min-height: 280px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+  
+  .hero-video {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
 
 /* Очень маленькие экраны */
 @media (max-width: 360px) {
   .hero-video-container {
-    width: calc(100% - 20px);
-    margin: 12px 10px 0 10px;
-    height: 40vh;
-    min-height: 250px;
+    width: calc(100% - 20px) !important;
+    margin: 12px 10px 0 10px !important;
+    height: 40vh !important;
+    min-height: 250px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .hero-video {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
 

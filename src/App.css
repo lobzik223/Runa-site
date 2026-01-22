@@ -3,4 +3,13 @@
   min-height: 100vh;
   background-color: #788FAC;
   position: relative;
+  overflow-x: hidden;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .app {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }
