@@ -36,7 +36,6 @@ const HeroSection: React.FC = () => {
           playsInline
           webkit-playsinline="true"
           preload="auto"
-          muted={true}
         >
           <source src={videoSrc} type="video/mp4" />
           Ваш браузер не поддерживает видео.

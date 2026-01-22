@@ -5,10 +5,9 @@
   right: 0;
   z-index: 1000;
   padding: 20px 40px;
-  background: rgba(120, 143, 172, 0.8); /* Полупрозрачный фон для видимости */
+  background: rgba(120, 143, 172, 0.9);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
 }
 
 .header-container {
@@ -31,7 +30,6 @@
   border: none;
   border-radius: 8px;
   font-weight: 600;
-  cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -40,15 +38,10 @@
   }
   
   .header-nav {
-    display: none; /* Скрываем меню на мобильных, если нет бургера */
+    display: none;
   }
 
   .logo-image {
     height: 22px;
-  }
-
-  .header-download-btn {
-    padding: 8px 16px;
-    font-size: 14px;
   }
 }
