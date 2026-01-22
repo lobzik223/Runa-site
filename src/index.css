@@ -21,6 +21,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Фон для области статус-бара на мобильных */
+@supports (padding: env(safe-area-inset-top)) {
+  @media (max-width: 768px) {
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: env(safe-area-inset-top);
+      background: rgba(120, 143, 172, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 999;
+      pointer-events: none;
+    }
+  }
+}
+
 #root {
   width: 100%;
 }

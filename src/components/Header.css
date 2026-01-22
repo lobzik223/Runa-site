@@ -11,6 +11,20 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
+/* Фон для области статус-бара на мобильных (время, Wi-Fi) */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top);
+  background: rgba(120, 143, 172, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
 .header-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -38,6 +52,14 @@
     padding: 12px 20px;
     padding-top: calc(12px + env(safe-area-inset-top));
     background: rgba(120, 143, 172, 0.65);
+  }
+  
+  /* Фон для области статус-бара на мобильных - такой же как шапка */
+  .header::before {
+    height: env(safe-area-inset-top);
+    background: rgba(120, 143, 172, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   
   .header-nav {
