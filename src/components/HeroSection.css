@@ -46,7 +46,7 @@ video::-webkit-media-controls-start-playback-button {
 /* Мобильная адаптация */
 @media (max-width: 768px) {
   .hero-section {
-    padding-top: 50px;
+    padding-top: calc(40px + env(safe-area-inset-top));
     min-height: 100vh;
   }
 
@@ -61,5 +61,18 @@ video::-webkit-media-controls-start-playback-button {
 
   .hero-video {
     border-radius: 0;
+  }
+}
+
+/* Поддержка safe-area для iOS Safari */
+@supports (padding: max(0px)) {
+  @media (max-width: 768px) {
+    .header {
+      padding-top: max(12px, env(safe-area-inset-top));
+    }
+    
+    .hero-section {
+      padding-top: max(40px, calc(40px + env(safe-area-inset-top)));
+    }
   }
 }
