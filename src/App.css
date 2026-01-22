@@ -52,10 +52,19 @@
   line-height: 1.2;
 }
 
+.runa-intro h2 .accent {
+  color: #b96742;
+}
+
 .runa-intro .description {
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
   font-size: 1.1rem;
+}
+
+.runa-intro .description .accent {
+  color: #b96742;
+  font-weight: 600;
 }
 
 .feature-advantages {
@@ -95,6 +104,10 @@
   text-align: right;
 }
 
+.advantages-content h3 .accent {
+  color: #b96742;
+}
+
 .advantages-content ul {
   list-style: none;
   padding: 0;
@@ -116,7 +129,7 @@
   content: '→';
   position: absolute;
   right: 0;
-  color: rgba(255, 255, 255, 0.5);
+  color: #b96742;
 }
 
 .runa-problems {
@@ -130,6 +143,10 @@
 .runa-problems h2 {
   margin-bottom: 24px;
   font-size: clamp(2rem, 4vw, 2.7rem);
+}
+
+.runa-problems h2 .accent {
+  color: #b96742;
 }
 
 .problem-grid {
@@ -167,6 +184,10 @@
   margin-bottom: 12px;
 }
 
+.pricing-card h2 .accent {
+  color: #b96742;
+}
+
 .pricing-card p {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 24px;
@@ -189,8 +210,8 @@
 }
 
 .btn.primary {
-  background: #ffd166;
-  color: #0f1220;
+  background: #b96742;
+  color: #ffffff;
 }
 
 .btn.secondary {

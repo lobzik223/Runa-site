@@ -12,9 +12,9 @@ const App: React.FC = () => {
         <section className="runa-intro-features" id="about-runa">
           <div className="runa-intro">
             <p className="eyebrow">Что такое RUNA</p>
-            <h2>Умный финансовый помощник, созданный для вас</h2>
+            <h2>Умный финансовый <span className="accent">помощник</span>, созданный для вас</h2>
             <p className="description">
-              RUNA — это интеллектуальный финансовый инструмент, созданный для того, чтобы вы могли полностью
+              <span className="accent">RUNA</span> — это интеллектуальный финансовый инструмент, созданный для того, чтобы вы могли полностью
               контролировать свои деньги и принимать взвешенные решения. Приложение помогает отслеживать доходы
               и расходы, анализирует привычки и предлагает рекомендации по оптимизации бюджета.
               RUNA объединяет ключевые функции управления личными финансами: планирование бюджета,
@@ -24,7 +24,7 @@ const App: React.FC = () => {
           <aside className="feature-advantages">
             <div className="glass-block"></div>
             <div className="advantages-content">
-              <h3>Преимущества</h3>
+              <h3><span className="accent">Преимущества</span></h3>
               <ul>
                 <li>Простота и скорость</li>
                 <li>Полный контроль финансов</li>
@@ -36,7 +36,7 @@ const App: React.FC = () => {
 
         <section className="runa-problems" id="problems">
           <p className="eyebrow">Проблемы и потери</p>
-          <h2>Что теряют люди без контроля</h2>
+          <h2>Что теряют люди <span className="accent">без контроля</span></h2>
           <div className="problem-grid">
             {[
               'Без контроля бюджета вы теряете в среднем 7 500 ₽ в месяц',
@@ -54,7 +54,7 @@ const App: React.FC = () => {
 
         <section className="runa-pricing" id="pricing">
           <div className="pricing-card">
-            <h2>Попробуй RUNA бесплатно</h2>
+            <h2>Попробуй <span className="accent">RUNA</span> бесплатно</h2>
             <p>Бесплатный доступ на 3 дня. После — подписка всего X ₽/мес.</p>
             <div className="pricing-actions">
               <button className="btn primary">Попробовать бесплатно</button>

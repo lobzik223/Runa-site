@@ -34,6 +34,36 @@
   pointer-events: none;
 }
 
+.wave-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: 10;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.wave-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  animation: wave 20s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-25px);
+  }
+}
+
 /* Скрытие кнопок плеера в браузерах */
 video::-webkit-media-controls {
   display: none !important;
@@ -61,6 +91,14 @@ video::-webkit-media-controls-start-playback-button {
 
   .hero-video {
     border-radius: 0;
+  }
+
+  .wave-divider {
+    height: 80px;
+  }
+
+  .wave-svg {
+    height: 80px;
   }
 }
 

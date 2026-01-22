@@ -41,6 +41,11 @@ const HeroSection: React.FC = () => {
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
+        <div className="wave-divider">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="wave-svg">
+            <path d="M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z" fill="#788FAC" />
+          </svg>
+        </div>
       </div>
     </section>
   );
