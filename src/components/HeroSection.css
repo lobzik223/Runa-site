@@ -52,14 +52,14 @@ video::-webkit-media-controls-start-playback-button {
 
   .hero-video-container {
     position: relative;
-    height: 60vh;
-    width: calc(100% - 32px);
-    margin: 20px auto 0;
-    border-radius: 12px;
+    height: 45vh;
+    width: 100%;
+    margin: 10px 0 0 0;
+    border-radius: 0;
     z-index: 5;
   }
 
   .hero-video {
-    border-radius: 12px;
+    border-radius: 0;
   }
 }
