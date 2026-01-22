@@ -42,8 +42,8 @@ const HeroSection: React.FC = () => {
         </video>
         <div className="hero-video-overlay"></div>
         <div className="wave-divider">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="wave-svg">
-            <path d="M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z" fill="#788FAC" />
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="wave-svg">
+            <path d="M0,40 Q360,10 720,40 T1440,40 L1440,80 L0,80 Z" fill="#788FAC" />
           </svg>
         </div>
       </div>
