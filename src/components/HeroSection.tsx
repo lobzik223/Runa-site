@@ -128,10 +128,9 @@ const HeroSection: React.FC = () => {
       const savedHideControls = hideControlsInDOM;
       
       // Добавляем в cleanup массив
-      if (isMobile) {
-        (events as any).__hideControls = savedHideControls;
-        (events as any).__animationFrameId = savedAnimationFrameId;
-      }
+      (events as any).__hideControls = savedHideControls;
+      (events as any).__animationFrameId = savedAnimationFrameId;
+    }
 
     // Функция для запуска видео
     const playVideo = async () => {
