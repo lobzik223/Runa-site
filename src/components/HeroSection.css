@@ -47,7 +47,7 @@ video::-webkit-media-controls-start-playback-button {
 @media (max-width: 768px) {
   .hero-section {
     padding-top: calc(40px + env(safe-area-inset-top));
-    min-height: 100vh;
+    min-height: 60vh;
   }
 
   .hero-video-container {
