@@ -38,19 +38,31 @@ app.use(express.static(distPath, {
     // Правильные Content-Type для разных файлов
     if (filePath.endsWith('.mov')) {
       res.setHeader('Content-Type', 'video/quicktime');
+      // Включаем Range requests для видео
+      res.setHeader('Accept-Ranges', 'bytes');
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
     } else if (filePath.endsWith('.mp4')) {
       res.setHeader('Content-Type', 'video/mp4');
+      // Включаем Range requests для видео
+      res.setHeader('Accept-Ranges', 'bytes');
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    } else if (filePath.endsWith('.webm')) {
+      res.setHeader('Content-Type', 'video/webm');
+      res.setHeader('Accept-Ranges', 'bytes');
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
     } else if (filePath.endsWith('.js')) {
       res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     } else if (filePath.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
     // Для HTML файлов отключаем Range-запросы
     if (filePath.endsWith('.html')) {
       res.removeHeader('Accept-Ranges');
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    } else {
-      // Кеширование для статических файлов
+    } else if (!filePath.match(/\.(mov|mp4|webm)$/i)) {
+      // Кеширование для остальных статических файлов
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
   }

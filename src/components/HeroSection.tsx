@@ -83,7 +83,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
         >
           <source src={videoSrc} type="video/mp4" />
           Ваш браузер не поддерживает видео.
