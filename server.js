@@ -90,7 +90,26 @@ app.listen(PORT, '0.0.0.0', () => {
   const indexPath = path.join(distPath, 'index.html');
   if (fs.existsSync(indexPath)) {
     console.log(`✅ index.html найден`);
+    const stats = fs.statSync(indexPath);
+    console.log(`📄 Размер index.html: ${(stats.size / 1024).toFixed(2)} KB`);
   } else {
     console.error(`❌ index.html НЕ найден! Запустите: npm run build`);
+    console.error(`📁 Проверьте путь: ${indexPath}`);
   }
+  
+  // Проверка доступности файлов
+  const filesToCheck = ['index.html', 'assets'];
+  filesToCheck.forEach(file => {
+    const filePath = path.join(distPath, file);
+    if (fs.existsSync(filePath)) {
+      console.log(`✅ ${file} существует`);
+    } else {
+      console.warn(`⚠️  ${file} не найден`);
+    }
+  });
+  
+  console.log(`\n🔍 Для диагностики 404 ошибки:`);
+  console.log(`   1. Проверьте: curl http://localhost:${PORT}`);
+  console.log(`   2. Проверьте логи: pm2 logs runa-site`);
+  console.log(`   3. Проверьте Nginx: sudo nginx -t && sudo systemctl status nginx`);
 });
