@@ -201,16 +201,16 @@ const App: React.FC = () => {
               // Позиционирование карточек на ПК:
               // index 0: "Потери бюджета" - колонка 1, строка 1
               // index 1: "Импульсивные траты" - колонка 2, строка 1
-              // index 2: "Незнание о расходах" - колонка 2, строка 2 (под "Импульсивные траты")
-              // index 3: "Перерасход" - колонка 3, строка 2 (правый угол)
+              // index 2: "Незнание о расходах" - колонка 1, строка 2 (под "Потери бюджета")
+              // index 3: "Перерасход" - колонка 2, строка 2 (под "Импульсивные траты")
               if (index === 0) {
                 gridClass = 'problem-card-pos-1-1';
               } else if (index === 1) {
                 gridClass = 'problem-card-pos-2-1';
               } else if (index === 2) {
-                gridClass = 'problem-card-pos-2-2';
+                gridClass = 'problem-card-pos-1-2';
               } else if (index === 3) {
-                gridClass = 'problem-card-pos-3-2';
+                gridClass = 'problem-card-pos-2-2';
               }
               
               return (
