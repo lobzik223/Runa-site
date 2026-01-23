@@ -1,9 +1,9 @@
 .hero-section {
   width: 100%;
   min-height: 100vh;
-  background-color: #788FAC;
+  background-color: #768993;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: block;
 }
 
@@ -29,31 +29,22 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(120, 143, 172, 0.1);
+  background: rgba(118, 137, 147, 0.1);
   z-index: 2;
   pointer-events: none;
 }
 
-.wave-divider {
+.hero-gradient-transition {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: clamp(50px, 6vw, 100px);
-  z-index: 10;
+  height: clamp(80px, 12vw, 150px);
+  background: linear-gradient(to bottom, transparent 0%, #768993 100%);
+  z-index: 3;
   pointer-events: none;
-  overflow: hidden;
 }
 
-.wave-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  min-height: 50px;
-}
 
 /* Скрытие кнопок плеера в браузерах */
 video::-webkit-media-controls {
@@ -84,13 +75,10 @@ video::-webkit-media-controls-start-playback-button {
     border-radius: 0;
   }
 
-  .wave-divider {
-    height: clamp(40px, 5vw, 70px);
+  .hero-gradient-transition {
+    height: clamp(60px, 10vw, 120px);
   }
-  
-  .wave-svg {
-    min-height: 40px;
-  }
+
 }
 
 /* Поддержка safe-area для iOS Safari */

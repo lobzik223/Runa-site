@@ -16,7 +16,7 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  background-color: #788FAC;
+  background-color: #768993;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -31,7 +31,7 @@ body {
       left: 0;
       right: 0;
       height: env(safe-area-inset-top);
-      background: rgba(120, 143, 172, 0.65);
+      background: rgba(118, 137, 147, 0.65);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       z-index: 999;
