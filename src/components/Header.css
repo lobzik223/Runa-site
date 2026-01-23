@@ -33,6 +33,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .logo-image {
@@ -48,36 +49,37 @@
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 32px; /* Нормальное расстояние между ссылками */
 }
 
 .nav-link {
-  color: #EDE5D0;
-  text-decoration: none;
+  color: #EDE5D0 !important; /* Нормальный цвет текста - кремовый (белый) */
+  text-decoration: none !important; /* Убираем подчеркивания */
   font-size: 15px;
   font-weight: 500;
   padding: 6px 0;
   position: relative;
-  transition: color 0.3s ease;
+  transition: opacity 0.3s ease;
+  white-space: nowrap; /* Предотвращаем перенос текста */
+}
+
+/* Убираем все цветовые состояния ссылок - только белый цвет */
+.nav-link:link,
+.nav-link:visited,
+.nav-link:active,
+.nav-link:focus {
+  color: #EDE5D0 !important;
+  text-decoration: none !important;
 }
 
 .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: rgba(237, 229, 208, 0.8);
-  transition: width 0.3s ease;
+  display: none !important; /* Убираем подчеркивание при hover */
 }
 
 .nav-link:hover {
-  color: #EDE5D0;
-}
-
-.nav-link:hover::after {
-  width: 100%;
+  color: #EDE5D0 !important;
+  opacity: 0.8; /* Легкое затемнение при hover */
+  text-decoration: none !important;
 }
 
 .header-download-btn {
@@ -102,6 +104,20 @@
 .header-download-btn:active {
   transform: translateY(0);
   background: rgba(255, 255, 255, 0.9);
+}
+
+/* Гамбургер-меню - скрыто на ПК */
+.header-menu-btn {
+  display: none;
+}
+
+/* Мобильное меню и оверлей - скрыты на ПК */
+.mobile-menu {
+  display: none !important;
+}
+
+.mobile-menu-overlay {
+  display: none !important;
 }
 
 @media (max-width: 768px) {
@@ -139,7 +155,104 @@
   }
   
   .header-download-btn {
-    padding: 6px 14px;
-    font-size: 12px;
+    display: none !important; /* Скрываем кнопку "Скачать" на мобильной версии */
+  }
+
+  /* Гамбургер-меню */
+  .header-menu-btn {
+    display: flex !important; /* Показываем гамбургер-меню на мобильной версии */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    position: relative;
+    gap: 5px;
+  }
+
+  .menu-line {
+    width: 100%;
+    height: 3px;
+    background: #EDE5D0;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .menu-line-open:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+  }
+
+  .menu-line-open:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-line-open:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+
+  /* Выпадающее меню */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: rgba(118, 137, 147, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(237, 229, 208, 0.2);
+    padding: 80px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+  }
+
+  .mobile-menu-open {
+    right: 0;
+  }
+
+  .mobile-nav-link {
+    color: #EDE5D0;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(237, 229, 208, 0.15);
+    border: 1px solid rgba(237, 229, 208, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: block;
+    text-align: left;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link:active {
+    background: rgba(237, 229, 208, 0.25);
+    transform: translateX(4px);
+    border-color: rgba(237, 229, 208, 0.5);
+  }
+
+  /* Оверлей для закрытия меню */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
 }

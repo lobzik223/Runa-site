@@ -280,6 +280,62 @@ const App: React.FC = () => {
           </div>
         </section>
 
+        <section className="runa-why" id="why-runa">
+          <div className="eyebrow-widget">
+            <p className="eyebrow">Почему R<span className="logo-u">U</span>NA</p>
+          </div>
+          <h2>RUNA — это финансовый контроль, который работает за вас, а не требует дисциплины.</h2>
+          <p className="runa-why-desc">
+            Приложение анализирует ваши расходы, привычки и решения — и помогает тратить осознанно каждый день.
+          </p>
+
+          <div className="why-features">
+            {/* Контроль без усилий - текст слева, изображение справа */}
+            <div className="why-feature why-feature-left">
+              <div className="why-feature-content">
+                <h3>Контроль без усилий</h3>
+                <p>RUNA автоматически показывает, куда уходят деньги, и выделяет лишние траты — без ручного учёта и сложных таблиц.</p>
+              </div>
+              <div className="why-feature-image">
+                {/* Место для изображения */}
+              </div>
+            </div>
+
+            {/* Умные подсказки - изображение слева, текст справа */}
+            <div className="why-feature why-feature-right">
+              <div className="why-feature-image">
+                {/* Место для изображения */}
+              </div>
+              <div className="why-feature-content">
+                <h3>Умные подсказки</h3>
+                <p>AI анализирует ваши расходы и даёт персональные рекомендации: где можно сэкономить и как улучшить финансовый баланс.</p>
+              </div>
+            </div>
+
+            {/* Меньше импульса — больше пользы - текст слева, изображение справа */}
+            <div className="why-feature why-feature-left">
+              <div className="why-feature-content">
+                <h3>Меньше импульса — больше пользы</h3>
+                <p>RUNA помогает замечать импульсивные покупки и подписки до того, как они станут проблемой.</p>
+              </div>
+              <div className="why-feature-image">
+                {/* Место для изображения */}
+              </div>
+            </div>
+
+            {/* Прозрачность и уверенность - изображение слева, текст справа */}
+            <div className="why-feature why-feature-right">
+              <div className="why-feature-image">
+                {/* Место для изображения */}
+              </div>
+              <div className="why-feature-content">
+                <h3>Прозрачность и уверенность</h3>
+                <p>Вы всегда понимаете своё финансовое состояние и принимаете решения на основе данных, а не ощущений.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="runa-pricing" id="pricing">
           <div className="pricing-card">
             <h2>Попробуй R<span className="logo-u">U</span>NA бесплатно</h2>

@@ -286,6 +286,128 @@
   max-width: 640px;
 }
 
+/* Раздел "Почему RUNA" */
+.runa-why {
+  background: transparent;
+  border-radius: 22px;
+  padding: 32px;
+  margin-top: 64px;
+}
+
+.runa-why .eyebrow {
+  margin-bottom: 0;
+  color: #B16E4D;
+}
+
+.runa-why h2 {
+  margin-bottom: 16px;
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  color: #EDE5D0;
+  line-height: 1.3;
+}
+
+.runa-why-desc {
+  margin-bottom: 48px;
+  color: #EDE5D0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 800px;
+}
+
+.why-features {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.why-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 32px;
+  background: rgba(237, 229, 208, 0.15);
+  border-radius: 20px;
+  border: 1px solid rgba(237, 229, 208, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12),
+              inset 0 0 50px rgba(237, 229, 208, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.why-feature:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15),
+              inset 0 0 60px rgba(237, 229, 208, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.why-feature-left {
+  /* Текст слева, изображение справа - порядок по умолчанию */
+}
+
+.why-feature-right {
+  /* Изображение слева, текст справа - меняем порядок */
+}
+
+.why-feature-right .why-feature-content {
+  order: 2;
+}
+
+.why-feature-right .why-feature-image {
+  order: 1;
+}
+
+.why-feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.why-feature-content h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #B16E4D;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.why-feature-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #EDE5D0;
+  margin: 0;
+}
+
+.why-feature-image {
+  width: 100%;
+  height: 300px;
+  background: rgba(237, 229, 208, 0.1);
+  border-radius: 16px;
+  border: 2px dashed rgba(237, 229, 208, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.why-feature-image::before {
+  content: 'Изображение';
+  color: rgba(237, 229, 208, 0.4);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.why-feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: none; /* Скрываем пока нет изображения */
+}
+
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(260px, 1fr));
@@ -295,7 +417,7 @@
   justify-items: stretch;
   align-items: stretch;
   max-width: 1100px;
-  margin: 0 auto;
+  margin: 0 auto 0 8%;
   padding: 0 16px;
 }
 
@@ -830,7 +952,7 @@
     position: relative;
     width: 100%;
     margin: 0 auto;
-    margin-left: -15px; /* Сдвигаем карточку чуть левее для центрирования */
+    margin-left: -8vw; /* Сдвигаем карточку влево для центрирования */
     overflow: hidden;
     border-radius: 16px;
     touch-action: pan-x pan-y; /* Разрешаем горизонтальный и вертикальный свайп */
@@ -945,6 +1067,67 @@
   .problem-grid {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+
+  /* Раздел "Почему RUNA" - мобильная версия */
+  .runa-why {
+    padding: 24px 4vw;
+    margin-top: -20px !important; /* Отрицательный отступ, чтобы максимально сблизить с "Проблемы и потери" */
+    padding-top: 12px !important; /* Уменьшаем верхний padding для компенсации */
+    text-align: center; /* Центрируем весь контент как в "Проблемы и потери" */
+  }
+
+  /* Центрируем виджет "Почему RUNA" на мобильной версии */
+  .runa-why .eyebrow-widget {
+    display: inline-block !important;
+    margin: 0 auto 20px auto !important; /* Центрируем виджет по середине */
+    text-align: center;
+    width: fit-content;
+  }
+
+  .runa-why h2 {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .runa-why-desc {
+    text-align: center;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+  }
+
+  .why-features {
+    gap: 32px;
+  }
+
+  .why-feature {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .why-feature-right .why-feature-content,
+  .why-feature-right .why-feature-image {
+    order: 0; /* На мобильной версии порядок не важен, все вертикально */
+  }
+
+  .why-feature-content h3 {
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    text-align: center;
+  }
+
+  .why-feature-content p {
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .why-feature-image {
+    height: 200px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .problem-card-wide {
