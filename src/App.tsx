@@ -1,12 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
+import LoadingView from './components/LoadingView';
 import './App.css';
 
 const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
+
+  const handleVideoLoaded = () => {
+    // Небольшая задержка для плавного перехода
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  };
 
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
@@ -33,8 +42,9 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
+      <LoadingView isLoading={isLoading} />
       <Header />
-      <HeroSection />
+      <HeroSection onVideoLoaded={handleVideoLoaded} />
       <main className="page-content">
         <section className="runa-intro-features" id="about-runa" ref={introSectionRef}>
           <div className="eyebrow-widget">
