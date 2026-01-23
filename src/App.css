@@ -7,6 +7,19 @@
   overflow: hidden;
 }
 
+/* Плавный скролл для мобильной версии */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .logo-u {
   color: #B16E4D;
 }
@@ -578,17 +591,24 @@
     gap: 48px;
     border: none !important; /* Убираем границы на мобильной версии */
     border-top: none !important;
-    margin-top: -40px !important; /* Поднимаем контент выше, чтобы градиент его перекрывал */
-    padding-top: 60px !important; /* Добавляем отступ сверху, чтобы градиент перекрывал начало */
+    border-bottom: none !important;
+    margin-top: -60px !important; /* Поднимаем контент, чтобы блюр перекрывал начало */
+    padding-top: 100px !important; /* Увеличиваем отступ сверху, чтобы градиент перекрывал начало разделов */
     position: relative;
-    z-index: 1; /* Контент должен быть под градиентом */
+    z-index: 15 !important; /* Контент должен быть поверх блюра */
+    outline: none !important; /* Убираем outline */
   }
 
   .runa-intro-features {
     border-top: none !important; /* Убираем верхнюю границу */
-    margin-top: -40px !important; /* Поднимаем выше, чтобы градиент перекрывал */
+    border-bottom: none !important; /* Убираем нижнюю границу */
+    margin-top: -70px !important; /* Поднимаем еще выше, чтобы убрать черную линию */
     grid-template-columns: 1fr;
     gap: 40px;
+    position: relative;
+    z-index: 15 !important; /* Секция должна быть поверх блюра */
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .runa-intro-features > .eyebrow-widget {
@@ -596,6 +616,11 @@
     display: inline-block !important; /* Показываем "Что такое RUNA" на мобильной версии */
     width: fit-content;
     margin-bottom: 24px;
+    margin-top: 70px !important; /* Опускаем виджет еще ниже */
+    position: relative;
+    z-index: 15 !important; /* Виджет должен быть поверх блюра */
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .runa-intro {
@@ -606,6 +631,11 @@
     flex-direction: row;
     gap: 20px;
     align-items: flex-start;
+    position: relative;
+    z-index: 15 !important; /* Контент должен быть поверх блюра */
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-top: -30px !important; /* Поднимаем текст и картинку выше */
   }
 
   .runa-intro-content {
@@ -618,7 +648,7 @@
     flex-shrink: 0;
     width: 120px;
     height: auto;
-    margin-top: 0;
+    margin-top: -30px !important; /* Поднимаем картинку выше */
   }
 
   .analytics-logo-mobile {
@@ -629,7 +659,7 @@
   }
 
   .feature-column {
-    display: none;
+    display: none; /* Скрываем виджет на мобильной версии */
   }
 
   .eyebrow-widget {
@@ -658,6 +688,7 @@
   .runa-intro h2 {
     font-size: clamp(1.8rem, 6vw, 2.2rem);
     margin-bottom: 20px;
+    margin-top: -30px !important; /* Поднимаем заголовок выше */
     line-height: 1.3;
   }
 
@@ -685,6 +716,7 @@
   .feature-column {
     gap: 0;
     padding: 0 8px;
+    display: none; /* Скрываем виджет на мобильной версии */
   }
 
   .feature-advantages {

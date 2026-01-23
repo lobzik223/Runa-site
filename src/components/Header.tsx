@@ -2,9 +2,13 @@ import React from 'react';
 import './Header.css';
 import logoImage from './images/runalogo.png';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  showOnMobile?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
   return (
-    <header className="header">
+    <header className={`header ${!showOnMobile ? 'header-hidden-mobile' : ''}`}>
       <div className="header-container">
         <div className="header-logo">
           <img src={logoImage} alt="RUNA Finance" className="logo-image" />

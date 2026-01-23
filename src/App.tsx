@@ -7,10 +7,12 @@ import './App.css';
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
+  const [showHeader, setShowHeader] = useState(false);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
   
@@ -96,6 +98,38 @@ const App: React.FC = () => {
     return () => clearTimeout(safetyTimeout);
   }, [isLoading]);
 
+  // Отслеживание прокрутки мимо hero section для показа header на мобильной версии
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile || !heroSectionRef.current) {
+      setShowHeader(true); // На ПК всегда показываем header
+      return;
+    }
+
+    const heroObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Когда hero section полностью выходит из viewport, показываем header
+          if (!entry.isIntersecting) {
+            setShowHeader(true);
+          } else {
+            setShowHeader(false);
+          }
+        });
+      },
+      {
+        threshold: 0, // Срабатывает когда hero section полностью выходит из viewport
+        rootMargin: '0px'
+      }
+    );
+
+    heroObserver.observe(heroSectionRef.current);
+
+    return () => {
+      heroObserver.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
     const observerOptions = {
@@ -122,8 +156,8 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <LoadingView isLoading={isLoading} />
-      <Header />
-      <HeroSection onVideoLoaded={handleVideoLoaded} />
+      <Header showOnMobile={showHeader} />
+      <HeroSection onVideoLoaded={handleVideoLoaded} ref={heroSectionRef} />
       <main className="page-content">
         <section className="runa-intro-features" id="about-runa" ref={introSectionRef}>
           <div className="eyebrow-widget">

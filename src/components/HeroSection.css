@@ -58,14 +58,16 @@ video::-webkit-media-controls-start-playback-button {
 /* Мобильная адаптация */
 @media (max-width: 768px) {
   .hero-section {
-    padding-top: calc(40px + env(safe-area-inset-top));
-    min-height: 60vh;
+    padding-top: 0; /* Убираем отступ сверху, чтобы видео начиналось выше */
+    min-height: 100vh; /* Растягиваем видео на всю высоту экрана */
     overflow: visible; /* Разрешаем градиенту выходить за пределы секции */
+    margin-top: -15px; /* Поднимаем секцию выше */
+    border: none !important; /* Убираем границы, которые могут создавать линию */
   }
 
   .hero-video-container {
     position: relative;
-    height: 45vh;
+    height: 100vh; /* Растягиваем видео на всю высоту экрана */
     width: 100%;
     margin: 0;
     border-radius: 0;
@@ -73,21 +75,25 @@ video::-webkit-media-controls-start-playback-button {
     overflow: visible; /* Разрешаем градиенту выходить за пределы контейнера */
     border: none !important; /* Убираем любые границы */
     box-shadow: none !important; /* Убираем тени */
+    top: -8px; /* Поднимаем видео выше */
+    outline: none !important; /* Убираем outline */
   }
 
   .hero-video {
     border-radius: 0;
+    border: none !important; /* Убираем границы видео */
+    outline: none !important; /* Убираем outline */
   }
 
   .hero-gradient-transition {
-    height: clamp(100px, 18vw, 180px) !important; /* Высота градиента */
-    bottom: 0 !important; /* Начинаем от нижнего края видео контейнера */
-    transform: translateY(calc(50% + 8px)) !important; /* Сдвигаем вниз на половину высоты + чуть-чуть ниже */
+    height: clamp(80px, 12vw, 150px) !important; /* Высота градиента как на ПК */
+    bottom: 0 !important; /* Позиционирование как на ПК версии */
+    transform: none !important; /* Убираем все трансформации */
     opacity: 1 !important; /* Убеждаемся, что градиент виден */
-    z-index: 20 !important; /* Максимальный z-index, чтобы градиент был поверх всего */
-    background: linear-gradient(to bottom, rgba(118, 137, 147, 0.5) 0%, rgba(118, 137, 147, 0.9) 30%, #768993 70%, #768993 100%) !important; /* Очень плавный и плотный градиент */
+    z-index: 10 !important; /* Уменьшаем z-index, чтобы контент был поверх блюра */
+    background: linear-gradient(to bottom, transparent 0%, #768993 100%) !important; /* Градиент как на ПК версии - нормальный блюр */
     width: 100% !important;
-    left: 0 !important;
+    left: 0 !important; /* Центрируем блюр */
   }
 
 }
@@ -100,7 +106,7 @@ video::-webkit-media-controls-start-playback-button {
     }
     
     .hero-section {
-      padding-top: max(40px, calc(40px + env(safe-area-inset-top)));
+      padding-top: 0; /* Видео начинается с самого верха на мобильной версии */
     }
   }
 }

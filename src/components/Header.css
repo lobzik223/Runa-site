@@ -111,6 +111,15 @@
     background: rgba(118, 137, 147, 0.35);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* Скрываем header на мобильной версии, когда пользователь еще не прокрутил мимо видео */
+  .header-hidden-mobile {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-100%);
+    pointer-events: none;
   }
   
   /* Фон для области статус-бара на мобильных - такой же как шапка */

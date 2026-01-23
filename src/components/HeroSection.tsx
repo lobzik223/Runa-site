@@ -1,18 +1,36 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef, useState } from 'react';
 import './HeroSection.css';
-import videoSrc from '../mov/intro1.mp4';
+import videoSrcPC from '../mov/intro1.mp4';
+import videoSrcMobile from '../mov/mob.mp4';
 
 interface HeroSectionProps {
   onVideoLoaded: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
+const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasCalledCallback = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Определяем мобильную версию
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      // Сбрасываем флаг при смене размера экрана
+      hasCalledCallback.current = false;
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    
+    // Сбрасываем флаг при смене видео
+    hasCalledCallback.current = false;
 
     // Принудительный запуск видео для мобильных
     const attemptPlay = () => {
@@ -71,10 +89,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
       clearTimeout(timeoutId);
       hasCalledCallback.current = false;
     };
-  }, [onVideoLoaded]);
+  }, [onVideoLoaded, isMobile]);
 
   return (
-    <section className="hero-section">
+    <section className="hero-section" ref={ref as React.Ref<HTMLElement>}>
       <div className="hero-video-container">
         <video
           ref={videoRef}
@@ -84,8 +102,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
           muted
           playsInline
           preload="auto"
+          key={isMobile ? 'mobile' : 'desktop'}
         >
-          <source src={videoSrc} type="video/mp4" />
+          <source src={isMobile ? videoSrcMobile : videoSrcPC} type="video/mp4" />
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
@@ -93,6 +112,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
       </div>
     </section>
   );
-};
+});
+
+HeroSection.displayName = 'HeroSection';
 
 export default HeroSection;
