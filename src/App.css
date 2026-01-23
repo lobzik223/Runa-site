@@ -275,10 +275,15 @@
 
 .problem-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-  gap: 20px;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  grid-template-rows: repeat(2, minmax(220px, auto));
+  gap: 30px;
   position: relative;
+  justify-items: stretch;
+  align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 /* Скрываем карусель на desktop */
@@ -317,6 +322,27 @@
 
 .problem-card-wide {
   grid-column: span 2;
+}
+
+/* Позиционирование карточек на ПК */
+.problem-card-pos-1-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.problem-card-pos-2-1 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.problem-card-pos-2-2 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.problem-card-pos-3-2 {
+  grid-column: 3;
+  grid-row: 2;
 }
 
 .problem-card-large {
@@ -731,6 +757,22 @@
     display: none;
   }
 
+  /* Центрируем виджет и заголовок на мобильной версии */
+  .runa-problems {
+    text-align: center; /* Центрируем весь контент */
+  }
+
+  .runa-problems .eyebrow-widget {
+    display: inline-block !important;
+    margin: 0 auto 20px auto; /* Центрируем виджет */
+    text-align: center;
+  }
+
+  .runa-problems h2 {
+    text-align: center !important; /* Центрируем заголовок */
+    margin: 0 auto 16px auto;
+  }
+
   /* Скрываем desktop карточки на мобильной версии */
   .problem-card-desktop {
     display: none;
@@ -741,30 +783,43 @@
     display: block;
     position: relative;
     width: 100%;
-    margin: 0 auto;
+    margin: 20px auto 0;
+    padding: 0;
+    overflow: visible;
+    box-sizing: border-box;
   }
 
   .problem-carousel-container {
     position: relative;
     width: 100%;
+    margin: 0 auto;
+    margin-left: -20px; /* Сдвигаем карточку влево */
     overflow: hidden;
-    border-radius: 16px; /* Немного уменьшаем радиус */
-    margin: 0 4px; /* Небольшие отступы по бокам для кнопок */
+    border-radius: 16px;
+    touch-action: pan-x pan-y; /* Разрешаем горизонтальный и вертикальный свайп */
+    -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+    min-height: 300px;
   }
 
   .problem-carousel-track {
     display: flex;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Более плавный переход */
     will-change: transform;
+    width: 100%;
+    backface-visibility: hidden; /* Улучшение производительности */
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d; /* Для плавной анимации */
   }
 
   .problem-card-mobile {
     min-width: 100%;
+    width: 100%;
     flex-shrink: 0;
-    padding: 16px 14px; /* Уменьшаем padding для более компактных карточек */
-    min-height: auto; /* Убираем фиксированную высоту */
+    padding: 18px 16px; /* Оптимальный padding для мобильной версии */
+    min-height: auto;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box; /* Учитываем padding в ширине */
   }
 
   .problem-card-mobile .problem-card-text {
@@ -796,64 +851,32 @@
 
   .problem-card-mobile .problem-card-image {
     flex: 1;
-    min-height: 160px; /* Уменьшаем минимальную высоту изображения */
-    max-height: 180px;
-    margin-top: 8px;
+    min-height: 150px;
+    max-height: 170px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
 
   .problem-card-mobile .problem-card-image img {
-    max-height: 180px; /* Уменьшаем максимальную высоту изображения */
+    max-height: 170px;
     max-width: 100%;
     width: auto;
     height: auto;
     object-fit: contain;
+    display: block;
   }
 
-  /* Кнопки навигации карусели */
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px; /* Уменьшаем размер кнопок */
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(237, 229, 208, 0.3);
-    border: 1px solid rgba(237, 229, 208, 0.5);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    color: #EDE5D0;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-                inset 0 0 30px rgba(237, 229, 208, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+  /* Тень для контейнера карусели */
+  .problem-carousel-mobile .problem-carousel-container {
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
   }
 
-  .carousel-btn:hover,
-  .carousel-btn:active {
-    background: rgba(237, 229, 208, 0.4);
-    transform: translateY(-50%) scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2),
-                inset 0 0 40px rgba(237, 229, 208, 0.3);
-  }
-
-  .carousel-btn-prev {
-    left: 8px; /* Ближе к краю */
-  }
-
-  .carousel-btn-next {
-    right: 8px; /* Ближе к краю */
+  /* Скрываем кнопки навигации на мобильной версии - только свайп */
+  .problem-carousel-mobile .carousel-btn {
+    display: none !important; /* Полностью скрываем кнопки */
   }
 
   /* Индикаторы карусели */

@@ -10,6 +10,9 @@ const App: React.FC = () => {
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
   
   const problems = [
     {
@@ -44,6 +47,34 @@ const App: React.FC = () => {
 
   const prevProblem = () => {
     setCurrentProblemIndex((prev) => (prev - 1 + problems.length) % problems.length);
+  };
+
+  // Поддержка свайпа для мобильной версии
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      // Свайп влево - следующая карточка
+      nextProblem();
+    } else if (distance < -minSwipeDistance) {
+      // Свайп вправо - предыдущая карточка
+      prevProblem();
+    }
+    
+    // Сброс значений
+    touchStartX.current = 0;
+    touchEndX.current = 0;
   };
 
   const handleVideoLoaded = () => {
@@ -131,17 +162,35 @@ const App: React.FC = () => {
           </p>
           <div className="problem-grid">
             {/* Desktop версия - все карточки */}
-            {problems.map((problem, index) => (
-              <article key={index} className="problem-card problem-card-with-image problem-card-desktop">
-                <div className="problem-card-text">
-                  <h3 className="problem-card-title">{problem.title}</h3>
-                  <p className="problem-card-desc">{problem.desc}</p>
-                </div>
-                <div className="problem-card-image">
-                  <img src={problem.image} alt={problem.alt} />
-                </div>
-              </article>
-            ))}
+            {problems.map((problem, index) => {
+              let gridClass = '';
+              // Позиционирование карточек на ПК:
+              // index 0: "Потери бюджета" - колонка 1, строка 1
+              // index 1: "Импульсивные траты" - колонка 2, строка 1
+              // index 2: "Незнание о расходах" - колонка 2, строка 2 (под "Импульсивные траты")
+              // index 3: "Перерасход" - колонка 3, строка 2 (правый угол)
+              if (index === 0) {
+                gridClass = 'problem-card-pos-1-1';
+              } else if (index === 1) {
+                gridClass = 'problem-card-pos-2-1';
+              } else if (index === 2) {
+                gridClass = 'problem-card-pos-2-2';
+              } else if (index === 3) {
+                gridClass = 'problem-card-pos-3-2';
+              }
+              
+              return (
+                <article key={index} className={`problem-card problem-card-with-image problem-card-desktop ${gridClass}`}>
+                  <div className="problem-card-text">
+                    <h3 className="problem-card-title">{problem.title}</h3>
+                    <p className="problem-card-desc">{problem.desc}</p>
+                  </div>
+                  <div className="problem-card-image">
+                    <img src={problem.image} alt={problem.alt} />
+                  </div>
+                </article>
+              );
+            })}
             
             {/* Mobile версия - карусель */}
             <div className="problem-carousel-mobile">
@@ -152,7 +201,13 @@ const App: React.FC = () => {
               >
                 ←
               </button>
-              <div className="problem-carousel-container">
+              <div 
+                className="problem-carousel-container"
+                ref={carouselRef}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
                 <div 
                   className="problem-carousel-track"
                   style={{ transform: `translateX(-${currentProblemIndex * 100}%)` }}
