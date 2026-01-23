@@ -6,9 +6,45 @@ import './App.css';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
+  
+  const problems = [
+    {
+      title: 'Потери бюджета',
+      desc: 'Без контроля бюджета вы теряете в среднем 7 500 ₽ в месяц.',
+      image: '/mov/potera.png',
+      alt: 'Потери бюджета'
+    },
+    {
+      title: 'Импульсивные траты',
+      desc: 'Потраченные впустую деньги на импульсивные покупки и забытые подписки.',
+      image: '/mov/q1.png',
+      alt: 'Импульсивные траты'
+    },
+    {
+      title: 'Незнание о расходах',
+      desc: '72% россиян не знают, куда уходят их деньги.',
+      image: '/mov/q3.png',
+      alt: 'Незнание о расходах'
+    },
+    {
+      title: 'Перерасход',
+      desc: 'Каждый второй тратит больше, чем планировал.',
+      image: '/mov/q2.png',
+      alt: 'Перерасход'
+    }
+  ];
+
+  const nextProblem = () => {
+    setCurrentProblemIndex((prev) => (prev + 1) % problems.length);
+  };
+
+  const prevProblem = () => {
+    setCurrentProblemIndex((prev) => (prev - 1 + problems.length) % problems.length);
+  };
 
   const handleVideoLoaded = () => {
     // Минимальная задержка для плавного перехода (уменьшено для быстрой загрузки)
@@ -94,30 +130,64 @@ const App: React.FC = () => {
             Узнайте, какие потери можно избежать с R<span className="logo-u">U</span>NA.
           </p>
           <div className="problem-grid">
-            <article className="problem-card problem-card-with-image">
-              <div className="problem-card-text">
-                <h3 className="problem-card-title">Потери бюджета</h3>
-                <p className="problem-card-desc">Без контроля бюджета вы теряете в среднем 7 500 ₽ в месяц.</p>
+            {/* Desktop версия - все карточки */}
+            {problems.map((problem, index) => (
+              <article key={index} className="problem-card problem-card-with-image problem-card-desktop">
+                <div className="problem-card-text">
+                  <h3 className="problem-card-title">{problem.title}</h3>
+                  <p className="problem-card-desc">{problem.desc}</p>
+                </div>
+                <div className="problem-card-image">
+                  <img src={problem.image} alt={problem.alt} />
+                </div>
+              </article>
+            ))}
+            
+            {/* Mobile версия - карусель */}
+            <div className="problem-carousel-mobile">
+              <button 
+                className="carousel-btn carousel-btn-prev" 
+                onClick={prevProblem}
+                aria-label="Предыдущая карточка"
+              >
+                ←
+              </button>
+              <div className="problem-carousel-container">
+                <div 
+                  className="problem-carousel-track"
+                  style={{ transform: `translateX(-${currentProblemIndex * 100}%)` }}
+                >
+                  {problems.map((problem, index) => (
+                    <article key={index} className="problem-card problem-card-with-image problem-card-mobile">
+                      <div className="problem-card-text">
+                        <h3 className="problem-card-title">{problem.title}</h3>
+                        <p className="problem-card-desc">{problem.desc}</p>
+                      </div>
+                      <div className="problem-card-image">
+                        <img src={problem.image} alt={problem.alt} />
+                      </div>
+                    </article>
+                  ))}
+                </div>
               </div>
-              <div className="problem-card-image">
-                <img src="/mov/potera.png" alt="Потери бюджета" />
+              <button 
+                className="carousel-btn carousel-btn-next" 
+                onClick={nextProblem}
+                aria-label="Следующая карточка"
+              >
+                →
+              </button>
+              <div className="carousel-indicators">
+                {problems.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`carousel-indicator ${index === currentProblemIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentProblemIndex(index)}
+                    aria-label={`Перейти к карточке ${index + 1}`}
+                  />
+                ))}
               </div>
-            </article>
-            <article className="problem-card problem-card-wide">
-              <span className="problem-card-number">02</span>
-              <h3 className="problem-card-title">Импульсивные траты</h3>
-              <p className="problem-card-desc">Потраченные впустую деньги на импульсивные покупки и забытые подписки.</p>
-            </article>
-            <article className="problem-card problem-card-light problem-card-large">
-              <span className="problem-card-number">03</span>
-              <h3 className="problem-card-title">Незнание о расходах</h3>
-              <p className="problem-card-desc">72% россиян не знают, куда уходят их деньги.</p>
-            </article>
-            <article className="problem-card">
-              <span className="problem-card-number">04</span>
-              <h3 className="problem-card-title">Перерасход</h3>
-              <p className="problem-card-desc">Каждый второй тратит больше, чем планировал.</p>
-            </article>
+            </div>
           </div>
         </section>
 
