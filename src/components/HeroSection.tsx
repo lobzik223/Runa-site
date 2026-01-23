@@ -26,52 +26,49 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
       });
     };
 
-    // Функция для обработки готовности видео
+    // Функция для обработки готовности видео (быстрая загрузка)
     const handleVideoReady = () => {
-      if (!hasCalledCallback.current && video.readyState >= 3) {
+      if (!hasCalledCallback.current) {
         hasCalledCallback.current = true;
         onVideoLoaded();
         attemptPlay();
       }
     };
 
-    // Отслеживание загрузки видео
-    const handleCanPlay = () => {
+    // Быстрая загрузка - достаточно метаданных (readyState >= 1)
+    const handleLoadedMetadata = () => {
       handleVideoReady();
     };
 
+    // Если уже есть минимальные данные
     const handleLoadedData = () => {
       handleVideoReady();
     };
 
-    // События загрузки видео
-    video.addEventListener('canplaythrough', handleCanPlay);
+    // События загрузки видео (минимальные требования)
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
     video.addEventListener('loadeddata', handleLoadedData);
-    const handleProgress = () => {
-      // Проверяем прогресс загрузки
-      if (!hasCalledCallback.current && video.readyState >= 3 && video.buffered.length > 0) {
-        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-        const duration = video.duration;
-        if (bufferedEnd >= duration * 0.5) { // Загружено минимум 50%
-          handleVideoReady();
-        }
-      }
-    };
-
-    video.addEventListener('progress', handleProgress);
-
+    
     // Предзагрузка видео
     video.load();
 
-    // Если видео уже загружено
-    if (video.readyState >= 4) { // HAVE_ENOUGH_DATA
+    // Если видео уже имеет метаданные
+    if (video.readyState >= 1) {
       handleVideoReady();
     }
 
+    // Таймаут - показываем сайт максимум через 1.5 секунды
+    const timeoutId = setTimeout(() => {
+      if (!hasCalledCallback.current) {
+        console.warn('Видео загружается медленно, показываем сайт');
+        handleVideoReady();
+      }
+    }, 1500);
+
     return () => {
-      video.removeEventListener('canplaythrough', handleCanPlay);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       video.removeEventListener('loadeddata', handleLoadedData);
-      video.removeEventListener('progress', handleProgress);
+      clearTimeout(timeoutId);
       hasCalledCallback.current = false;
     };
   }, [onVideoLoaded]);
@@ -86,7 +83,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onVideoLoaded }) => {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
         >
           <source src={videoSrc} type="video/mp4" />
           Ваш браузер не поддерживает видео.

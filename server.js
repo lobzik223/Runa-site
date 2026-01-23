@@ -45,8 +45,12 @@ app.use(express.static(distPath, {
     } else if (filePath.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css; charset=utf-8');
     }
-    // Кеширование для статических файлов
-    if (!filePath.endsWith('.html')) {
+    // Для HTML файлов отключаем Range-запросы
+    if (filePath.endsWith('.html')) {
+      res.removeHeader('Accept-Ranges');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    } else {
+      // Кеширование для статических файлов
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     }
   }
@@ -63,14 +67,27 @@ app.get('*', (req, res) => {
     return res.status(500).send('Ошибка: файл index.html не найден. Запустите: npm run build');
   }
   
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      console.error('Ошибка отправки index.html:', err);
-      if (!res.headersSent) {
-        res.status(500).send('Ошибка загрузки страницы');
-      }
+  // Удаляем Range заголовок из запроса (избегаем RangeNotSatisfiableError)
+  delete req.headers.range;
+  
+  // Отключаем Accept-Ranges для HTML файлов
+  res.removeHeader('Accept-Ranges');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  // Читаем и отправляем файл напрямую (без Range-запросов)
+  try {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Content-Length', Buffer.byteLength(fileContent, 'utf8'));
+    res.status(200).send(fileContent);
+  } catch (err) {
+    console.error('Ошибка чтения index.html:', err);
+    if (!res.headersSent) {
+      res.status(500).send('Ошибка загрузки страницы');
     }
-  });
+  }
 });
 
 // Обработка ошибок

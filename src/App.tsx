@@ -11,11 +11,23 @@ const App: React.FC = () => {
   const widgetRef = useRef<HTMLDivElement>(null);
 
   const handleVideoLoaded = () => {
-    // Небольшая задержка для плавного перехода
+    // Минимальная задержка для плавного перехода (уменьшено для быстрой загрузки)
     setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 200);
   };
+
+  // Таймаут безопасности - показываем сайт максимум через 2 секунды
+  useEffect(() => {
+    const safetyTimeout = setTimeout(() => {
+      if (isLoading) {
+        console.warn('Принудительное скрытие загрузочного экрана по таймауту');
+        setIsLoading(false);
+      }
+    }, 2000);
+
+    return () => clearTimeout(safetyTimeout);
+  }, [isLoading]);
 
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
