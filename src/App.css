@@ -46,7 +46,7 @@
 }
 
 .logo-u {
-  color: #CD6F42;
+  color: #253550;
 }
 
 .page-content {
@@ -2121,6 +2121,13 @@
   /* Центрируем виджет и заголовок на мобильной версии */
   .runa-problems {
     text-align: center; /* Центрируем весь контент */
+    padding-left: 0 !important; /* Убираем левый padding для правильного центрирования */
+    padding-right: 0 !important; /* Убираем правый padding для правильного центрирования */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрируем все дочерние элементы */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .runa-problems .eyebrow-widget {
@@ -2132,6 +2139,9 @@
   .runa-problems h2 {
     text-align: center !important; /* Центрируем заголовок */
     margin: 0 auto 16px auto;
+    width: 100%;
+    padding: 0 16px; /* Добавляем боковые отступы для текста */
+    box-sizing: border-box;
   }
 
   /* Скрываем desktop карточки на мобильной версии */
@@ -2141,26 +2151,36 @@
 
   /* Показываем карусель только на мобильной версии */
   .problem-carousel-mobile {
-    display: block;
+    display: flex !important;
     position: relative;
     width: 100%;
+    max-width: 100%;
     margin: 20px auto 0;
-    padding: 0;
+    padding: 0 16px; /* Равные отступы слева и справа */
     overflow: visible;
     box-sizing: border-box;
-    max-width: 100%;
+    /* Центрируем карусель */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .problem-carousel-container {
     position: relative;
-    width: 100%;
-    margin: 0 auto;
-    margin-left: calc(-10vw + 20px); /* Централизуем карточку, сдвигаем правее */
+    width: 100%; /* Занимает всю доступную ширину родителя */
+    max-width: 100%;
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 0;
     overflow: hidden;
     border-radius: 16px;
     touch-action: pan-x pan-y; /* Разрешаем горизонтальный и вертикальный свайп */
     -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
     min-height: 300px;
+    box-sizing: border-box;
+    /* Гарантируем центрирование на всех устройствах */
+    left: auto;
+    right: auto;
+    transform: none !important; /* Убираем любые трансформации, которые могут смещать */
   }
 
   .problem-carousel-track {
@@ -2182,6 +2202,9 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box; /* Учитываем padding в ширине */
+    /* Гарантируем правильное выравнивание */
+    margin: 0;
+    position: relative;
   }
 
   .problem-card-mobile .problem-card-text {
@@ -2245,10 +2268,14 @@
   .carousel-indicators {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 6px;
-    margin-top: 12px;
+    margin: 12px auto 0; /* Центрируем индикаторы */
     margin-bottom: -30px; /* Уменьшаем отступ снизу для сокращения расстояния до следующего раздела */
     padding: 0 4px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .carousel-indicator {
