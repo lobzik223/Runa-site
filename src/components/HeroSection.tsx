@@ -37,6 +37,11 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x-webkit-airplay', 'deny');
     
+    // КРИТИЧНО: Убеждаемся, что видео всегда без звука для автозапуска
+    video.muted = true;
+    video.volume = 0;
+    video.setAttribute('muted', 'true');
+    
     // Дополнительно для мобильных устройств
     if (isMobile) {
       video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
@@ -46,48 +51,96 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     // Сбрасываем флаг при смене видео
     hasCalledCallback.current = false;
 
-    // Принудительный запуск видео для мобильных
-    const attemptPlay = () => {
-      video.play().catch(() => {
-        // Если автоплей заблокирован, пробуем запустить при клике в любом месте
-        const playOnTouch = () => {
-          video.play();
-          document.removeEventListener('touchstart', playOnTouch);
+    // Агрессивная функция запуска видео
+    const attemptPlay = async () => {
+      try {
+        // Убеждаемся, что видео без звука
+        video.muted = true;
+        video.volume = 0;
+        
+        // Пытаемся запустить
+        await video.play();
+        
+        // Если успешно запустилось, продолжаем воспроизведение при паузе
+        video.addEventListener('pause', () => {
+          if (document.visibilityState === 'visible' && !video.ended) {
+            video.play().catch(() => {});
+          }
+        }, { once: false });
+        
+        return true;
+      } catch (error) {
+        // Если автоплей заблокирован, пробуем запустить при первом взаимодействии
+        const playOnInteraction = async () => {
+          try {
+            video.muted = true;
+            video.volume = 0;
+            await video.play();
+            // Удаляем обработчики после успешного запуска
+            document.removeEventListener('touchstart', playOnInteraction);
+            document.removeEventListener('touchend', playOnInteraction);
+            document.removeEventListener('click', playOnInteraction);
+            document.removeEventListener('scroll', playOnInteraction);
+          } catch (e) {
+            // Игнорируем ошибки
+          }
         };
-        document.addEventListener('touchstart', playOnTouch);
-      });
+        
+        // Добавляем обработчики для первого взаимодействия
+        document.addEventListener('touchstart', playOnInteraction, { once: true, passive: true });
+        document.addEventListener('touchend', playOnInteraction, { once: true, passive: true });
+        document.addEventListener('click', playOnInteraction, { once: true, passive: true });
+        document.addEventListener('scroll', playOnInteraction, { once: true, passive: true });
+        
+        return false;
+      }
     };
 
-    // Функция для обработки готовности видео (быстрая загрузка)
+    // Функция для обработки готовности видео
     const handleVideoReady = () => {
       if (!hasCalledCallback.current) {
         hasCalledCallback.current = true;
         onVideoLoaded();
+        // Пытаемся запустить сразу
         attemptPlay();
       }
     };
 
-    // Быстрая загрузка - достаточно метаданных (readyState >= 1)
+    // Множественные события для максимальной совместимости
     const handleLoadedMetadata = () => {
       handleVideoReady();
     };
 
-    // Если уже есть минимальные данные
     const handleLoadedData = () => {
       handleVideoReady();
     };
 
-    // События загрузки видео (минимальные требования)
+    const handleCanPlay = () => {
+      handleVideoReady();
+    };
+
+    const handleCanPlayThrough = () => {
+      handleVideoReady();
+    };
+
+    // Добавляем все обработчики событий
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
     video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('canplaythrough', handleCanPlayThrough);
     
     // Предзагрузка видео
     video.load();
 
-    // Если видео уже имеет метаданные
+    // Если видео уже имеет метаданные, запускаем сразу
     if (video.readyState >= 1) {
       handleVideoReady();
     }
+
+    // Пытаемся запустить сразу, даже если метаданные еще не загружены
+    setTimeout(() => {
+      attemptPlay();
+    }, 100);
 
     // Таймаут - показываем сайт максимум через 1.5 секунды
     const timeoutId = setTimeout(() => {
@@ -100,6 +153,8 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('canplaythrough', handleCanPlayThrough);
       clearTimeout(timeoutId);
       hasCalledCallback.current = false;
     };
