@@ -35,25 +35,52 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
     // КРИТИЧНО ДЛЯ iOS: Скрываем LoadingView СРАЗУ, не ждем видео!
-    let iosTimeoutId: NodeJS.Timeout | null = null;
     if (isIOS) {
-      // Для iOS вызываем onVideoLoaded сразу после небольшой задержки
-      iosTimeoutId = setTimeout(() => {
+      // Для iOS вызываем onVideoLoaded сразу, без задержек
+      // Используем несколько механизмов для гарантии
+      const callVideoLoaded = () => {
         if (!hasCalledCallback.current) {
           hasCalledCallback.current = true;
           console.log('iOS: Скрываем LoadingView немедленно');
           onVideoLoaded();
         }
-      }, 300);
+      };
+      
+      // Вызываем сразу
+      callVideoLoaded();
+      
+      // Дополнительный вызов через requestAnimationFrame для гарантии
+      requestAnimationFrame(() => {
+        callVideoLoaded();
+      });
+      
+      // Еще один вызов через небольшую задержку как fallback
+      setTimeout(() => {
+        callVideoLoaded();
+      }, 50);
     }
     
     // Полностью отключаем элементы управления
     video.controls = false;
     video.removeAttribute('controls');
-    video.setAttribute('controls', 'false');
+    // НЕ устанавливаем controls='false' - это может вызвать проблемы на iOS
     video.setAttribute('playsinline', 'true');
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x-webkit-airplay', 'deny');
+    // Дополнительно для iOS - убеждаемся что controls полностью отсутствует
+    if (isIOS) {
+      video.removeAttribute('controls');
+      // Используем Object.defineProperty для блокировки controls на iOS
+      try {
+        Object.defineProperty(video, 'controls', {
+          value: false,
+          writable: false,
+          configurable: true
+        });
+      } catch (e) {
+        // Игнорируем ошибки
+      }
+    }
     
     // КРИТИЧНО: Убеждаемся, что видео всегда без звука для автозапуска
     video.muted = true;
@@ -338,14 +365,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
 
     // Функция для проверки полной готовности видео
     const checkVideoReady = (): boolean => {
-      // Для iOS используем максимально мягкие условия - практически сразу готовы
+      // Для iOS - уже скрыли LoadingView, просто проверяем базовую готовность
       if (isIOS) {
-        // На iOS достаточно иметь readyState >= 1 (HAVE_METADATA) или даже просто наличие элемента
-        // Не требуем duration или буферизацию вообще
-        if (video.readyState >= 1) {
-          return true;
-        }
-        // Даже если readyState = 0, считаем готовым на iOS через небольшую задержку
+        // На iOS считаем готовым если есть элемент видео
         return true;
       }
       
@@ -394,15 +416,10 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     
     // Для iOS также обрабатываем событие canplay (менее строгое, чем canplaythrough)
     const handleCanPlay = () => {
-      if (isIOS && !hasCalledCallback.current) {
-        // На iOS считаем видео готовым сразу при canplay
-        setTimeout(() => {
-          if (!hasCalledCallback.current) {
-            hasCalledCallback.current = true;
-            onVideoLoaded();
-            attemptPlay();
-          }
-        }, 100);
+      // Для iOS - уже скрыли LoadingView выше, просто пытаемся запустить видео
+      if (isIOS) {
+        attemptPlay();
+        return;
       }
       handleVideoReady();
     };
@@ -419,15 +436,10 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     
     // Обработчик для проверки метаданных
     const handleLoadedMetadata = () => {
-      // Для iOS - сразу скрываем LoadingView после загрузки метаданных
-      if (isIOS && !hasCalledCallback.current) {
-        setTimeout(() => {
-          if (!hasCalledCallback.current) {
-            hasCalledCallback.current = true;
-            onVideoLoaded();
-            attemptPlay();
-          }
-        }, 200);
+      // Для iOS - уже скрыли LoadingView выше, просто пытаемся запустить видео
+      if (isIOS) {
+        attemptPlay();
+        return;
       }
       // Для других устройств - readyState >= 4
       if (!isIOS && video.readyState >= 4) {
@@ -465,17 +477,10 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       handleVideoReady();
     }
 
-    // Пытаемся запустить сразу, даже если метаданные еще не загружены (только для не-iOS)
-    if (!isIOS) {
-      setTimeout(() => {
-        attemptPlay();
-      }, 100);
-    } else {
-      // Для iOS пытаемся запустить через небольшую задержку
-      setTimeout(() => {
-        attemptPlay();
-      }, 500);
-    }
+    // Пытаемся запустить сразу, даже если метаданные еще не загружены
+    setTimeout(() => {
+      attemptPlay();
+    }, isIOS ? 200 : 100);
 
     // Таймаут безопасности - для iOS НЕ НУЖЕН (уже скрыли выше), для других устройств - 10 секунд
     let timeoutId: NodeJS.Timeout | null = null;
@@ -531,9 +536,6 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       }
       if (earlyTimeoutId) {
         clearTimeout(earlyTimeoutId);
-      }
-      if (iosTimeoutId) {
-        clearTimeout(iosTimeoutId);
       }
       if (readyCheckInterval) {
         clearInterval(readyCheckInterval);

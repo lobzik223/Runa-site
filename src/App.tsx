@@ -92,18 +92,12 @@ const App: React.FC = () => {
     
     console.log('handleVideoLoaded вызван, isLoading:', isLoading, 'isIOS:', isIOS);
     
-    if (isIOS) {
-      // Для iOS сразу обновляем состояние
-      setIsLoading(false);
-      console.log('iOS: setIsLoading(false) вызван');
-    } else {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 200);
-    }
+    // Для всех устройств сразу обновляем состояние
+    setIsLoading(false);
+    console.log('setIsLoading(false) вызван');
   };
 
-  // Таймаут безопасности - для iOS МИНИМАЛЬНЫЙ (200ms!), для других устройств - 8 секунд
+  // Таймаут безопасности - для iOS очень короткий, для других устройств - 8 секунд
   useEffect(() => {
     const isIOS = typeof window !== 'undefined' && 
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
@@ -116,7 +110,7 @@ const App: React.FC = () => {
           console.log('iOS: Принудительное скрытие загрузочного экрана по таймауту');
           setIsLoading(false);
         }
-      }, 500); // Увеличиваем до 500ms для надежности
+      }, 300); // Короткий таймаут для iOS
       return () => clearTimeout(iosTimeout);
     }
     
