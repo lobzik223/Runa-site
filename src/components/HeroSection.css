@@ -339,6 +339,60 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   .hero-video * {
     pointer-events: none !important;
   }
+  
+  /* Агрессивное скрытие всех возможных элементов управления на мобильных */
+  .hero-video::before,
+  .hero-video::after {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  /* Скрытие всех дочерних элементов, которые могут быть элементами управления */
+  .hero-video-container video::-webkit-media-controls,
+  .hero-video-container video::-webkit-media-controls-enclosure,
+  .hero-video-container video::-webkit-media-controls-panel,
+  .hero-video-container video::-webkit-media-controls-play-button,
+  .hero-video-container video::-webkit-media-controls-timeline,
+  .hero-video-container video::-webkit-media-controls-current-time-display,
+  .hero-video-container video::-webkit-media-controls-time-remaining-display,
+  .hero-video-container video::-webkit-media-controls-mute-button,
+  .hero-video-container video::-webkit-media-controls-volume-slider,
+  .hero-video-container video::-webkit-media-controls-fullscreen-button,
+  .hero-video-container video::-webkit-media-controls-overlay-play-button,
+  .hero-video-container video::-webkit-media-controls-overlay-enclosure,
+  .hero-video-container video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+  }
+  
+  /* Скрытие всех элементов управления через селектор по типу */
+  .hero-video-container video[controls],
+  .hero-video-container video[controls] * {
+    pointer-events: none !important;
+  }
+  
+  /* Дополнительное скрытие через overlay */
+  .hero-video-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
+    background: transparent;
+  }
 
   .hero-gradient-transition {
     height: clamp(80px, 12vw, 150px) !important; /* Высота градиента как на ПК */

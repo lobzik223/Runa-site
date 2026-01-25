@@ -42,10 +42,44 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     video.volume = 0;
     video.setAttribute('muted', 'true');
     
-    // Дополнительно для мобильных устройств
+    // Дополнительно для мобильных устройств - агрессивное скрытие элементов управления
+    let hideControlsInterval: NodeJS.Timeout | null = null;
+    const preventControlsShow = () => {
+      if (video.controls) {
+        video.controls = false;
+      }
+    };
+    
     if (isMobile) {
       video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
       video.setAttribute('disablePictureInPicture', 'true');
+      
+      // Дополнительные атрибуты для полного скрытия элементов управления
+      video.setAttribute('controls', 'false');
+      video.controls = false;
+      
+      // Предотвращаем показ элементов управления при любых событиях
+      video.addEventListener('play', preventControlsShow);
+      video.addEventListener('pause', preventControlsShow);
+      video.addEventListener('click', preventControlsShow);
+      video.addEventListener('touchstart', preventControlsShow);
+      video.addEventListener('touchend', preventControlsShow);
+      
+      // Периодически проверяем и скрываем элементы управления
+      hideControlsInterval = setInterval(() => {
+        preventControlsShow();
+        // Скрываем все возможные элементы управления через DOM
+        const controls = video.querySelectorAll('*');
+        controls.forEach((el: Element) => {
+          const htmlEl = el as HTMLElement;
+          if (htmlEl.style) {
+            htmlEl.style.display = 'none';
+            htmlEl.style.visibility = 'hidden';
+            htmlEl.style.opacity = '0';
+            htmlEl.style.pointerEvents = 'none';
+          }
+        });
+      }, 100);
     }
     
     // Сбрасываем флаг при смене видео
@@ -96,9 +130,11 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       }
     };
 
-    // Функция для обработки готовности видео
+    // Функция для обработки полной готовности видео
     const handleVideoReady = () => {
-      if (!hasCalledCallback.current) {
+      // Ждем полной загрузки видео (readyState >= 4 означает HAVE_ENOUGH_DATA)
+      // Это гарантирует, что видео полностью загружено и готово к воспроизведению
+      if (video.readyState >= 4 && !hasCalledCallback.current) {
         hasCalledCallback.current = true;
         onVideoLoaded();
         // Пытаемся запустить сразу
@@ -106,34 +142,41 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       }
     };
 
-    // Множественные события для максимальной совместимости
-    const handleLoadedMetadata = () => {
-      handleVideoReady();
-    };
-
-    const handleLoadedData = () => {
-      handleVideoReady();
-    };
-
-    const handleCanPlay = () => {
-      handleVideoReady();
-    };
-
+    // Обработчик для полной загрузки видео
     const handleCanPlayThrough = () => {
-      handleVideoReady();
+      // Дополнительная проверка readyState для уверенности
+      if (video.readyState >= 4) {
+        handleVideoReady();
+      }
     };
 
-    // Добавляем все обработчики событий
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    video.addEventListener('loadeddata', handleLoadedData);
-    video.addEventListener('canplay', handleCanPlay);
+    // Обработчик для проверки прогресса загрузки
+    const handleProgress = () => {
+      // Проверяем, загружено ли достаточно данных (>= 95% или readyState >= 4)
+      if (video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        const duration = video.duration;
+        if (duration > 0 && (bufferedEnd / duration >= 0.95 || video.readyState >= 4)) {
+          handleVideoReady();
+        }
+      }
+    };
+
+    // Добавляем обработчики событий для полной загрузки
     video.addEventListener('canplaythrough', handleCanPlayThrough);
+    video.addEventListener('progress', handleProgress);
+    video.addEventListener('loadeddata', () => {
+      // Проверяем readyState после загрузки данных
+      if (video.readyState >= 4) {
+        handleVideoReady();
+      }
+    });
     
     // Предзагрузка видео
     video.load();
 
-    // Если видео уже имеет метаданные, запускаем сразу
-    if (video.readyState >= 1) {
+    // Если видео уже полностью загружено, вызываем callback сразу
+    if (video.readyState >= 4) {
       handleVideoReady();
     }
 
@@ -142,20 +185,29 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       attemptPlay();
     }, 100);
 
-    // Таймаут - показываем сайт максимум через 1.5 секунды
+    // Таймаут безопасности - показываем сайт максимум через 5 секунд (увеличен для полной загрузки)
     const timeoutId = setTimeout(() => {
       if (!hasCalledCallback.current) {
-        console.warn('Видео загружается медленно, показываем сайт');
-        handleVideoReady();
+        console.warn('Видео загружается медленно, показываем сайт после таймаута');
+        hasCalledCallback.current = true;
+        onVideoLoaded();
       }
-    }, 1500);
+    }, 5000);
 
     return () => {
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('loadeddata', handleLoadedData);
-      video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('canplaythrough', handleCanPlayThrough);
+      video.removeEventListener('progress', handleProgress);
+      if (isMobile) {
+        video.removeEventListener('play', preventControlsShow);
+        video.removeEventListener('pause', preventControlsShow);
+        video.removeEventListener('click', preventControlsShow);
+        video.removeEventListener('touchstart', preventControlsShow);
+        video.removeEventListener('touchend', preventControlsShow);
+      }
       clearTimeout(timeoutId);
+      if (hideControlsInterval) {
+        clearInterval(hideControlsInterval);
+      }
       hasCalledCallback.current = false;
     };
   }, [onVideoLoaded, isMobile]);
