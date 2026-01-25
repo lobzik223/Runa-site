@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header';
+import logoImage from './images/runalogo.png';
 import './PrivacyPolicyView.css';
 
 const PrivacyPolicyView: React.FC = () => {
@@ -183,6 +184,9 @@ const PrivacyPolicyView: React.FC = () => {
                 <a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">@RUNAfinance</a>
               </p>
             </div>
+          </div>
+          <div className="footer-logo-container">
+            <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
           </div>
           <div>
             <h5>Ссылки</h5>

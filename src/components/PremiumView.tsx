@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from './Header';
+import logoImage from './images/runalogo.png';
 import './PremiumView.css';
 
 const PremiumView: React.FC = () => {
@@ -131,6 +132,9 @@ const PremiumView: React.FC = () => {
                 <a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">@RUNAfinance</a>
               </p>
             </div>
+          </div>
+          <div className="footer-logo-container">
+            <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
           </div>
           <div>
             <h5>Ссылки</h5>

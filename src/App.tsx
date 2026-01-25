@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import LoadingView from './components/LoadingView';
+import logoImage from './components/images/runalogo.png';
 import './App.css';
 
 const App: React.FC = () => {
@@ -90,14 +91,18 @@ const App: React.FC = () => {
     }, 200);
   };
 
-  // Таймаут безопасности - показываем сайт максимум через 8 секунд (увеличен для полной загрузки видео)
+  // Таймаут безопасности - для iOS короче (5 секунд), для других устройств - 8 секунд
   useEffect(() => {
+    const isIOS = typeof window !== 'undefined' && 
+      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
+       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    const safetyTimeoutMs = isIOS ? 5000 : 8000;
     const safetyTimeout = setTimeout(() => {
       if (isLoading) {
         console.warn('Принудительное скрытие загрузочного экрана по таймауту безопасности');
         setIsLoading(false);
       }
-    }, 8000);
+    }, safetyTimeoutMs);
 
     return () => clearTimeout(safetyTimeout);
   }, [isLoading]);
@@ -537,6 +542,9 @@ const App: React.FC = () => {
                 <a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">@RUNAfinance</a>
               </p>
             </div>
+          </div>
+          <div className="footer-logo-container">
+            <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
           </div>
           <div>
             <h5>Ссылки</h5>

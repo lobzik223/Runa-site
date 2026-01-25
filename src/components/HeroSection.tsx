@@ -29,6 +29,11 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const video = videoRef.current;
     if (!video) return;
     
+    // Определяем iOS один раз для всего useEffect
+    const isIOS = typeof window !== 'undefined' && 
+      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
+       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    
     // Полностью отключаем элементы управления
     video.controls = false;
     video.removeAttribute('controls');
@@ -53,10 +58,8 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       video.setAttribute('controls', 'false');
     };
     
-    // Определяем iPhone для дополнительных правил
-    const isIPhone = typeof window !== 'undefined' && 
-      (/iPhone|iPod/.test(navigator.userAgent) || 
-       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    // Определяем iPhone для дополнительных правил (используем isIOS)
+    const isIPhone = isIOS;
     
     if (isMobile) {
       video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
@@ -322,25 +325,32 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
 
     // Функция для проверки полной готовности видео
     const checkVideoReady = (): boolean => {
-      // Проверяем readyState (>= 4 означает HAVE_ENOUGH_DATA)
-      if (video.readyState < 4) {
+      // Используем isIOS из внешней области видимости
+      // Проверяем readyState (>= 3 означает HAVE_FUTURE_DATA, что достаточно для iOS)
+      const minReadyState = isIOS ? 3 : 4;
+      if (video.readyState < minReadyState) {
         return false;
       }
       
       // Проверяем, что видео имеет метаданные
-      if (!video.duration || video.duration === 0) {
+      if (!video.duration || isNaN(video.duration) || video.duration === 0 || !isFinite(video.duration)) {
         return false;
       }
       
-      // Проверяем буферизацию - должно быть загружено минимум 95%
+      // Для iOS используем более мягкие требования к буферизации
       if (video.buffered.length > 0) {
         const bufferedEnd = video.buffered.end(video.buffered.length - 1);
         const bufferedPercent = (bufferedEnd / video.duration) * 100;
-        if (bufferedPercent < 95) {
+        // На iOS достаточно 50% буферизации, на других устройствах - 95%
+        const requiredPercent = isIOS ? 50 : 95;
+        if (bufferedPercent < requiredPercent) {
           return false;
         }
       } else {
-        // Если нет буфера, ждем еще
+        // Для iOS, если readyState >= 3 и есть duration, считаем готовым даже без буфера
+        if (isIOS && video.readyState >= 3 && video.duration > 0) {
+          return true;
+        }
         return false;
       }
       
@@ -365,6 +375,23 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const handleCanPlayThrough = () => {
       handleVideoReady();
     };
+    
+    // Для iOS также обрабатываем событие canplay (менее строгое, чем canplaythrough)
+    const handleCanPlay = () => {
+      if (isIOS && !hasCalledCallback.current) {
+        // На iOS считаем видео готовым при canplay, если есть метаданные
+        if (video.readyState >= 3 && video.duration > 0) {
+          setTimeout(() => {
+            if (!hasCalledCallback.current) {
+              hasCalledCallback.current = true;
+              onVideoLoaded();
+              attemptPlay();
+            }
+          }, 300);
+        }
+      }
+      handleVideoReady();
+    };
 
     // Обработчик для проверки прогресса загрузки
     const handleProgress = () => {
@@ -379,13 +406,16 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     // Обработчик для проверки метаданных
     const handleLoadedMetadata = () => {
       // После загрузки метаданных начинаем проверять готовность
-      if (video.readyState >= 4) {
+      // Для iOS достаточно readyState >= 3
+      const minReadyState = isIOS ? 3 : 4;
+      if (video.readyState >= minReadyState) {
         handleVideoReady();
       }
     };
 
     // Добавляем обработчики событий для полной загрузки
     video.addEventListener('canplaythrough', handleCanPlayThrough);
+    video.addEventListener('canplay', handleCanPlay); // Для iOS
     video.addEventListener('progress', handleProgress);
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -394,12 +424,14 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     video.load();
 
     // Периодическая проверка готовности (на случай, если события не сработали)
+    // Для iOS проверяем чаще
+    const checkInterval = isIOS ? 100 : 200;
     const readyCheckInterval = setInterval(() => {
       if (!hasCalledCallback.current && checkVideoReady()) {
         handleVideoReady();
         clearInterval(readyCheckInterval);
       }
-    }, 200);
+    }, checkInterval);
 
     // Если видео уже полностью загружено, вызываем callback сразу
     if (checkVideoReady()) {
@@ -411,18 +443,22 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       attemptPlay();
     }, 100);
 
-    // Таймаут безопасности - показываем сайт максимум через 10 секунд (увеличен для полной загрузки)
+    // Таймаут безопасности - для iOS короче (5 секунд), для других устройств - 10 секунд
+    const safetyTimeout = isIOS ? 5000 : 10000;
     const timeoutId = setTimeout(() => {
       if (!hasCalledCallback.current) {
         console.warn('Видео загружается медленно, показываем сайт после таймаута безопасности');
         hasCalledCallback.current = true;
         onVideoLoaded();
         clearInterval(readyCheckInterval);
+        // Пытаемся запустить видео даже после таймаута
+        attemptPlay();
       }
-    }, 10000);
+    }, safetyTimeout);
 
     return () => {
       video.removeEventListener('canplaythrough', handleCanPlayThrough);
+      video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('progress', handleProgress);
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);

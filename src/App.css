@@ -1674,6 +1674,28 @@
   margin: 0;
 }
 
+/* Стили для логотипа в футере */
+.footer-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.footer-logo {
+  max-width: 180px;
+  width: 100%;
+  height: auto;
+  opacity: 0.9;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.footer-logo:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
 /* Средние экраны (ноутбуки, маленькие мониторы) - уменьшаем размеры */
 @media (min-width: 769px) and (max-width: 1400px) {
   /* Уменьшаем размеры заголовков */
@@ -1709,6 +1731,15 @@
   .runa-why {
     padding: 28px;
     margin-top: 40px;
+  }
+  
+  /* Адаптация футера для средних экранов */
+  .footer-grid {
+    gap: 48px;
+  }
+  
+  .footer-logo {
+    max-width: 160px;
   }
   
   /* Уменьшаем размеры виджетов */
@@ -2599,36 +2630,119 @@
   
   /* Мобильная версия футера */
   .site-footer {
-    padding: 32px 4vw 24px;
+    padding: 40px 5vw 28px;
   }
   
   .footer-grid {
+    grid-template-columns: 1fr !important;
     flex-direction: column;
-    gap: 24px;
-    margin-bottom: 32px;
+    gap: 28px;
+    margin-bottom: 28px;
+    align-items: center;
+    text-align: center;
   }
   
+  /* Логотип в центре, компактный размер */
+  .footer-logo-container {
+    order: 0;
+    padding: 8px 0 16px 0;
+    width: 100%;
+  }
+  
+  .footer-logo {
+    max-width: 140px;
+    width: auto;
+    height: auto;
+  }
+  
+  /* Заголовки секций - компактнее */
+  .footer-grid h4,
+  .footer-grid h5 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  
+  .footer-grid h4::after,
+  .footer-grid h5::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+  }
+  
+  /* Контакты - компактнее и центрированы */
   .footer-contacts {
-    gap: 12px;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
   }
   
   .footer-contacts p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    padding: 6px 0;
   }
   
+  .footer-label {
+    min-width: auto;
+    margin-right: 6px;
+    font-weight: 500;
+  }
+  
+  /* Ссылки - центрированы */
+  .footer-grid ul {
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .footer-grid > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .footer-grid ul li {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .footer-link {
+    font-size: 0.9rem;
+    display: inline-block;
+  }
+  
+  /* Нижняя часть - компактнее */
   .footer-bottom {
-    margin-top: 32px;
-    gap: 12px;
+    margin-top: 24px;
+    gap: 8px;
+    padding-top: 20px;
+    width: 100%;
   }
   
   .footer-note {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.5;
+    padding: 0 15px;
   }
   
   .footer-inn {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-align: center;
+    opacity: 0.8;
+    padding: 0 15px;
+  }
+  
+  /* Убираем hover эффекты на мобильных */
+  .footer-contacts p:hover {
+    transform: none;
+  }
+  
+  .footer-grid ul li:hover {
+    transform: none;
   }
   
   /* Мобильная версия окна подписки */
