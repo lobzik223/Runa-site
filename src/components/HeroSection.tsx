@@ -48,7 +48,15 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       if (video.controls) {
         video.controls = false;
       }
+      // Дополнительно для iPhone - принудительно убираем controls
+      video.removeAttribute('controls');
+      video.setAttribute('controls', 'false');
     };
+    
+    // Определяем iPhone для дополнительных правил
+    const isIPhone = typeof window !== 'undefined' && 
+      (/iPhone|iPod/.test(navigator.userAgent) || 
+       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
     if (isMobile) {
       video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
@@ -56,19 +64,18 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       
       // Дополнительные атрибуты для полного скрытия элементов управления
       video.setAttribute('controls', 'false');
+      video.removeAttribute('controls');
       video.controls = false;
       
-      // Предотвращаем показ элементов управления при любых событиях
-      video.addEventListener('play', preventControlsShow);
-      video.addEventListener('pause', preventControlsShow);
-      video.addEventListener('click', preventControlsShow);
-      video.addEventListener('touchstart', preventControlsShow);
-      video.addEventListener('touchend', preventControlsShow);
+      // Агрессивное скрытие элементов управления через CSS классы
+      video.classList.add('no-controls');
+      video.setAttribute('data-no-controls', 'true');
       
-      // Периодически проверяем и скрываем элементы управления
-      hideControlsInterval = setInterval(() => {
+      // Функция для агрессивного скрытия всех элементов управления
+      const hideAllControls = () => {
         preventControlsShow();
-        // Скрываем все возможные элементы управления через DOM
+        
+        // Скрываем через DOM
         const controls = video.querySelectorAll('*');
         controls.forEach((el: Element) => {
           const htmlEl = el as HTMLElement;
@@ -77,9 +84,91 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
             htmlEl.style.visibility = 'hidden';
             htmlEl.style.opacity = '0';
             htmlEl.style.pointerEvents = 'none';
+            htmlEl.style.width = '0';
+            htmlEl.style.height = '0';
+            htmlEl.style.position = 'absolute';
+            htmlEl.style.left = '-9999px';
+            htmlEl.style.top = '-9999px';
           }
         });
-      }, 100);
+        
+        // Скрываем через псевдоэлементы - динамически добавляем стили
+        if (!document.head.querySelector('style[data-video-controls-hide]')) {
+          const style = document.createElement('style');
+          style.setAttribute('data-video-controls-hide', 'true');
+          style.textContent = `
+            .hero-video::-webkit-media-controls,
+            .hero-video::-webkit-media-controls-enclosure,
+            .hero-video::-webkit-media-controls-panel,
+            .hero-video::-webkit-media-controls-play-button,
+            .hero-video::-webkit-media-controls-start-playback-button,
+            .hero-video::-webkit-media-controls-overlay-play-button {
+              display: none !important;
+              opacity: 0 !important;
+              visibility: hidden !important;
+              pointer-events: none !important;
+              width: 0 !important;
+              height: 0 !important;
+              position: absolute !important;
+              left: -9999px !important;
+              top: -9999px !important;
+              clip: rect(0, 0, 0, 0) !important;
+              clip-path: inset(100%) !important;
+              transform: scale(0) !important;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+      };
+      
+      // Предотвращаем показ элементов управления при любых событиях
+      const handleControlHide = () => {
+        preventControlsShow();
+        hideAllControls();
+      };
+      
+      const events = ['play', 'pause', 'click', 'touchstart', 'touchend', 'loadstart', 'loadedmetadata', 'canplay', 'playing', 'waiting', 'seeking', 'seeked'];
+      events.forEach(event => {
+        video.addEventListener(event, handleControlHide, { passive: true });
+      });
+      
+      // Сохраняем ссылку на обработчик для очистки
+      (video as any)._controlHideHandler = handleControlHide;
+      
+      // Периодически проверяем и скрываем элементы управления (более часто для iPhone)
+      const checkInterval = isIPhone ? 30 : 50; // Еще более часто для iPhone
+      hideControlsInterval = setInterval(() => {
+        preventControlsShow();
+        hideAllControls();
+        // Дополнительно для iPhone - принудительно скрываем через DOM
+        if (isIPhone) {
+          // Ищем все возможные элементы управления
+          const allElements = document.querySelectorAll('*');
+          allElements.forEach((el: Element) => {
+            const htmlEl = el as HTMLElement;
+            const className = htmlEl.getAttribute('class') || '';
+            const id = htmlEl.getAttribute('id') || '';
+            if (className.includes('media-controls') || 
+                className.includes('play-button') || 
+                className.includes('webkit-media') ||
+                id.includes('media-controls') ||
+                id.includes('play-button')) {
+              htmlEl.style.display = 'none';
+              htmlEl.style.visibility = 'hidden';
+              htmlEl.style.opacity = '0';
+              htmlEl.style.pointerEvents = 'none';
+              htmlEl.style.width = '0';
+              htmlEl.style.height = '0';
+              htmlEl.style.position = 'absolute';
+              htmlEl.style.left = '-9999px';
+              htmlEl.style.top = '-9999px';
+            }
+          });
+        }
+      }, checkInterval);
+      
+      // Немедленное скрытие при загрузке
+      hideAllControls();
     }
     
     // Сбрасываем флаг при смене видео
@@ -237,11 +326,15 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       if (isMobile) {
-        video.removeEventListener('play', preventControlsShow);
-        video.removeEventListener('pause', preventControlsShow);
-        video.removeEventListener('click', preventControlsShow);
-        video.removeEventListener('touchstart', preventControlsShow);
-        video.removeEventListener('touchend', preventControlsShow);
+        // Удаляем все обработчики событий
+        const handleControlHide = (video as any)._controlHideHandler;
+        if (handleControlHide) {
+          const events = ['play', 'pause', 'click', 'touchstart', 'touchend', 'loadstart', 'loadedmetadata', 'canplay', 'playing', 'waiting', 'seeking', 'seeked'];
+          events.forEach(event => {
+            video.removeEventListener(event, handleControlHide);
+          });
+        }
+        delete (video as any)._controlHideHandler;
       }
       clearTimeout(timeoutId);
       clearInterval(readyCheckInterval);

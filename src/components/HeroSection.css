@@ -363,6 +363,54 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     pointer-events: none !important;
   }
   
+  /* Агрессивное скрытие для iPhone - специальные правила */
+  .hero-video.no-controls,
+  .hero-video[data-no-controls="true"] {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  
+  .hero-video.no-controls::-webkit-media-controls,
+  .hero-video[data-no-controls="true"]::-webkit-media-controls,
+  .hero-video.no-controls::-webkit-media-controls-enclosure,
+  .hero-video[data-no-controls="true"]::-webkit-media-controls-enclosure,
+  .hero-video.no-controls::-webkit-media-controls-panel,
+  .hero-video[data-no-controls="true"]::-webkit-media-controls-panel,
+  .hero-video.no-controls::-webkit-media-controls-play-button,
+  .hero-video[data-no-controls="true"]::-webkit-media-controls-play-button,
+  .hero-video.no-controls::-webkit-media-controls-start-playback-button,
+  .hero-video[data-no-controls="true"]::-webkit-media-controls-start-playback-button,
+  .hero-video.no-controls::-webkit-media-controls-overlay-play-button,
+  .hero-video[data-no-controls="true"]::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(100%) !important;
+  }
+  
+  /* Дополнительное скрытие через псевдоэлементы для iPhone */
+  .hero-video::before,
+  .hero-video::after {
+    display: none !important;
+    content: none !important;
+  }
+  
+  /* Скрытие всех возможных элементов управления через селекторы по состоянию */
+  .hero-video:focus::-webkit-media-controls,
+  .hero-video:hover::-webkit-media-controls,
+  .hero-video:active::-webkit-media-controls {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
   /* Агрессивное скрытие всех возможных элементов управления на мобильных */
   .hero-video::before,
   .hero-video::after {
@@ -444,7 +492,69 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   /* Скрытие элементов управления при любых состояниях видео */
   .hero-video:playing::-webkit-media-controls,
   .hero-video:paused::-webkit-media-controls,
-  .hero-video:seeking::-webkit-media-controls {
+  .hero-video:seeking::-webkit-media-controls,
+  .hero-video:loading::-webkit-media-controls,
+  .hero-video:waiting::-webkit-media-controls {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  /* Специальные правила для iPhone - максимально агрессивное скрытие */
+  @supports (-webkit-touch-callout: none) {
+    .hero-video {
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+    }
+    
+    .hero-video::-webkit-media-controls,
+    .hero-video::-webkit-media-controls-enclosure,
+    .hero-video::-webkit-media-controls-panel,
+    .hero-video::-webkit-media-controls-play-button,
+    .hero-video::-webkit-media-controls-start-playback-button,
+    .hero-video::-webkit-media-controls-overlay-play-button {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      clip: rect(0, 0, 0, 0) !important;
+      clip-path: inset(100%) !important;
+      transform: scale(0) !important;
+    }
+  }
+  
+  /* Дополнительные правила для iPhone через user-agent detection */
+  @media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .hero-video::-webkit-media-controls-play-button,
+    .hero-video::-webkit-media-controls-start-playback-button,
+    .hero-video::-webkit-media-controls-overlay-play-button {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      clip: rect(0, 0, 0, 0) !important;
+      clip-path: inset(100%) !important;
+      transform: scale(0) !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+    }
+  }
+  
+  /* Дополнительное скрытие для всех возможных состояний видео на iPhone */
+  .hero-video:not([controls])::-webkit-media-controls,
+  .hero-video[controls="false"]::-webkit-media-controls,
+  .hero-video[controls=""]::-webkit-media-controls {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
