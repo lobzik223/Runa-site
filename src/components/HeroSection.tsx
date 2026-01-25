@@ -35,13 +35,16 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
     // КРИТИЧНО ДЛЯ iOS: Скрываем LoadingView СРАЗУ, не ждем видео!
-    if (isIOS && !hasCalledCallback.current) {
-      setTimeout(() => {
+    let iosTimeoutId: NodeJS.Timeout | null = null;
+    if (isIOS) {
+      // Для iOS вызываем onVideoLoaded сразу после небольшой задержки
+      iosTimeoutId = setTimeout(() => {
         if (!hasCalledCallback.current) {
           hasCalledCallback.current = true;
+          console.log('iOS: Скрываем LoadingView немедленно');
           onVideoLoaded();
         }
-      }, 100); // Минимальная задержка только для плавности
+      }, 300);
     }
     
     // Полностью отключаем элементы управления
@@ -528,6 +531,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       }
       if (earlyTimeoutId) {
         clearTimeout(earlyTimeoutId);
+      }
+      if (iosTimeoutId) {
+        clearTimeout(iosTimeoutId);
       }
       if (readyCheckInterval) {
         clearInterval(readyCheckInterval);

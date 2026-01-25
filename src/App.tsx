@@ -90,8 +90,12 @@ const App: React.FC = () => {
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
+    console.log('handleVideoLoaded вызван, isLoading:', isLoading, 'isIOS:', isIOS);
+    
     if (isIOS) {
+      // Для iOS сразу обновляем состояние
       setIsLoading(false);
+      console.log('iOS: setIsLoading(false) вызван');
     } else {
       setTimeout(() => {
         setIsLoading(false);
@@ -105,14 +109,14 @@ const App: React.FC = () => {
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
-    // Для iOS скрываем LoadingView практически сразу
+    // Для iOS скрываем LoadingView практически сразу (fallback на случай если onVideoLoaded не сработал)
     if (isIOS) {
       const iosTimeout = setTimeout(() => {
         if (isLoading) {
-          console.log('iOS: Принудительное скрытие загрузочного экрана');
+          console.log('iOS: Принудительное скрытие загрузочного экрана по таймауту');
           setIsLoading(false);
         }
-      }, 200);
+      }, 500); // Увеличиваем до 500ms для надежности
       return () => clearTimeout(iosTimeout);
     }
     
