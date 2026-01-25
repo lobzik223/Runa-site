@@ -2132,7 +2132,7 @@
   /* Центрируем виджет и заголовок на мобильной версии */
   .runa-problems {
     text-align: center; /* Центрируем весь контент */
-    padding: 28px 0 !important; /* Только вертикальные отступы, горизонтальные убираем */
+    padding: 28px 0 20px 0 !important; /* Только вертикальные отступы, снизу меньше для убирания элемента */
     display: flex;
     flex-direction: column;
     align-items: center; /* Центрируем все дочерние элементы */
@@ -2141,6 +2141,7 @@
     box-sizing: border-box;
     overflow-x: hidden; /* Предотвращаем горизонтальный скролл */
     margin: 0;
+    margin-bottom: 20px !important; /* Добавляем отступ снизу, чтобы убрать элемент под карточкой */
     position: relative;
   }
 
@@ -2187,15 +2188,17 @@
     min-width: 0 !important; /* Позволяем сжиматься */
     /* Предотвращаем наложение элементов */
     z-index: 1;
+    /* Убираем тени и элементы под карточкой */
+    box-shadow: none !important;
   }
 
   .problem-carousel-container {
     position: relative;
     width: 100% !important; /* Занимает всю доступную ширину родителя (уже с учетом padding) */
     max-width: 100% !important; /* Не превышаем ширину родителя */
-    margin: 0 auto !important; /* Центрируем контейнер */
+    margin: 0 auto 0 !important; /* Центрируем контейнер, убираем margin снизу */
     padding: 0 !important;
-    overflow: hidden !important; /* Скрываем переполнение для правильной работы карусели */
+    overflow: hidden !important; /* Скрываем переполнение для правильной работы карусели - это правильно! */
     border-radius: 16px;
     touch-action: pan-x pan-y; /* Разрешаем горизонтальный и вертикальный свайп */
     -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
@@ -2212,11 +2215,16 @@
     /* Предотвращаем наложение карточек */
     isolation: isolate; /* Создаем новый контекст наложения */
     z-index: 1;
+    /* Убираем лишние элементы под карточкой */
+    box-shadow: none !important; /* Убираем тень, которая может создавать эффект элемента под карточкой */
+    /* Убеждаемся, что карточки правильно отображаются при свайпе */
+    clip-path: none !important;
+    /* Гарантируем правильную работу карусели - убираем contain, чтобы карточки были видны */
   }
 
   .problem-carousel-track {
     display: flex !important;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Более плавный переход */
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important; /* Более плавный переход */
     will-change: transform;
     width: 100% !important;
     max-width: 100% !important;
@@ -2224,7 +2232,7 @@
     backface-visibility: hidden; /* Улучшение производительности */
     -webkit-backface-visibility: hidden;
     transform-style: flat !important; /* Убираем 3D трансформации для предотвращения наложения */
-    overflow: hidden !important; /* Скрываем карточки вне видимой области */
+    overflow: visible !important; /* Показываем карточки при свайпе - важно для отображения */
     min-width: 0 !important;
     /* Убеждаемся, что все карточки видны при свайпе */
     position: relative;
@@ -2233,6 +2241,9 @@
     z-index: 1;
     /* Убеждаемся, что карточки не накладываются */
     isolation: isolate;
+    /* Гарантируем правильное отображение при transform */
+    transform-origin: left center; /* Трансформация начинается слева для правильного сдвига */
+    /* Убеждаемся, что карточки правильно отображаются - убираем contain */
   }
 
   .problem-card-mobile {
@@ -2257,6 +2268,8 @@
     /* Убеждаемся, что карточки не накладываются - каждая в своей позиции */
     transform: translateZ(0); /* Создаем новый слой для каждой карточки */
     will-change: transform;
+    /* Упрощаем тень, чтобы не было эффекта элемента под карточкой */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important; /* Упрощенная тень */
   }
 
   .problem-card-mobile .problem-card-text {
@@ -2306,9 +2319,11 @@
     display: block;
   }
 
-  /* Тень для контейнера карусели */
+  /* Тень для контейнера карусели - убираем, чтобы не было элемента под карточкой */
   .problem-carousel-mobile .problem-carousel-container {
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: none !important; /* Убираем тень, которая создает эффект элемента под карточкой */
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   /* Скрываем кнопки навигации на мобильной версии - только свайп */
@@ -2369,7 +2384,7 @@
   /* Раздел "Как мы выглядим" - мобильная версия */
   .runa-app-preview {
     padding: 20px 4vw;
-    margin-top: 8px !important;
+    margin-top: 40px !important; /* Увеличиваем отступ сверху, чтобы убрать элемент под карточкой */
     text-align: center;
   }
   
