@@ -5,33 +5,23 @@ import LoadingView from './components/LoadingView';
 import logoImage from './components/images/runalogo.png';
 import './App.css';
 
+// Определяем iOS синхронно ДО первого рендера
+const isIOS = typeof window !== 'undefined' && 
+  (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
+   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [showHeader, setShowHeader] = useState(false);
-  const minLoadingTimePassedRef = useRef(false);
+  const videoLoadedRef = useRef(false);
   const loadingStartTimeRef = useRef<number>(Date.now());
   
-  // Гарантируем минимальное время показа LoadingView на iOS
+  console.log('App render, isIOS:', isIOS, 'isLoading:', isLoading);
+  
   useEffect(() => {
-    const isIOS = typeof window !== 'undefined' && 
-      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
-       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-    
     loadingStartTimeRef.current = Date.now();
-    
-    if (isIOS) {
-      // На iOS гарантируем минимум 1000ms показа LoadingView
-      const minTimeTimer = setTimeout(() => {
-        minLoadingTimePassedRef.current = true;
-        console.log('iOS: Минимальное время показа LoadingView прошло');
-      }, 1000);
-      
-      return () => clearTimeout(minTimeTimer);
-    } else {
-      // Для других устройств сразу разрешаем скрытие
-      minLoadingTimePassedRef.current = true;
-    }
+    console.log('App mounted, isIOS:', isIOS, 'isLoading:', isLoading);
   }, []);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
@@ -109,64 +99,59 @@ const App: React.FC = () => {
   };
 
   const handleVideoLoaded = () => {
-    const isIOS = typeof window !== 'undefined' && 
-      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
-       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-    
+    videoLoadedRef.current = true;
     console.log('handleVideoLoaded вызван, isLoading:', isLoading, 'isIOS:', isIOS);
     
-    // Для iOS ждем минимальное время показа, для других - сразу скрываем
-    if (isIOS) {
-      const elapsed = Date.now() - loadingStartTimeRef.current;
-      const minTime = 1000; // Минимальное время показа 1 секунда
-      
-      if (elapsed >= minTime && minLoadingTimePassedRef.current) {
-        // Минимальное время прошло, скрываем
-        setIsLoading(false);
-        console.log('iOS: Скрываем LoadingView после минимального времени');
-      } else {
-        // Если минимальное время еще не прошло, ждем
-        const remainingTime = Math.max(0, minTime - elapsed);
-        setTimeout(() => {
-          setIsLoading(false);
-          console.log('iOS: Скрываем LoadingView после ожидания минимального времени');
-        }, remainingTime);
-      }
-    } else {
-      // Для других устройств сразу обновляем состояние
+    // Для iOS НЕ скрываем сразу - ждем минимальное время через отдельный useEffect
+    // Для других устройств сразу скрываем
+    if (!isIOS) {
       setIsLoading(false);
-      console.log('setIsLoading(false) вызван');
+      console.log('Не iOS: Скрываем LoadingView сразу');
+    } else {
+      console.log('iOS: handleVideoLoaded вызван, но ждем минимальное время');
     }
   };
 
-  // Таймаут безопасности - для iOS минимальное время показа, для других устройств - 8 секунд
+  // КРИТИЧНО: Для iOS гарантируем минимальное время показа LoadingView (2 секунды)
   useEffect(() => {
-    const isIOS = typeof window !== 'undefined' && 
-      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
-       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-    
-    // Для iOS скрываем LoadingView после минимального времени показа (fallback на случай если onVideoLoaded не сработал)
-    if (isIOS) {
-      const iosTimeout = setTimeout(() => {
+    // Убеждаемся, что isLoading = true в начале на iOS
+    if (isIOS && !isLoading) {
+      console.log('iOS: isLoading был false, устанавливаем в true');
+      setIsLoading(true);
+    }
+  }, []); // Только при монтировании
+  
+  useEffect(() => {
+    if (!isIOS) {
+      // Для не-iOS устройств - обычный таймаут безопасности
+      const safetyTimeoutMs = 8000;
+      const safetyTimeout = setTimeout(() => {
         if (isLoading) {
-          console.log('iOS: Принудительное скрытие загрузочного экрана по таймауту');
+          console.warn('Принудительное скрытие загрузочного экрана по таймауту безопасности');
           setIsLoading(false);
         }
-      }, 1500); // Fallback таймаут для iOS (1.5 секунды)
-      return () => clearTimeout(iosTimeout);
+      }, safetyTimeoutMs);
+      return () => clearTimeout(safetyTimeout);
     }
     
-    // Для других устройств - обычный таймаут
-    const safetyTimeoutMs = 8000;
-    const safetyTimeout = setTimeout(() => {
-      if (isLoading) {
-        console.warn('Принудительное скрытие загрузочного экрана по таймауту безопасности');
-        setIsLoading(false);
-      }
-    }, safetyTimeoutMs);
-
-    return () => clearTimeout(safetyTimeout);
-  }, [isLoading]);
+    // Для iOS: LoadingView должен показываться минимум 2 секунды
+    console.log('iOS: Установлен таймаут для минимального времени показа LoadingView (2 секунды), isLoading:', isLoading);
+    
+    // Убеждаемся, что isLoading = true
+    if (!isLoading) {
+      console.log('iOS: isLoading был false, устанавливаем в true для показа LoadingView');
+      setIsLoading(true);
+    }
+    
+    const minDisplayTime = 2000;
+    
+    const iosTimeout = setTimeout(() => {
+      console.log('iOS: Скрываем LoadingView после минимального времени показа (2 секунды)');
+      setIsLoading(false);
+    }, minDisplayTime);
+    
+    return () => clearTimeout(iosTimeout);
+  }, [isIOS, isLoading]); // Зависимость от isIOS и isLoading
 
   // Отслеживание прокрутки мимо hero section для показа header на мобильной версии
   useEffect(() => {
@@ -229,6 +214,8 @@ const App: React.FC = () => {
       elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
+
+  console.log('App render, isLoading:', isLoading, 'isIOS:', isIOS);
 
   return (
     <div className="app">

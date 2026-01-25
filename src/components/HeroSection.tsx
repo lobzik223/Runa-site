@@ -34,17 +34,21 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
-    // КРИТИЧНО ДЛЯ iOS: Скрываем LoadingView после минимальной задержки, чтобы он успел показаться
+    // КРИТИЧНО ДЛЯ iOS: НЕ вызываем onVideoLoaded сразу - пусть App.tsx управляет временем показа
+    // Для iOS просто отмечаем, что видео готово, но не скрываем LoadingView
     if (isIOS) {
-      // Для iOS даем время LoadingView показаться (минимум 1000ms), затем скрываем
-      // Это гарантирует, что пользователь увидит загрузку, но не будет долго ждать
+      // На iOS просто отмечаем, что видео загружено, но не скрываем LoadingView
+      // App.tsx будет управлять временем показа LoadingView
       setTimeout(() => {
         if (!hasCalledCallback.current) {
           hasCalledCallback.current = true;
-          console.log('iOS: Скрываем LoadingView после минимальной задержки');
-          onVideoLoaded();
+          console.log('iOS: Видео готово, но LoadingView будет скрыт через минимальное время');
+          onVideoLoaded(); // Просто отмечаем, что видео готово
         }
-      }, 1000); // Минимальное время показа LoadingView на iOS (1 секунда)
+      }, 100); // Небольшая задержка для инициализации видео
+    } else {
+      // Для не-iOS устройств - вызываем onVideoLoaded когда видео готово
+      // Это будет обработано через события видео ниже
     }
     
     // Полностью отключаем элементы управления
