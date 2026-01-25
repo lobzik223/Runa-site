@@ -91,12 +91,12 @@ const App: React.FC = () => {
     }, 200);
   };
 
-  // Таймаут безопасности - для iOS короче (5 секунд), для других устройств - 8 секунд
+  // Таймаут безопасности - для iOS очень короткий (3 секунды), для других устройств - 8 секунд
   useEffect(() => {
     const isIOS = typeof window !== 'undefined' && 
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-    const safetyTimeoutMs = isIOS ? 5000 : 8000;
+    const safetyTimeoutMs = isIOS ? 3000 : 8000;
     const safetyTimeout = setTimeout(() => {
       if (isLoading) {
         console.warn('Принудительное скрытие загрузочного экрана по таймауту безопасности');
