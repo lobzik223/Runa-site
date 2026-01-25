@@ -2130,7 +2130,7 @@
     position: relative;
     width: 100%;
     margin: 0 auto;
-    margin-left: -11vw; /* Централизуем карточку, сдвигаем левее */
+    margin-left: -10vw; /* Централизуем карточку, сдвигаем левее */
     overflow: hidden;
     border-radius: 16px;
     touch-action: pan-x pan-y; /* Разрешаем горизонтальный и вертикальный свайп */
