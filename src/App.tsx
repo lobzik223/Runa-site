@@ -9,6 +9,30 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [showHeader, setShowHeader] = useState(false);
+  const minLoadingTimePassedRef = useRef(false);
+  const loadingStartTimeRef = useRef<number>(Date.now());
+  
+  // Гарантируем минимальное время показа LoadingView на iOS
+  useEffect(() => {
+    const isIOS = typeof window !== 'undefined' && 
+      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
+       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    
+    loadingStartTimeRef.current = Date.now();
+    
+    if (isIOS) {
+      // На iOS гарантируем минимум 1000ms показа LoadingView
+      const minTimeTimer = setTimeout(() => {
+        minLoadingTimePassedRef.current = true;
+        console.log('iOS: Минимальное время показа LoadingView прошло');
+      }, 1000);
+      
+      return () => clearTimeout(minTimeTimer);
+    } else {
+      // Для других устройств сразу разрешаем скрытие
+      minLoadingTimePassedRef.current = true;
+    }
+  }, []);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -85,32 +109,50 @@ const App: React.FC = () => {
   };
 
   const handleVideoLoaded = () => {
-    // Для iOS - сразу скрываем без задержки, для других - небольшая задержка
     const isIOS = typeof window !== 'undefined' && 
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
     console.log('handleVideoLoaded вызван, isLoading:', isLoading, 'isIOS:', isIOS);
     
-    // Для всех устройств сразу обновляем состояние
-    setIsLoading(false);
-    console.log('setIsLoading(false) вызван');
+    // Для iOS ждем минимальное время показа, для других - сразу скрываем
+    if (isIOS) {
+      const elapsed = Date.now() - loadingStartTimeRef.current;
+      const minTime = 1000; // Минимальное время показа 1 секунда
+      
+      if (elapsed >= minTime && minLoadingTimePassedRef.current) {
+        // Минимальное время прошло, скрываем
+        setIsLoading(false);
+        console.log('iOS: Скрываем LoadingView после минимального времени');
+      } else {
+        // Если минимальное время еще не прошло, ждем
+        const remainingTime = Math.max(0, minTime - elapsed);
+        setTimeout(() => {
+          setIsLoading(false);
+          console.log('iOS: Скрываем LoadingView после ожидания минимального времени');
+        }, remainingTime);
+      }
+    } else {
+      // Для других устройств сразу обновляем состояние
+      setIsLoading(false);
+      console.log('setIsLoading(false) вызван');
+    }
   };
 
-  // Таймаут безопасности - для iOS очень короткий, для других устройств - 8 секунд
+  // Таймаут безопасности - для iOS минимальное время показа, для других устройств - 8 секунд
   useEffect(() => {
     const isIOS = typeof window !== 'undefined' && 
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
-    // Для iOS скрываем LoadingView практически сразу (fallback на случай если onVideoLoaded не сработал)
+    // Для iOS скрываем LoadingView после минимального времени показа (fallback на случай если onVideoLoaded не сработал)
     if (isIOS) {
       const iosTimeout = setTimeout(() => {
         if (isLoading) {
           console.log('iOS: Принудительное скрытие загрузочного экрана по таймауту');
           setIsLoading(false);
         }
-      }, 300); // Короткий таймаут для iOS
+      }, 1500); // Fallback таймаут для iOS (1.5 секунды)
       return () => clearTimeout(iosTimeout);
     }
     
@@ -201,7 +243,8 @@ const App: React.FC = () => {
           height: isLoading ? '100vh' : 'auto',
           position: isLoading ? 'fixed' : 'relative',
           width: isLoading ? '100%' : 'auto',
-          zIndex: isLoading ? -1 : 1
+          zIndex: isLoading ? -1 : 1,
+          visibility: isLoading ? 'hidden' : 'visible'
         }}
       >
         <Header showOnMobile={showHeader} />
