@@ -484,7 +484,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
           console.warn('Видео загружается медленно, показываем сайт после таймаута безопасности');
           hasCalledCallback.current = true;
           onVideoLoaded();
-          clearInterval(readyCheckInterval);
+          if (readyCheckInterval) {
+            clearInterval(readyCheckInterval);
+          }
           attemptPlay();
         }
       }, 10000);
