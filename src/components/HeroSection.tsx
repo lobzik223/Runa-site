@@ -29,11 +29,19 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const video = videoRef.current;
     if (!video) return;
     
-    // Отключаем элементы управления
+    // Полностью отключаем элементы управления
     video.controls = false;
+    video.removeAttribute('controls');
     video.setAttribute('controls', 'false');
     video.setAttribute('playsinline', 'true');
     video.setAttribute('webkit-playsinline', 'true');
+    video.setAttribute('x-webkit-airplay', 'deny');
+    
+    // Дополнительно для мобильных устройств
+    if (isMobile) {
+      video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+      video.setAttribute('disablePictureInPicture', 'true');
+    }
     
     // Сбрасываем флаг при смене видео
     hasCalledCallback.current = false;

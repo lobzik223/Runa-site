@@ -50,46 +50,115 @@
 }
 
 
-/* Скрытие кнопок плеера в браузерах */
-video::-webkit-media-controls {
-  display: none !important;
+/* Полное скрытие всех элементов управления видео */
+.hero-video,
+video.hero-video {
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }
-video::-webkit-media-controls-start-playback-button {
+
+.hero-video::-webkit-media-controls,
+video.hero-video::-webkit-media-controls {
   display: none !important;
-  -webkit-appearance: none;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
-video::-webkit-media-controls-panel {
+
+.hero-video::-webkit-media-controls-start-playback-button,
+video.hero-video::-webkit-media-controls-start-playback-button {
   display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
-video::-webkit-media-controls-play-button {
+
+.hero-video::-webkit-media-controls-panel,
+video.hero-video::-webkit-media-controls-panel {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
-video::-webkit-media-controls-timeline {
+
+.hero-video::-webkit-media-controls-play-button,
+video.hero-video::-webkit-media-controls-play-button {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
-video::-webkit-media-controls-current-time-display {
+
+.hero-video::-webkit-media-controls-timeline,
+video.hero-video::-webkit-media-controls-timeline {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
-video::-webkit-media-controls-time-remaining-display {
+
+.hero-video::-webkit-media-controls-current-time-display,
+video.hero-video::-webkit-media-controls-current-time-display {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
-video::-webkit-media-controls-mute-button {
+
+.hero-video::-webkit-media-controls-time-remaining-display,
+video.hero-video::-webkit-media-controls-time-remaining-display {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
-video::-webkit-media-controls-toggle-closed-captions-button {
+
+.hero-video::-webkit-media-controls-mute-button,
+video.hero-video::-webkit-media-controls-mute-button {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
-video::-webkit-media-controls-volume-slider {
+
+.hero-video::-webkit-media-controls-toggle-closed-captions-button,
+video.hero-video::-webkit-media-controls-toggle-closed-captions-button {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
-video::-webkit-media-controls-fullscreen-button {
+
+.hero-video::-webkit-media-controls-volume-slider,
+video.hero-video::-webkit-media-controls-volume-slider {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
-video::-webkit-media-controls-overlay-play-button {
+
+.hero-video::-webkit-media-controls-fullscreen-button,
+video.hero-video::-webkit-media-controls-fullscreen-button {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
-video::-webkit-media-controls-overlay-enclosure {
+
+.hero-video::-webkit-media-controls-overlay-play-button,
+video.hero-video::-webkit-media-controls-overlay-play-button {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.hero-video::-webkit-media-controls-overlay-enclosure,
+video.hero-video::-webkit-media-controls-overlay-enclosure {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* Дополнительные правила для полного скрытия элементов управления */
@@ -148,21 +217,38 @@ video::-webkit-media-controls-overlay-enclosure {
     -webkit-touch-callout: none !important; /* Отключаем контекстное меню на iOS */
     -webkit-user-select: none !important;
     user-select: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
   }
   
-  /* Дополнительное скрытие элементов управления на мобильных */
+  /* Полное скрытие всех элементов управления на мобильных */
+  
   .hero-video::-webkit-media-controls {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
   
   .hero-video::-webkit-media-controls-enclosure {
     display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
   }
   
   .hero-video::-webkit-media-controls-panel {
     display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
   
   .hero-video::-webkit-media-controls-start-playback-button {
@@ -170,6 +256,88 @@ video::-webkit-media-controls-overlay-enclosure {
     -webkit-appearance: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  
+  .hero-video::-webkit-media-controls-play-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  .hero-video::-webkit-media-controls-timeline {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  .hero-video::-webkit-media-controls-current-time-display {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-time-remaining-display {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-mute-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-volume-slider {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-overlay-enclosure {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  /* Дополнительные правила для iOS Safari */
+  .hero-video::-webkit-media-controls-toggle-closed-captions-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  /* Убираем возможность показа элементов управления при любых действиях */
+  .hero-video[controls] {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  
+  .hero-video:not([controls]) {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  
+  /* Дополнительное скрытие для всех браузеров */
+  .hero-video * {
+    pointer-events: none !important;
   }
 
   .hero-gradient-transition {
