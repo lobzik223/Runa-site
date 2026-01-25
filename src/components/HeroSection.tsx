@@ -34,6 +34,16 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
+    // КРИТИЧНО ДЛЯ iOS: Скрываем LoadingView СРАЗУ, не ждем видео!
+    if (isIOS && !hasCalledCallback.current) {
+      setTimeout(() => {
+        if (!hasCalledCallback.current) {
+          hasCalledCallback.current = true;
+          onVideoLoaded();
+        }
+      }, 100); // Минимальная задержка только для плавности
+    }
+    
     // Полностью отключаем элементы управления
     video.controls = false;
     video.removeAttribute('controls');
@@ -431,73 +441,53 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     
     // Предзагрузка видео
     video.load();
-    
-    // Для iOS - немедленно скрываем LoadingView через небольшую задержку
-    if (isIOS) {
-      setTimeout(() => {
-        if (!hasCalledCallback.current) {
-          hasCalledCallback.current = true;
-          onVideoLoaded();
-          attemptPlay();
-        }
-      }, 300);
-    }
 
     // Периодическая проверка готовности (на случай, если события не сработали)
-    // Для iOS проверяем очень часто и максимально агрессивно
-    const checkInterval = isIOS ? 50 : 200;
-    const readyCheckInterval = setInterval(() => {
-      if (!hasCalledCallback.current) {
-        if (checkVideoReady()) {
+    // Для iOS НЕ НУЖНА - уже скрыли LoadingView выше
+    let readyCheckInterval: NodeJS.Timeout | null = null;
+    if (!isIOS) {
+      const checkInterval = 200;
+      readyCheckInterval = setInterval(() => {
+        if (!hasCalledCallback.current && checkVideoReady()) {
           handleVideoReady();
-          clearInterval(readyCheckInterval);
-        } else if (isIOS) {
-          // Для iOS - если прошло больше 500ms, скрываем LoadingView в любом случае
-          const elapsed = Date.now() - (window.performance?.timing?.navigationStart || Date.now());
-          if (elapsed > 500 || video.readyState >= 1) {
-            hasCalledCallback.current = true;
-            onVideoLoaded();
-            attemptPlay();
+          if (readyCheckInterval) {
             clearInterval(readyCheckInterval);
           }
         }
-      }
-    }, checkInterval);
+      }, checkInterval);
+    }
 
-    // Если видео уже полностью загружено, вызываем callback сразу
-    if (checkVideoReady()) {
+    // Если видео уже полностью загружено, вызываем callback сразу (только для не-iOS)
+    if (!isIOS && checkVideoReady()) {
       handleVideoReady();
     }
 
-    // Пытаемся запустить сразу, даже если метаданные еще не загружены
-    setTimeout(() => {
-      attemptPlay();
-    }, 100);
-
-    // Таймаут безопасности - для iOS очень короткий (1 секунда!), для других устройств - 10 секунд
-    const safetyTimeout = isIOS ? 1000 : 10000;
-    const timeoutId = setTimeout(() => {
-      if (!hasCalledCallback.current) {
-        console.warn('Видео загружается медленно, показываем сайт после таймаута безопасности');
-        hasCalledCallback.current = true;
-        onVideoLoaded();
-        clearInterval(readyCheckInterval);
-        // Пытаемся запустить видео даже после таймаута
+    // Пытаемся запустить сразу, даже если метаданные еще не загружены (только для не-iOS)
+    if (!isIOS) {
+      setTimeout(() => {
         attemptPlay();
-      }
-    }, safetyTimeout);
-    
-    // Для iOS добавляем дополнительный очень ранний таймаут (500ms)
+      }, 100);
+    } else {
+      // Для iOS пытаемся запустить через небольшую задержку
+      setTimeout(() => {
+        attemptPlay();
+      }, 500);
+    }
+
+    // Таймаут безопасности - для iOS НЕ НУЖЕН (уже скрыли выше), для других устройств - 10 секунд
+    let timeoutId: NodeJS.Timeout | null = null;
     let earlyTimeoutId: NodeJS.Timeout | null = null;
-    if (isIOS) {
-      earlyTimeoutId = setTimeout(() => {
+    
+    if (!isIOS) {
+      timeoutId = setTimeout(() => {
         if (!hasCalledCallback.current) {
-          console.log('iOS: Очень раннее скрытие загрузки');
+          console.warn('Видео загружается медленно, показываем сайт после таймаута безопасности');
           hasCalledCallback.current = true;
           onVideoLoaded();
+          clearInterval(readyCheckInterval);
           attemptPlay();
         }
-      }, 500);
+      }, 10000);
     }
 
     return () => {
@@ -531,11 +521,15 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
         }
         delete (video as any)._mutationObserver;
       }
-      clearTimeout(timeoutId);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       if (earlyTimeoutId) {
         clearTimeout(earlyTimeoutId);
       }
-      clearInterval(readyCheckInterval);
+      if (readyCheckInterval) {
+        clearInterval(readyCheckInterval);
+      }
       if (hideControlsInterval) {
         clearInterval(hideControlsInterval);
       }
