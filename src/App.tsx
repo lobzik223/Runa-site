@@ -85,18 +85,26 @@ const App: React.FC = () => {
   };
 
   const handleVideoLoaded = () => {
-    // Минимальная задержка для плавного перехода (уменьшено для быстрой загрузки)
-    setTimeout(() => {
+    // Для iOS - сразу скрываем без задержки, для других - небольшая задержка
+    const isIOS = typeof window !== 'undefined' && 
+      (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
+       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+    
+    if (isIOS) {
       setIsLoading(false);
-    }, 200);
+    } else {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 200);
+    }
   };
 
-  // Таймаут безопасности - для iOS очень короткий (3 секунды), для других устройств - 8 секунд
+  // Таймаут безопасности - для iOS очень короткий (1 секунда!), для других устройств - 8 секунд
   useEffect(() => {
     const isIOS = typeof window !== 'undefined' && 
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-    const safetyTimeoutMs = isIOS ? 3000 : 8000;
+    const safetyTimeoutMs = isIOS ? 1000 : 8000;
     const safetyTimeout = setTimeout(() => {
       if (isLoading) {
         console.warn('Принудительное скрытие загрузочного экрана по таймауту безопасности');

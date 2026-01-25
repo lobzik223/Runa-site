@@ -325,14 +325,15 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
 
     // Функция для проверки полной готовности видео
     const checkVideoReady = (): boolean => {
-      // Для iOS используем максимально мягкие условия
+      // Для iOS используем максимально мягкие условия - практически сразу готовы
       if (isIOS) {
-        // На iOS достаточно иметь метаданные (readyState >= 2) и duration
-        // Не требуем буферизацию вообще
-        if (video.readyState >= 2 && video.duration > 0 && isFinite(video.duration)) {
+        // На iOS достаточно иметь readyState >= 1 (HAVE_METADATA) или даже просто наличие элемента
+        // Не требуем duration или буферизацию вообще
+        if (video.readyState >= 1) {
           return true;
         }
-        return false;
+        // Даже если readyState = 0, считаем готовым на iOS через небольшую задержку
+        return true;
       }
       
       // Для других устройств - более строгие требования
@@ -381,16 +382,14 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     // Для iOS также обрабатываем событие canplay (менее строгое, чем canplaythrough)
     const handleCanPlay = () => {
       if (isIOS && !hasCalledCallback.current) {
-        // На iOS считаем видео готовым при canplay, если есть метаданные (readyState >= 2)
-        if (video.readyState >= 2 && video.duration > 0) {
-          setTimeout(() => {
-            if (!hasCalledCallback.current) {
-              hasCalledCallback.current = true;
-              onVideoLoaded();
-              attemptPlay();
-            }
-          }, 200);
-        }
+        // На iOS считаем видео готовым сразу при canplay
+        setTimeout(() => {
+          if (!hasCalledCallback.current) {
+            hasCalledCallback.current = true;
+            onVideoLoaded();
+            attemptPlay();
+          }
+        }, 100);
       }
       handleVideoReady();
     };
@@ -407,18 +406,15 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     
     // Обработчик для проверки метаданных
     const handleLoadedMetadata = () => {
-      // После загрузки метаданных начинаем проверять готовность
-      // Для iOS достаточно readyState >= 2 (HAVE_METADATA)
+      // Для iOS - сразу скрываем LoadingView после загрузки метаданных
       if (isIOS && !hasCalledCallback.current) {
-        if (video.readyState >= 2 && video.duration > 0) {
-          setTimeout(() => {
-            if (!hasCalledCallback.current) {
-              hasCalledCallback.current = true;
-              onVideoLoaded();
-              attemptPlay();
-            }
-          }, 500);
-        }
+        setTimeout(() => {
+          if (!hasCalledCallback.current) {
+            hasCalledCallback.current = true;
+            onVideoLoaded();
+            attemptPlay();
+          }
+        }, 200);
       }
       // Для других устройств - readyState >= 4
       if (!isIOS && video.readyState >= 4) {
@@ -435,9 +431,20 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     
     // Предзагрузка видео
     video.load();
+    
+    // Для iOS - немедленно скрываем LoadingView через небольшую задержку
+    if (isIOS) {
+      setTimeout(() => {
+        if (!hasCalledCallback.current) {
+          hasCalledCallback.current = true;
+          onVideoLoaded();
+          attemptPlay();
+        }
+      }, 300);
+    }
 
     // Периодическая проверка готовности (на случай, если события не сработали)
-    // Для iOS проверяем чаще и более агрессивно
+    // Для iOS проверяем очень часто и максимально агрессивно
     const checkInterval = isIOS ? 50 : 200;
     const readyCheckInterval = setInterval(() => {
       if (!hasCalledCallback.current) {
@@ -445,8 +452,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
           handleVideoReady();
           clearInterval(readyCheckInterval);
         } else if (isIOS) {
-          // Для iOS дополнительно проверяем через более мягкие условия
-          if (video.readyState >= 2 && video.duration > 0 && !hasCalledCallback.current) {
+          // Для iOS - если прошло больше 500ms, скрываем LoadingView в любом случае
+          const elapsed = Date.now() - (window.performance?.timing?.navigationStart || Date.now());
+          if (elapsed > 500 || video.readyState >= 1) {
             hasCalledCallback.current = true;
             onVideoLoaded();
             attemptPlay();
@@ -466,8 +474,8 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       attemptPlay();
     }, 100);
 
-    // Таймаут безопасности - для iOS очень короткий (3 секунды), для других устройств - 10 секунд
-    const safetyTimeout = isIOS ? 3000 : 10000;
+    // Таймаут безопасности - для iOS очень короткий (1 секунда!), для других устройств - 10 секунд
+    const safetyTimeout = isIOS ? 1000 : 10000;
     const timeoutId = setTimeout(() => {
       if (!hasCalledCallback.current) {
         console.warn('Видео загружается медленно, показываем сайт после таймаута безопасности');
@@ -479,17 +487,17 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       }
     }, safetyTimeout);
     
-    // Для iOS добавляем дополнительный ранний таймаут (1.5 секунды)
+    // Для iOS добавляем дополнительный очень ранний таймаут (500ms)
     let earlyTimeoutId: NodeJS.Timeout | null = null;
     if (isIOS) {
       earlyTimeoutId = setTimeout(() => {
-        if (!hasCalledCallback.current && video.readyState >= 2 && video.duration > 0) {
-          console.log('iOS: Раннее скрытие загрузки после загрузки метаданных');
+        if (!hasCalledCallback.current) {
+          console.log('iOS: Очень раннее скрытие загрузки');
           hasCalledCallback.current = true;
           onVideoLoaded();
           attemptPlay();
         }
-      }, 1500);
+      }, 500);
     }
 
     return () => {
