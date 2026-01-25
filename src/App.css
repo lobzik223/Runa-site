@@ -21,7 +21,7 @@
 }
 
 .logo-u {
-  color: #B16E4D;
+  color: #CD6F42;
 }
 
 .page-content {
@@ -38,25 +38,27 @@
 }
 
 .eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: rgba(237, 229, 208, 0.8);
+  color: #253550;
   margin-bottom: 0;
   display: block;
 }
 
 .eyebrow-widget {
-  background: rgba(237, 229, 208, 0.2);
-  border: 1px solid rgba(237, 229, 208, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 14px;
   padding: 14px 20px;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12),
-              inset 0 0 30px rgba(237, 229, 208, 0.12),
+              inset 0 0 30px rgba(255, 255, 255, 0.12),
               inset 0 1px 0 rgba(255, 255, 255, 0.3),
-              0 0 0 1px rgba(237, 229, 208, 0.15);
+              0 0 0 1px rgba(255, 255, 255, 0.15);
   margin-bottom: 16px;
   display: inline-block;
   width: fit-content;
@@ -128,26 +130,31 @@
 
 .runa-intro .eyebrow,
 .eyebrow-widget .eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #B16E4D;
+  color: #253550;
   margin-bottom: 0;
-  font-weight: 600;
 }
 
 .runa-intro h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: clamp(2.5rem, 5vw, 3.2rem);
   margin-bottom: 14px;
   margin-top: 0;
   line-height: 1.2;
+  color: #253550;
 }
 
 .runa-intro .description {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   line-height: 1.7;
-  color: #EDE5D0;
+  color: #253550;
   font-size: 1.05rem;
-  font-weight: 400;
   margin-top: 0;
 }
 
@@ -224,15 +231,15 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  color: #EDE5D0;
+  color: #253550;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 300;
   padding: 8px 0;
   transition: all 0.3s ease;
 }
 
 .advantage-item:hover {
-  color: #EDE5D0;
+  color: #253550;
   transform: translateX(4px);
 }
 
@@ -266,21 +273,71 @@
   background: transparent;
   border-radius: 22px;
   padding: 32px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.runa-problems.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.runa-problems .eyebrow-widget,
+.runa-problems h2,
+.runa-problems .runa-problems-desc,
+.runa-problems .problem-grid,
+.runa-problems .problem-carousel-mobile {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.runa-problems.animate-in .eyebrow-widget {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.runa-problems.animate-in h2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.runa-problems.animate-in .runa-problems-desc {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.runa-problems.animate-in .problem-grid,
+.runa-problems.animate-in .problem-carousel-mobile {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
 }
 
 .runa-problems .eyebrow {
   margin-bottom: 0;
-  color: #B16E4D;
+  color: #253550;
 }
 
 .runa-problems h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   margin-bottom: 16px;
   font-size: clamp(2rem, 4vw, 2.7rem);
+  color: #253550;
 }
 
 .runa-problems-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   margin-bottom: 32px;
-  color: #EDE5D0;
+  color: #253550;
   font-size: 1.05rem;
   line-height: 1.6;
   max-width: 640px;
@@ -292,23 +349,70 @@
   border-radius: 22px;
   padding: 32px;
   margin-top: 64px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.runa-why.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.runa-why .eyebrow-widget,
+.runa-why h2,
+.runa-why .runa-why-desc,
+.runa-why .why-features {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.runa-why.animate-in .eyebrow-widget {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.runa-why.animate-in h2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.runa-why.animate-in .runa-why-desc {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.runa-why.animate-in .why-features {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
 }
 
 .runa-why .eyebrow {
   margin-bottom: 0;
-  color: #B16E4D;
+  color: #253550;
 }
 
 .runa-why h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   margin-bottom: 16px;
   font-size: clamp(2rem, 4vw, 2.7rem);
-  color: #EDE5D0;
+  color: #253550;
   line-height: 1.3;
 }
 
 .runa-why-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   margin-bottom: 48px;
-  color: #EDE5D0;
+  color: #253550;
   font-size: 1.05rem;
   line-height: 1.6;
   max-width: 800px;
@@ -334,7 +438,30 @@
   box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12),
               inset 0 0 50px rgba(237, 229, 208, 0.1),
               inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.runa-why.animate-in .why-feature {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.runa-why.animate-in .why-feature:nth-child(1) {
+  transition-delay: 0.5s;
+}
+
+.runa-why.animate-in .why-feature:nth-child(2) {
+  transition-delay: 0.6s;
+}
+
+.runa-why.animate-in .why-feature:nth-child(3) {
+  transition-delay: 0.7s;
+}
+
+.runa-why.animate-in .why-feature:nth-child(4) {
+  transition-delay: 0.8s;
 }
 
 .why-feature:hover {
@@ -345,19 +472,19 @@
 }
 
 .why-feature-left {
-  /* Текст слева, изображение справа - порядок по умолчанию */
+  /* Изображение слева, текст справа - порядок по умолчанию */
 }
 
 .why-feature-right {
-  /* Изображение слева, текст справа - меняем порядок */
+  /* Текст слева, изображение справа - меняем порядок */
 }
 
 .why-feature-right .why-feature-content {
-  order: 2;
+  order: 1;
 }
 
 .why-feature-right .why-feature-image {
-  order: 1;
+  order: 2;
 }
 
 .why-feature-content {
@@ -367,26 +494,28 @@
 }
 
 .why-feature-content h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: 1.8rem;
-  font-weight: 700;
-  color: #B16E4D;
+  color: #253550;
   margin: 0;
   line-height: 1.3;
 }
 
 .why-feature-content p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #EDE5D0;
+  color: #253550;
   margin: 0;
 }
 
 .why-feature-image {
   width: 100%;
   height: 300px;
-  background: rgba(237, 229, 208, 0.1);
+  background: transparent;
   border-radius: 16px;
-  border: 2px dashed rgba(237, 229, 208, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -394,18 +523,12 @@
   overflow: hidden;
 }
 
-.why-feature-image::before {
-  content: 'Изображение';
-  color: rgba(237, 229, 208, 0.4);
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
 .why-feature-image img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: none; /* Скрываем пока нет изображения */
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
 }
 
 .problem-grid {
@@ -444,7 +567,30 @@
               inset 0 1px 0 rgba(255, 255, 255, 0.4),
               0 0 0 1px rgba(237, 229, 208, 0.2);
   line-height: 1.55;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.runa-problems.animate-in .problem-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.runa-problems.animate-in .problem-card-pos-1-1 {
+  transition-delay: 0.5s;
+}
+
+.runa-problems.animate-in .problem-card-pos-2-1 {
+  transition-delay: 0.6s;
+}
+
+.runa-problems.animate-in .problem-card-pos-1-2 {
+  transition-delay: 0.7s;
+}
+
+.runa-problems.animate-in .problem-card-pos-2-2 {
+  transition-delay: 0.8s;
 }
 
 .problem-card:hover {
@@ -490,19 +636,19 @@
   height: 46px;
   font-size: 0.95rem;
   margin-bottom: 20px;
-  color: #EDE5D0;
+  color: #253550;
 }
 
 .problem-card-large .problem-card-title {
   font-size: 1.2rem;
   margin-bottom: 14px;
-  color: #B16E4D;
+  color: #253550;
 }
 
 .problem-card-large .problem-card-desc {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #EDE5D0;
+  color: #253550;
 }
 
 .problem-card-with-image {
@@ -520,14 +666,14 @@
 .problem-card-with-image .problem-card-title {
   font-size: 1.05rem;
   margin-bottom: 8px;
-  color: #B16E4D;
+  color: #253550;
 }
 
 .problem-card-with-image .problem-card-desc {
   font-size: 0.9rem;
   line-height: 1.5;
   margin-bottom: 0;
-  color: #EDE5D0;
+  color: #253550;
 }
 
 .problem-card-with-image .problem-card-image {
@@ -562,11 +708,11 @@
 }
 
 .problem-card-light .problem-card-title {
-  color: #B16E4D;
+  color: #253550;
 }
 
 .problem-card-light .problem-card-desc {
-  color: rgba(237, 229, 208, 0.95);
+  color: #253550;
 }
 
 .problem-card-number {
@@ -585,18 +731,21 @@
 }
 
 .problem-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: 1.1rem;
-  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #B16E4D;
+  color: #253550;
   margin-bottom: 12px;
   line-height: 1.3;
 }
 
 .problem-card-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   font-size: 0.95rem;
-  color: #EDE5D0;
+  color: #253550;
   margin: 0;
   line-height: 1.55;
 }
@@ -604,43 +753,305 @@
 .runa-pricing {
   display: flex;
   justify-content: center;
+  padding: 0 5vw;
 }
 
 .pricing-card {
-  background: linear-gradient(135deg, rgba(237, 229, 208, 0.28), rgba(237, 229, 208, 0.18));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15));
   border-radius: 22px;
-  padding: 36px;
-  border: 1px solid rgba(237, 229, 208, 0.45);
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   width: min(520px, 100%);
   text-align: center;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
-              inset 0 0 70px rgba(237, 229, 208, 0.2),
+              inset 0 0 70px rgba(255, 255, 255, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.5),
-              0 0 0 1px rgba(237, 229, 208, 0.25);
+              0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .pricing-card h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: 2rem;
   margin-bottom: 12px;
-  color: #EDE5D0;
+  color: #253550;
 }
 
 .pricing-card h2 .accent {
-  color: #b96742;
+  color: #253550;
 }
 
 .pricing-card p {
-  color: #EDE5D0;
-  margin-bottom: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
+  margin-bottom: 40px;
+  line-height: 1.6;
 }
 
 .pricing-actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.pricing-actions .btn {
+  width: 100%;
+  padding: 14px 32px;
+  font-size: 1rem;
+}
+
+.pricing-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.pricing-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 20px;
+  color: #253550;
+}
+
+.pricing-intro {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #253550;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.pricing-features {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.pricing-features h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: #253550;
+  text-align: center;
+}
+
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: #253550;
+  line-height: 1.6;
+}
+
+.feature-check {
+  font-weight: 600;
+  color: #CD6F42;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.payment-methods {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.payment-methods h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #253550;
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.payment-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #253550;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.pricing-plans {
+  margin-bottom: 48px;
+}
+
+.pricing-plans h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: #253550;
+  text-align: center;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.plan-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.plan-card-recommended {
+  background: rgba(37, 53, 80, 0.25);
+  border: 2px solid #253550;
+}
+
+.plan-card-best {
+  background: rgba(37, 53, 80, 0.3);
+  border: 2px solid #CD6F42;
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #CD6F42;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plan-header {
+  margin-bottom: 16px;
+}
+
+.plan-duration {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #253550;
+}
+
+.plan-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #253550;
+  margin-bottom: 12px;
+}
+
+.plan-price-special {
+  color: #CD6F42;
+  font-size: 2.2rem;
+}
+
+.plan-description {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: #253550;
+  line-height: 1.5;
+}
+
+.pricing-cta {
+  text-align: center;
+}
+
+.pricing-note {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: #253550;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.btn-subscribe {
+  background: #253550;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 24px;
+  padding: 16px 48px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 53, 80, 0.3);
+  margin-bottom: 20px;
+}
+
+.btn-subscribe:hover {
+  background: #1a2d3f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 53, 80, 0.4);
+}
+
+.pricing-disclaimer {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: #253550;
+  opacity: 0.7;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .btn {
@@ -649,21 +1060,35 @@
   padding: 12px 26px;
   cursor: pointer;
   font-weight: 600;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 .btn.primary {
-  background: #ffffff;
-  color: #768993;
+  background: #253550;
+  color: #FFFFFF;
+  border: 2px solid #253550;
+}
+
+.btn.primary:hover {
+  background: #1a2d3f;
+  border-color: #1a2d3f;
+  transform: translateY(-2px);
 }
 
 .btn.secondary {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: #FFFFFF;
 }
 
-.btn:hover {
+.btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 1);
   transform: translateY(-2px);
 }
 
@@ -684,8 +1109,60 @@
 
 .footer-grid h4,
 .footer-grid h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   margin-bottom: 12px;
-  color: #EDE5D0;
+  color: #253550;
+}
+
+.footer-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-contacts p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.footer-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #253550;
+}
+
+.footer-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.footer-link:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.footer-inn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
+  font-size: 0.85rem;
+  margin: 0;
+  opacity: 0.8;
 }
 
 .footer-grid ul {
@@ -698,11 +1175,15 @@
 }
 
 .footer-grid li {
-  color: #EDE5D0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
 }
 
 .footer-note {
-  color: rgba(237, 229, 208, 0.8);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
   text-align: center;
   font-size: 0.9rem;
 }
@@ -770,15 +1251,16 @@
   }
 
   .runa-intro-logo-mobile {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex-shrink: 0;
-    width: 120px;
-    height: auto;
+    width: 100%;
     margin: -30px auto 0 auto !important; /* Центрируем картинку и поднимаем выше */
   }
 
   .analytics-logo-mobile {
-    width: 100%;
+    width: 240px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
@@ -795,10 +1277,6 @@
     display: inline-block !important; /* Убеждаемся, что виджет виден на мобильной версии */
   }
 
-  .runa-intro-features > .eyebrow-widget {
-    display: inline-block !important; /* Показываем "Что такое RUNA" на мобильной версии */
-    margin-bottom: 24px;
-  }
 
   .eyebrow-widget .eyebrow {
     font-size: 0.8rem;
@@ -820,25 +1298,23 @@
   }
 
   .runa-intro .description {
-    display: none;
+    display: none; /* Скрываем описание в основном блоке на мобильной версии */
+  }
+  
+  .description-mobile-logo {
+    display: block !important; /* Показываем описание под логотипом в мобильной версии */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    color: #253550;
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    max-width: 100%;
   }
 
-  .runa-intro-logo-mobile {
-    display: block;
-    flex-shrink: 0;
-    width: 250px;
-    height: auto;
-    margin-top: 40px;
-    margin-left: -20px;
-    align-self: flex-start;
-  }
-
-  .analytics-logo-mobile {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-  }
 
   .feature-column {
     gap: 0;
@@ -883,11 +1359,36 @@
     transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
                 transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  
+  .runa-intro-logo-mobile img {
+    opacity: 0;
+    transform: translateX(20px) scale(0.9);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .runa-intro-logo-mobile .description-mobile-logo {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   .runa-intro.animate-in .runa-intro-logo-mobile {
     opacity: 1;
     transform: translateX(0) scale(1);
+  }
+  
+  .runa-intro.animate-in .runa-intro-logo-mobile img {
+    opacity: 1;
+    transform: translateX(0) scale(1);
     transition-delay: 0.4s;
+  }
+  
+  .runa-intro.animate-in .runa-intro-logo-mobile .description-mobile-logo {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.5s;
   }
 
   .advantages-list {
@@ -907,9 +1408,6 @@
     font-size: 14px;
   }
 
-  .pricing-card {
-    padding: 28px;
-  }
 
   /* Проблемы и потери: простая сетка на мобильных (glass — только на ПК) */
   .runa-problems-desc {
@@ -946,13 +1444,14 @@
     padding: 0;
     overflow: visible;
     box-sizing: border-box;
+    max-width: 100%;
   }
 
   .problem-carousel-container {
     position: relative;
     width: 100%;
     margin: 0 auto;
-    margin-left: -8vw; /* Сдвигаем карточку влево для центрирования */
+    margin-left: -11vw; /* Централизуем карточку, сдвигаем левее */
     overflow: hidden;
     border-radius: 16px;
     touch-action: pan-x pan-y; /* Разрешаем горизонтальный и вертикальный свайп */
@@ -1044,6 +1543,7 @@
     justify-content: center;
     gap: 6px;
     margin-top: 12px;
+    margin-bottom: -30px; /* Уменьшаем отступ снизу для сокращения расстояния до следующего раздела */
     padding: 0 4px;
   }
 
@@ -1072,8 +1572,8 @@
   /* Раздел "Почему RUNA" - мобильная версия */
   .runa-why {
     padding: 24px 4vw;
-    margin-top: -20px !important; /* Отрицательный отступ, чтобы максимально сблизить с "Проблемы и потери" */
-    padding-top: 12px !important; /* Уменьшаем верхний padding для компенсации */
+    margin-top: -50px !important; /* Поднимаем раздел еще выше, чтобы почти убрать пустое пространство */
+    padding-top: 20px !important;
     text-align: center; /* Центрируем весь контент как в "Проблемы и потери" */
   }
 
@@ -1098,13 +1598,13 @@
   }
 
   .why-features {
-    gap: 32px;
+    gap: 24px; /* Уменьшаем отступ между элементами для компактности */
   }
 
   .why-feature {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 24px;
+    gap: 20px;
+    padding: 20px;
     text-align: center;
   }
 
@@ -1147,5 +1647,163 @@
 
   .problem-card-desc {
     font-size: 0.9rem;
+  }
+  
+  /* Мобильная версия футера */
+  .site-footer {
+    padding: 32px 4vw 24px;
+  }
+  
+  .footer-grid {
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  
+  .footer-contacts {
+    gap: 12px;
+  }
+  
+  .footer-contacts p {
+    font-size: 0.95rem;
+  }
+  
+  .footer-bottom {
+    margin-top: 32px;
+    gap: 12px;
+  }
+  
+  .footer-note {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .footer-inn {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  
+  /* Мобильная версия окна подписки */
+  .runa-pricing {
+    padding: 0 4vw;
+  }
+  
+  .pricing-header {
+    margin-bottom: 32px;
+  }
+  
+  .pricing-header h2 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    margin-bottom: 16px;
+  }
+  
+  .pricing-intro {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .pricing-features {
+    padding: 24px 20px;
+    margin-bottom: 32px;
+  }
+  
+  .pricing-features h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  
+  .features-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  
+  .feature-item {
+    font-size: 0.95rem;
+  }
+  
+  .payment-methods {
+    margin-bottom: 32px;
+  }
+  
+  .payment-methods h3 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+  
+  .payment-icons {
+    gap: 12px;
+  }
+  
+  .payment-icon {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+  }
+  
+  .pricing-plans {
+    margin-bottom: 32px;
+  }
+  
+  .pricing-plans h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 100%;
+  }
+  
+  .plan-card {
+    padding: 20px;
+  }
+  
+  .plan-price {
+    font-size: 1.8rem;
+  }
+  
+  .plan-price-special {
+    font-size: 2rem;
+  }
+  
+  .pricing-note {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  
+  .btn-subscribe {
+    width: 100%;
+    padding: 18px 32px;
+    font-size: 1rem;
+  }
+  
+  .pricing-disclaimer {
+    font-size: 0.8rem;
+  }
+  
+  /* Мобильная версия секции подписки на главной */
+  .pricing-card {
+    padding: 28px 24px;
+  }
+  
+  .pricing-card h2 {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+    margin-bottom: 16px;
+  }
+  
+  .pricing-card p {
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  
+  .pricing-actions {
+    max-width: 100%;
+    gap: 20px;
+  }
+  
+  .pricing-actions .btn {
+    padding: 16px 28px;
+    font-size: 0.95rem;
   }
 }

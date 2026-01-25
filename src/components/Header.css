@@ -53,10 +53,11 @@
 }
 
 .nav-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   color: #EDE5D0 !important; /* Нормальный цвет текста - кремовый (белый) */
   text-decoration: none !important; /* Убираем подчеркивания */
   font-size: 15px;
-  font-weight: 500;
   padding: 6px 0;
   position: relative;
   transition: opacity 0.3s ease;
@@ -83,12 +84,13 @@
 }
 
 .header-download-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   padding: 8px 18px;
   background: #FFFFFF;
   color: #7A4F43;
   border: none;
   border-radius: 8px;
-  font-weight: 600;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -111,13 +113,15 @@
   display: none;
 }
 
-/* Мобильное меню и оверлей - скрыты на ПК */
-.mobile-menu {
-  display: none !important;
-}
+/* Мобильное меню и оверлей - скрыты на ПК (показываются только на мобильной версии) */
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none !important;
+  }
 
-.mobile-menu-overlay {
-  display: none !important;
+  .mobile-menu-overlay {
+    display: none !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -221,10 +225,11 @@
   }
 
   .mobile-nav-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
     color: #EDE5D0;
     text-decoration: none;
     font-size: 1rem;
-    font-weight: 500;
     padding: 14px 16px;
     border-radius: 12px;
     background: rgba(237, 229, 208, 0.15);

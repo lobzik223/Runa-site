@@ -43,11 +43,11 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
         </div>
         
         <nav className="header-nav">
-          <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Главная</a>
-          <a href="#about-runa" className="nav-link">Что такое RUNA</a>
-          <a href="#problems" className="nav-link">Проблемы и потери</a>
-          <a href="#why-runa" className="nav-link">Почему RUNA</a>
-          <a href="#pricing" className="nav-link">Попробовать бесплатно</a>
+          <a href="/" className="nav-link">Главная</a>
+          <a href="/#about-runa" className="nav-link">Что такое RUNA</a>
+          <a href="/#problems" className="nav-link">Проблемы и потери</a>
+          <a href="/#why-runa" className="nav-link">Почему RUNA</a>
+          <a href="/premium" className="nav-link">Подписка</a>
         </nav>
         
         <button className="header-download-btn">Скачать</button>
@@ -84,11 +84,11 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
           ref={menuRef}
           className={`mobile-menu ${isMenuOpen ? 'mobile-menu-open' : ''}`}
         >
-          <a href="#home" className="mobile-nav-link" onClick={closeMenu}>Главная</a>
-          <a href="#about-runa" className="mobile-nav-link" onClick={closeMenu}>Что такое RUNA</a>
-          <a href="#problems" className="mobile-nav-link" onClick={closeMenu}>Проблемы и потери</a>
-          <a href="#why-runa" className="mobile-nav-link" onClick={closeMenu}>Почему RUNA</a>
-          <a href="#pricing" className="mobile-nav-link" onClick={closeMenu}>Попробовать бесплатно</a>
+          <a href="/" className="mobile-nav-link" onClick={closeMenu}>Главная</a>
+          <a href="/#about-runa" className="mobile-nav-link" onClick={closeMenu}>Что такое RUNA</a>
+          <a href="/#problems" className="mobile-nav-link" onClick={closeMenu}>Проблемы и потери</a>
+          <a href="/#why-runa" className="mobile-nav-link" onClick={closeMenu}>Почему RUNA</a>
+          <a href="/premium" className="mobile-nav-link" onClick={closeMenu}>Подписка</a>
         </nav>
       </div>
     </header>

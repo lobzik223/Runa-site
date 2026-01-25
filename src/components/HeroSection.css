@@ -21,6 +21,10 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .hero-video-overlay {
@@ -54,6 +58,63 @@ video::-webkit-media-controls-start-playback-button {
   display: none !important;
   -webkit-appearance: none;
 }
+video::-webkit-media-controls-panel {
+  display: none !important;
+}
+video::-webkit-media-controls-play-button {
+  display: none !important;
+}
+video::-webkit-media-controls-timeline {
+  display: none !important;
+}
+video::-webkit-media-controls-current-time-display {
+  display: none !important;
+}
+video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+}
+video::-webkit-media-controls-mute-button {
+  display: none !important;
+}
+video::-webkit-media-controls-toggle-closed-captions-button {
+  display: none !important;
+}
+video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
+video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+}
+video::-webkit-media-controls-overlay-enclosure {
+  display: none !important;
+}
+
+/* Дополнительные правила для полного скрытия элементов управления */
+.hero-video[controls] {
+  pointer-events: none !important;
+}
+
+.hero-video:not([controls]) {
+  pointer-events: none !important;
+}
+
+/* Скрытие элементов управления при любых состояниях */
+.hero-video::-webkit-media-controls-enclosure {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Предотвращение показа элементов управления при паузе или других событиях */
+.hero-video::-webkit-media-controls-panel {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
 
 /* Мобильная адаптация */
 @media (max-width: 768px) {
@@ -83,6 +144,32 @@ video::-webkit-media-controls-start-playback-button {
     border-radius: 0;
     border: none !important; /* Убираем границы видео */
     outline: none !important; /* Убираем outline */
+    pointer-events: none !important; /* Отключаем взаимодействие с видео */
+    -webkit-touch-callout: none !important; /* Отключаем контекстное меню на iOS */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+  
+  /* Дополнительное скрытие элементов управления на мобильных */
+  .hero-video::-webkit-media-controls {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .hero-video::-webkit-media-controls-enclosure {
+    display: none !important;
+  }
+  
+  .hero-video::-webkit-media-controls-panel {
+    display: none !important;
+  }
+  
+  .hero-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 
   .hero-gradient-transition {
@@ -94,6 +181,79 @@ video::-webkit-media-controls-start-playback-button {
     background: linear-gradient(to bottom, transparent 0%, #768993 100%) !important; /* Градиент как на ПК версии - нормальный блюр */
     width: 100% !important;
     left: 0 !important; /* Центрируем блюр */
+  }
+
+  /* Подсказка для скролла вниз - только на мобильной версии */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    pointer-events: auto;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .scroll-hint-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    animation: pulseText 2s ease-in-out infinite;
+  }
+
+  .scroll-hint-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scroll-icon {
+    width: 24px;
+    height: 24px;
+    animation: bounceDown 2s infinite;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  @keyframes pulseText {
+    0%, 100% {
+      opacity: 0.9;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes bounceDown {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(8px);
+      opacity: 0.6;
+    }
   }
 
 }

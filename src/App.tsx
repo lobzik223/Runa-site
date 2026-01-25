@@ -13,6 +13,8 @@ const App: React.FC = () => {
   const widgetRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
+  const problemsSectionRef = useRef<HTMLElement>(null);
+  const whySectionRef = useRef<HTMLElement>(null);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
   
@@ -145,7 +147,12 @@ const App: React.FC = () => {
       });
     }, observerOptions);
 
-    const elements = [introTextRef.current, widgetRef.current].filter(Boolean) as Element[];
+    const elements = [
+      introTextRef.current, 
+      widgetRef.current,
+      problemsSectionRef.current,
+      whySectionRef.current
+    ].filter(Boolean) as Element[];
     elements.forEach((el) => observer.observe(el));
 
     return () => {
@@ -174,6 +181,11 @@ const App: React.FC = () => {
             </div>
             <div className="runa-intro-logo-mobile">
               <img src="/mov/analitiklogo.png" alt="RUNA Analytics" className="analytics-logo-mobile" />
+              <p className="description-mobile-logo">
+                R<span className="logo-u">U</span>NA — интеллектуальный финансовый инструмент для полного контроля ваших денег. 
+                Отслеживайте доходы и расходы, анализируйте привычки и получайте персональные рекомендации 
+                по оптимизации бюджета.
+              </p>
             </div>
           </div>
           <div className="feature-column" ref={widgetRef}>
@@ -185,7 +197,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        <section className="runa-problems" id="problems">
+        <section className="runa-problems" id="problems" ref={problemsSectionRef}>
           <div className="eyebrow-widget">
             <p className="eyebrow">Проблемы и потери</p>
           </div>
@@ -280,7 +292,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        <section className="runa-why" id="why-runa">
+        <section className="runa-why" id="why-runa" ref={whySectionRef}>
           <div className="eyebrow-widget">
             <p className="eyebrow">Почему R<span className="logo-u">U</span>NA</p>
           </div>
@@ -290,47 +302,47 @@ const App: React.FC = () => {
           </p>
 
           <div className="why-features">
-            {/* Контроль без усилий - текст слева, изображение справа */}
+            {/* Контроль без усилий - изображение слева, текст справа */}
             <div className="why-feature why-feature-left">
+              <div className="why-feature-image">
+                <img src="/mov/control.png" alt="Контроль без усилий" />
+              </div>
               <div className="why-feature-content">
                 <h3>Контроль без усилий</h3>
                 <p>RUNA автоматически показывает, куда уходят деньги, и выделяет лишние траты — без ручного учёта и сложных таблиц.</p>
               </div>
-              <div className="why-feature-image">
-                {/* Место для изображения */}
-              </div>
             </div>
 
-            {/* Умные подсказки - изображение слева, текст справа */}
+            {/* Умные подсказки - текст слева, изображение справа */}
             <div className="why-feature why-feature-right">
-              <div className="why-feature-image">
-                {/* Место для изображения */}
-              </div>
               <div className="why-feature-content">
                 <h3>Умные подсказки</h3>
                 <p>AI анализирует ваши расходы и даёт персональные рекомендации: где можно сэкономить и как улучшить финансовый баланс.</p>
               </div>
+              <div className="why-feature-image">
+                <img src="/mov/smart.png" alt="Умные подсказки" />
+              </div>
             </div>
 
-            {/* Меньше импульса — больше пользы - текст слева, изображение справа */}
+            {/* Меньше импульса — больше пользы - изображение слева, текст справа */}
             <div className="why-feature why-feature-left">
+              <div className="why-feature-image">
+                <img src="/mov/minimuminpuls.png" alt="Меньше импульса — больше пользы" />
+              </div>
               <div className="why-feature-content">
                 <h3>Меньше импульса — больше пользы</h3>
                 <p>RUNA помогает замечать импульсивные покупки и подписки до того, как они станут проблемой.</p>
               </div>
-              <div className="why-feature-image">
-                {/* Место для изображения */}
-              </div>
             </div>
 
-            {/* Прозрачность и уверенность - изображение слева, текст справа */}
+            {/* Прозрачность и уверенность - текст слева, изображение справа */}
             <div className="why-feature why-feature-right">
-              <div className="why-feature-image">
-                {/* Место для изображения */}
-              </div>
               <div className="why-feature-content">
                 <h3>Прозрачность и уверенность</h3>
                 <p>Вы всегда понимаете своё финансовое состояние и принимаете решения на основе данных, а не ощущений.</p>
+              </div>
+              <div className="why-feature-image">
+                <img src="/mov/glasses.png" alt="Прозрачность и уверенность" />
               </div>
             </div>
           </div>
@@ -339,10 +351,10 @@ const App: React.FC = () => {
         <section className="runa-pricing" id="pricing">
           <div className="pricing-card">
             <h2>Попробуй R<span className="logo-u">U</span>NA бесплатно</h2>
-            <p>Бесплатный доступ на 3 дня. После — подписка всего X ₽/мес.</p>
+            <p>Бесплатный доступ на 3 дня. После — подписка всего от 400 ₽/мес.</p>
             <div className="pricing-actions">
-              <button className="btn primary">Попробовать бесплатно</button>
-              <button className="btn secondary">Купить подписку</button>
+              <a href="/premium" className="btn primary">Оформить подписку</a>
+              <button className="btn secondary">Попробовать бесплатно</button>
             </div>
           </div>
         </section>
@@ -351,19 +363,31 @@ const App: React.FC = () => {
         <div className="footer-grid">
           <div>
             <h4>Контакты</h4>
-            <p>Телефон / Email / Telegram</p>
+            <div className="footer-contacts">
+              <p>
+                <span className="footer-label">Почта:</span>{' '}
+                <a href="mailto:runa.fintech@bk.ru" className="footer-link">runa.fintech@bk.ru</a>
+              </p>
+              <p>
+                <span className="footer-label">Telegram:</span>{' '}
+                <a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">@RUNAfinance</a>
+              </p>
+            </div>
           </div>
           <div>
             <h5>Ссылки</h5>
             <ul>
-              <li>Telegram</li>
-              <li>Email</li>
-              <li>Политика конфиденциальности</li>
-              <li>Пользовательское соглашение</li>
+              <li><a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">Telegram</a></li>
+              <li><a href="mailto:runa.fintech@bk.ru" className="footer-link">Email</a></li>
+              <li><a href="/privacy" className="footer-link">Политика конфиденциальности</a></li>
+              <li><a href="/user-agreement" className="footer-link">Пользовательское соглашение</a></li>
             </ul>
           </div>
         </div>
-        <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — Ваша уверенность в деньгах</p>
+        <div className="footer-bottom">
+          <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — Ваша уверенность в деньгах</p>
+          <p className="footer-inn">ИНН: 660609610617</p>
+        </div>
       </footer>
     </div>
   );

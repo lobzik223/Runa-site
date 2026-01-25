@@ -19,6 +19,9 @@ body {
   background-color: #768993;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
 }
 
 /* Фон для области статус-бара на мобильных */

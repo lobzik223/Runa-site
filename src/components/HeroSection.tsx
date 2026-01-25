@@ -29,6 +29,12 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const video = videoRef.current;
     if (!video) return;
     
+    // Отключаем элементы управления
+    video.controls = false;
+    video.setAttribute('controls', 'false');
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
+    
     // Сбрасываем флаг при смене видео
     hasCalledCallback.current = false;
 
@@ -91,6 +97,13 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     };
   }, [onVideoLoaded, isMobile]);
 
+  const handleScrollDown = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <section className="hero-section" ref={ref as React.Ref<HTMLElement>}>
       <div className="hero-video-container">
@@ -102,6 +115,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
           muted
           playsInline
           preload="auto"
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           key={isMobile ? 'mobile' : 'desktop'}
         >
           <source src={isMobile ? videoSrcMobile : videoSrcPC} type="video/mp4" />
@@ -110,6 +126,42 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
         <div className="hero-video-overlay"></div>
         <div className="hero-gradient-transition"></div>
       </div>
+      {isMobile && (
+        <div 
+          className="scroll-hint" 
+          onClick={handleScrollDown}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleScrollDown();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Прокрутить вниз"
+        >
+          <div className="scroll-hint-text">Прокрутите вниз</div>
+          <div className="scroll-hint-icons">
+            <svg 
+              className="scroll-icon" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path 
+                d="M7 10L12 15L17 10" 
+                stroke="rgba(255, 255, 255, 0.9)" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      )}
     </section>
   );
 });
