@@ -460,9 +460,12 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;
-    pointer-events: none;
+    z-index: 1000 !important; /* Высокий z-index для перекрытия элементов управления */
+    pointer-events: auto !important; /* Разрешаем pointer-events для перехвата кликов на iOS */
     background: transparent;
+    /* Перехватываем клики на элементах управления */
+    touch-action: none !important;
+    -webkit-touch-callout: none !important;
   }
   
   /* Дополнительный слой для полного скрытия элементов управления */
@@ -477,7 +480,7 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 99;
+    z-index: 999 !important; /* Высокий z-index для перекрытия */
     pointer-events: none;
     background: transparent;
   }
@@ -533,7 +536,10 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   @media screen and (-webkit-min-device-pixel-ratio: 2) {
     .hero-video::-webkit-media-controls-play-button,
     .hero-video::-webkit-media-controls-start-playback-button,
-    .hero-video::-webkit-media-controls-overlay-play-button {
+    .hero-video::-webkit-media-controls-overlay-play-button,
+    .hero-video::-webkit-media-controls-timeline,
+    .hero-video::-webkit-media-controls-current-time-display,
+    .hero-video::-webkit-media-controls-time-remaining-display {
       display: none !important;
       opacity: 0 !important;
       visibility: hidden !important;
@@ -549,16 +555,52 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
       -webkit-appearance: none !important;
       appearance: none !important;
     }
+    
+    /* Дополнительный overlay для iOS - перекрывает все элементы управления */
+    .hero-video-container::after {
+      z-index: 10000 !important; /* Максимальный z-index для iOS */
+      pointer-events: auto !important;
+    }
   }
   
   /* Дополнительное скрытие для всех возможных состояний видео на iPhone */
   .hero-video:not([controls])::-webkit-media-controls,
   .hero-video[controls="false"]::-webkit-media-controls,
-  .hero-video[controls=""]::-webkit-media-controls {
+  .hero-video[controls=""]::-webkit-media-controls,
+  .hero-video[controls]::-webkit-media-controls {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(100%) !important;
+    transform: scale(0) !important;
+  }
+  
+  /* Максимально агрессивное скрытие для iOS - все возможные комбинации */
+  @supports (-webkit-touch-callout: none) {
+    video.hero-video,
+    video.hero-video *,
+    .hero-video-container video,
+    .hero-video-container video * {
+      -webkit-touch-callout: none !important;
+    }
+    
+    /* Скрытие через все возможные псевдоэлементы */
+    video.hero-video::before,
+    video.hero-video::after,
+    .hero-video-container video::before,
+    .hero-video-container video::after {
+      display: none !important;
+      content: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
   }
 
   .hero-gradient-transition {

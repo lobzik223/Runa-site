@@ -146,10 +146,10 @@
 }
 
 .plan-card {
-  background: rgba(37, 53, 80, 0.25); /* Темный фон как у других виджетов */
+  background: rgba(255, 255, 255, 0.15); /* Светлый прозрачный фон вместо серого */
   border-radius: 20px;
   padding: 24px;
-  border: 2px solid #CD6F42; /* Оранжевая граница как у других виджетов */
+  border: 2px solid rgba(205, 111, 66, 0.3); /* Полупрозрачная оранжевая граница по умолчанию */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   text-align: center;
@@ -161,8 +161,9 @@
 
 .plan-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(205, 111, 66, 0.3);
-  border-color: #CD6F42;
+  box-shadow: 0 8px 24px rgba(205, 111, 66, 0.2);
+  border-color: rgba(205, 111, 66, 0.5);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .plan-card:active {
@@ -170,24 +171,35 @@
 }
 
 .plan-card-selected {
-  border: 2px solid #CD6F42;
-  background: rgba(205, 111, 66, 0.15);
-  box-shadow: 0 8px 24px rgba(205, 111, 66, 0.3);
+  border: 2px solid #CD6F42 !important; /* Яркая оранжевая граница при выборе */
+  background: rgba(205, 111, 66, 0.25) !important; /* Оранжевый фон при выборе */
+  box-shadow: 0 8px 24px rgba(205, 111, 66, 0.4) !important;
 }
 
 .plan-card-selected:hover {
-  border-color: #CD6F42;
-  box-shadow: 0 10px 28px rgba(205, 111, 66, 0.4);
+  border-color: #CD6F42 !important;
+  background: rgba(205, 111, 66, 0.3) !important; /* Более яркий оранжевый при наведении на выбранный */
+  box-shadow: 0 10px 28px rgba(205, 111, 66, 0.5) !important;
 }
 
 .plan-card-recommended {
-  background: rgba(37, 53, 80, 0.25);
-  border: 2px solid #CD6F42; /* Оранжевая граница как у других */
+  background: rgba(255, 255, 255, 0.15); /* Светлый фон вместо серого */
+  border: 2px solid rgba(205, 111, 66, 0.3); /* Полупрозрачная граница по умолчанию */
+}
+
+.plan-card-recommended.plan-card-selected {
+  background: rgba(205, 111, 66, 0.25) !important; /* Оранжевый только при выборе */
+  border: 2px solid #CD6F42 !important;
 }
 
 .plan-card-best {
-  background: rgba(37, 53, 80, 0.3);
-  border: 2px solid #CD6F42;
+  background: rgba(255, 255, 255, 0.15); /* Светлый фон вместо серого */
+  border: 2px solid rgba(205, 111, 66, 0.3); /* Полупрозрачная граница по умолчанию */
+}
+
+.plan-card-best.plan-card-selected {
+  background: rgba(205, 111, 66, 0.25) !important; /* Оранжевый только при выборе */
+  border: 2px solid #CD6F42 !important;
 }
 
 .plan-badge {

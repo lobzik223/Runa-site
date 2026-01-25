@@ -58,11 +58,8 @@ const PremiumView: React.FC = () => {
           <div className="payment-methods">
             <h3>Способы оплаты</h3>
             <div className="payment-icons">
-              <div className="payment-icon">VISA</div>
-              <div className="payment-icon">Mastercard</div>
               <div className="payment-icon">МИР</div>
               <div className="payment-icon">ЮMoney</div>
-              <div className="payment-icon">QIWI</div>
             </div>
           </div>
 
