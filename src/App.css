@@ -7,6 +7,31 @@
   overflow: hidden;
 }
 
+/* Блокировка контента до полной загрузки */
+.app-content-blocked {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  height: 100vh !important;
+  position: fixed !important;
+  width: 100% !important;
+  z-index: -1 !important;
+  visibility: hidden !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: none !important;
+}
+
+.app-content-visible {
+  opacity: 1;
+  pointer-events: auto;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in;
+}
+
 /* Плавный скролл для мобильной версии */
 @media (max-width: 768px) {
   html {

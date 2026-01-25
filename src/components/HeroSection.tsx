@@ -130,53 +130,89 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       }
     };
 
+    // Функция для проверки полной готовности видео
+    const checkVideoReady = (): boolean => {
+      // Проверяем readyState (>= 4 означает HAVE_ENOUGH_DATA)
+      if (video.readyState < 4) {
+        return false;
+      }
+      
+      // Проверяем, что видео имеет метаданные
+      if (!video.duration || video.duration === 0) {
+        return false;
+      }
+      
+      // Проверяем буферизацию - должно быть загружено минимум 95%
+      if (video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        const bufferedPercent = (bufferedEnd / video.duration) * 100;
+        if (bufferedPercent < 95) {
+          return false;
+        }
+      } else {
+        // Если нет буфера, ждем еще
+        return false;
+      }
+      
+      return true;
+    };
+
     // Функция для обработки полной готовности видео
     const handleVideoReady = () => {
-      // Ждем полной загрузки видео (readyState >= 4 означает HAVE_ENOUGH_DATA)
-      // Это гарантирует, что видео полностью загружено и готово к воспроизведению
-      if (video.readyState >= 4 && !hasCalledCallback.current) {
+      // Проверяем все условия готовности
+      if (checkVideoReady() && !hasCalledCallback.current) {
         hasCalledCallback.current = true;
-        onVideoLoaded();
-        // Пытаемся запустить сразу
-        attemptPlay();
+        // Небольшая задержка для гарантии полной готовности
+        setTimeout(() => {
+          onVideoLoaded();
+          // Пытаемся запустить сразу
+          attemptPlay();
+        }, 100);
       }
     };
 
     // Обработчик для полной загрузки видео
     const handleCanPlayThrough = () => {
-      // Дополнительная проверка readyState для уверенности
-      if (video.readyState >= 4) {
-        handleVideoReady();
-      }
+      handleVideoReady();
     };
 
     // Обработчик для проверки прогресса загрузки
     const handleProgress = () => {
-      // Проверяем, загружено ли достаточно данных (>= 95% или readyState >= 4)
-      if (video.buffered.length > 0) {
-        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-        const duration = video.duration;
-        if (duration > 0 && (bufferedEnd / duration >= 0.95 || video.readyState >= 4)) {
-          handleVideoReady();
-        }
+      handleVideoReady();
+    };
+    
+    // Обработчик для проверки загруженных данных
+    const handleLoadedData = () => {
+      handleVideoReady();
+    };
+    
+    // Обработчик для проверки метаданных
+    const handleLoadedMetadata = () => {
+      // После загрузки метаданных начинаем проверять готовность
+      if (video.readyState >= 4) {
+        handleVideoReady();
       }
     };
 
     // Добавляем обработчики событий для полной загрузки
     video.addEventListener('canplaythrough', handleCanPlayThrough);
     video.addEventListener('progress', handleProgress);
-    video.addEventListener('loadeddata', () => {
-      // Проверяем readyState после загрузки данных
-      if (video.readyState >= 4) {
-        handleVideoReady();
-      }
-    });
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
     
     // Предзагрузка видео
     video.load();
 
+    // Периодическая проверка готовности (на случай, если события не сработали)
+    const readyCheckInterval = setInterval(() => {
+      if (!hasCalledCallback.current && checkVideoReady()) {
+        handleVideoReady();
+        clearInterval(readyCheckInterval);
+      }
+    }, 200);
+
     // Если видео уже полностью загружено, вызываем callback сразу
-    if (video.readyState >= 4) {
+    if (checkVideoReady()) {
       handleVideoReady();
     }
 
@@ -185,18 +221,21 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       attemptPlay();
     }, 100);
 
-    // Таймаут безопасности - показываем сайт максимум через 5 секунд (увеличен для полной загрузки)
+    // Таймаут безопасности - показываем сайт максимум через 10 секунд (увеличен для полной загрузки)
     const timeoutId = setTimeout(() => {
       if (!hasCalledCallback.current) {
-        console.warn('Видео загружается медленно, показываем сайт после таймаута');
+        console.warn('Видео загружается медленно, показываем сайт после таймаута безопасности');
         hasCalledCallback.current = true;
         onVideoLoaded();
+        clearInterval(readyCheckInterval);
       }
-    }, 5000);
+    }, 10000);
 
     return () => {
       video.removeEventListener('canplaythrough', handleCanPlayThrough);
       video.removeEventListener('progress', handleProgress);
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       if (isMobile) {
         video.removeEventListener('play', preventControlsShow);
         video.removeEventListener('pause', preventControlsShow);
@@ -205,6 +244,7 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
         video.removeEventListener('touchend', preventControlsShow);
       }
       clearTimeout(timeoutId);
+      clearInterval(readyCheckInterval);
       if (hideControlsInterval) {
         clearInterval(hideControlsInterval);
       }
@@ -218,6 +258,57 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       behavior: 'smooth'
     });
   };
+
+  // Контроль поведения видео при скролле на мобильных устройствах
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const videoContainer = videoRef.current?.parentElement;
+    const video = videoRef.current;
+    if (!videoContainer || !video) return;
+
+    // Получаем начальную позицию при монтировании
+    const initialTop = videoContainer.getBoundingClientRect().top;
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
+      const currentTop = videoContainer.getBoundingClientRect().top;
+
+      // Всегда предотвращаем увеличение видео
+      video.style.transform = 'translateZ(0) scale(1)';
+      video.style.scale = '1';
+      videoContainer.style.transform = 'none';
+      videoContainer.style.scale = '1';
+
+      // При скролле вниз - фиксируем видео на месте, не позволяем увеличиваться
+      if (scrollDelta > 0) {
+        // Видео не должно увеличиваться или двигаться вниз ниже исходной позиции
+        if (currentTop < initialTop) {
+          videoContainer.style.top = '0';
+          videoContainer.style.position = 'sticky';
+        }
+      }
+      // При скролле вверх - позволяем видео подниматься естественно (sticky работает)
+      // но не опускаться ниже исходной позиции и не увеличиваться
+      else if (scrollDelta < 0) {
+        // Видео может подниматься вверх (sticky позволяет это), но не ниже начальной позиции
+        if (currentTop > initialTop) {
+          videoContainer.style.top = '0';
+        }
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    // Используем passive для лучшей производительности
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMobile]);
 
   return (
     <section className="hero-section" ref={ref as React.Ref<HTMLElement>}>

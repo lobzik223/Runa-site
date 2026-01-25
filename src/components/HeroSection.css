@@ -190,23 +190,33 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   .hero-section {
     padding-top: 0; /* Убираем отступ сверху, чтобы видео начиналось выше */
     min-height: 100vh; /* Растягиваем видео на всю высоту экрана */
-    overflow: visible; /* Разрешаем градиенту выходить за пределы секции */
+    overflow: hidden; /* Предотвращаем скролл внутри секции */
     margin-top: -15px; /* Поднимаем секцию выше */
     border: none !important; /* Убираем границы, которые могут создавать линию */
+    position: relative; /* Фиксируем позицию секции */
   }
 
   .hero-video-container {
-    position: relative;
+    position: sticky; /* Используем sticky для контроля при скролле */
+    top: 0; /* Фиксируем сверху */
     height: 100vh; /* Растягиваем видео на всю высоту экрана */
     width: 100%;
     margin: 0;
     border-radius: 0;
     z-index: 5;
-    overflow: visible; /* Разрешаем градиенту выходить за пределы контейнера */
+    overflow: hidden; /* Предотвращаем переполнение */
     border: none !important; /* Убираем любые границы */
     box-shadow: none !important; /* Убираем тени */
-    top: -8px; /* Поднимаем видео выше */
     outline: none !important; /* Убираем outline */
+    /* Предотвращаем увеличение при скролле вниз */
+    transform: translateZ(0) !important; /* Аппаратное ускорение */
+    will-change: auto !important; /* Отключаем автоматические изменения */
+    backface-visibility: hidden; /* Предотвращаем искажения */
+    -webkit-backface-visibility: hidden;
+    /* Фиксируем размер - не увеличивается при скролле */
+    max-width: 100% !important;
+    max-height: 100vh !important;
+    scale: 1 !important;
   }
 
   .hero-video {
@@ -219,6 +229,19 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     user-select: none !important;
     -webkit-appearance: none !important;
     appearance: none !important;
+    /* Фиксируем размер видео - не увеличивается при скролле */
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transform: translateZ(0) scale(1) !important; /* Аппаратное ускорение и фиксированный масштаб */
+    will-change: auto !important; /* Отключаем автоматические изменения */
+    max-width: 100% !important;
+    max-height: 100vh !important;
+    scale: 1 !important; /* Фиксируем масштаб */
+    /* Предотвращаем резиновый скролл и увеличение */
+    -webkit-transform: translateZ(0) scale(1) !important;
+    -moz-transform: translateZ(0) scale(1) !important;
+    -ms-transform: translateZ(0) scale(1) !important;
   }
   
   /* Полное скрытие всех элементов управления на мобильных */
@@ -381,7 +404,7 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     pointer-events: none !important;
   }
   
-  /* Дополнительное скрытие через overlay */
+  /* Дополнительное скрытие через overlay - только на мобильных */
   .hero-video-container::after {
     content: '';
     position: absolute;
@@ -392,6 +415,40 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     z-index: 100;
     pointer-events: none;
     background: transparent;
+  }
+  
+  /* Дополнительный слой для полного скрытия элементов управления */
+  .hero-video-container {
+    position: relative;
+  }
+  
+  .hero-video-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    pointer-events: none;
+    background: transparent;
+  }
+  
+  /* Скрытие всех возможных элементов управления через селекторы по атрибутам */
+  .hero-video[controls],
+  .hero-video[controls="true"],
+  .hero-video[controls="false"] {
+    pointer-events: none !important;
+  }
+  
+  /* Скрытие элементов управления при любых состояниях видео */
+  .hero-video:playing::-webkit-media-controls,
+  .hero-video:paused::-webkit-media-controls,
+  .hero-video:seeking::-webkit-media-controls {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
   .hero-gradient-transition {

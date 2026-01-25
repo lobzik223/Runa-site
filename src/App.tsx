@@ -167,9 +167,22 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <LoadingView isLoading={isLoading} />
-      <Header showOnMobile={showHeader} />
-      <HeroSection onVideoLoaded={handleVideoLoaded} ref={heroSectionRef} />
-      <main className="page-content">
+      {/* Блокируем весь контент до полной загрузки */}
+      <div 
+        className={isLoading ? 'app-content-blocked' : 'app-content-visible'}
+        style={{
+          opacity: isLoading ? 0 : 1,
+          pointerEvents: isLoading ? 'none' : 'auto',
+          overflow: isLoading ? 'hidden' : 'visible',
+          height: isLoading ? '100vh' : 'auto',
+          position: isLoading ? 'fixed' : 'relative',
+          width: isLoading ? '100%' : 'auto',
+          zIndex: isLoading ? -1 : 1
+        }}
+      >
+        <Header showOnMobile={showHeader} />
+        <HeroSection onVideoLoaded={handleVideoLoaded} ref={heroSectionRef} />
+        <main className="page-content">
         <section className="runa-intro-features" id="about-runa" ref={introSectionRef}>
           <div className="eyebrow-widget">
             <p className="eyebrow">Что такое R<span className="logo-u">U</span>NA</p>
@@ -540,6 +553,7 @@ const App: React.FC = () => {
           <p className="footer-inn">ИНН: 660609610617</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
