@@ -42,15 +42,61 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     video.loop = true;
     video.controls = false;
     video.removeAttribute('controls');
+    
+    // Добавляем класс для CSS скрытия кнопки
+    video.classList.add('no-controls');
+    video.setAttribute('data-no-controls', 'true');
+
+    // Функция для принудительного скрытия кнопки Play через CSS
+    const hidePlayButton = () => {
+      if (!video) return;
+      // Принудительно скрываем все элементы управления
+      const style = document.createElement('style');
+      style.id = 'hide-video-controls';
+      style.textContent = `
+        .hero-video::-webkit-media-controls,
+        .hero-video::-webkit-media-controls-enclosure,
+        .hero-video::-webkit-media-controls-panel,
+        .hero-video::-webkit-media-controls-play-button,
+        .hero-video::-webkit-media-controls-start-playback-button,
+        .hero-video::-webkit-media-controls-overlay-play-button,
+        .hero-video::-webkit-media-controls-overlay-enclosure {
+          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          width: 0 !important;
+          height: 0 !important;
+          position: absolute !important;
+          left: -9999px !important;
+          top: -9999px !important;
+          clip: rect(0, 0, 0, 0) !important;
+          clip-path: inset(100%) !important;
+        }
+      `;
+      if (!document.getElementById('hide-video-controls')) {
+        document.head.appendChild(style);
+      }
+    };
 
     const attemptPlay = () => {
       try {
-        video.play().catch(() => {
-          // ignore - autoplay может быть заблокирован
-        });
+        const playPromise = video.play();
+        if (playPromise && typeof playPromise.then === 'function') {
+          playPromise
+            .then(() => {
+              // Видео запустилось - скрываем кнопку
+              hidePlayButton();
+            })
+            .catch(() => {
+              // ignore - autoplay может быть заблокирован
+            });
+        }
       } catch {
         // ignore
       }
+      // Всегда пытаемся скрыть кнопку
+      hidePlayButton();
     };
 
     const markLoadedOnce = () => {
@@ -63,41 +109,95 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const onLoadedData = () => {
       markLoadedOnce();
       attemptPlay();
+      hidePlayButton();
     };
 
     const onCanPlay = () => {
       // Пробуем запустить видео - это скроет кнопку Play на iOS
       attemptPlay();
+      hidePlayButton();
+    };
+
+    const onPlaying = () => {
+      // Видео играет - точно скрываем кнопку
+      hidePlayButton();
+    };
+
+    const onPlay = () => {
+      // Видео начало играть - скрываем кнопку
+      hidePlayButton();
     };
 
     video.addEventListener('loadeddata', onLoadedData);
     video.addEventListener('canplay', onCanPlay);
+    video.addEventListener('playing', onPlaying);
+    video.addEventListener('play', onPlay);
+
+    // Сразу скрываем кнопку
+    hidePlayButton();
 
     // Пробуем стартануть сразу после монтирования
     attemptPlay();
     
-    // Несколько попыток с интервалами для гарантии запуска и скрытия кнопки Play
-    const timeout1 = setTimeout(attemptPlay, 50);
-    const timeout2 = setTimeout(attemptPlay, 150);
-    const timeout3 = setTimeout(attemptPlay, 300);
-    const timeout4 = setTimeout(attemptPlay, 500);
+    // Много попыток с интервалами для гарантии запуска и скрытия кнопки Play
+    const timeouts = [
+      setTimeout(attemptPlay, 10),
+      setTimeout(attemptPlay, 30),
+      setTimeout(attemptPlay, 50),
+      setTimeout(attemptPlay, 100),
+      setTimeout(attemptPlay, 150),
+      setTimeout(attemptPlay, 200),
+      setTimeout(attemptPlay, 300),
+      setTimeout(attemptPlay, 500),
+      setTimeout(attemptPlay, 800),
+      setTimeout(attemptPlay, 1000),
+    ];
+
+    // MutationObserver для отслеживания появления кнопки Play
+    const observer = new MutationObserver(() => {
+      hidePlayButton();
+      attemptPlay();
+    });
+
+    observer.observe(video, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['controls', 'class'],
+    });
 
     // Если autoplay заблокирован — попытка на первом жесте пользователя
-    const onFirstGesture = () => attemptPlay();
+    const onFirstGesture = () => {
+      attemptPlay();
+      hidePlayButton();
+    };
     window.addEventListener('touchstart', onFirstGesture, { passive: true, once: true });
     window.addEventListener('scroll', onFirstGesture, { passive: true, once: true });
     window.addEventListener('click', onFirstGesture, { passive: true, once: true });
 
+    // Периодическая проверка и скрытие кнопки
+    const intervalId = setInterval(() => {
+      hidePlayButton();
+      if (video.paused) {
+        attemptPlay();
+      }
+    }, 100);
+
     return () => {
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
-      clearTimeout(timeout3);
-      clearTimeout(timeout4);
+      timeouts.forEach(clearTimeout);
+      clearInterval(intervalId);
+      observer.disconnect();
       video.removeEventListener('loadeddata', onLoadedData);
       video.removeEventListener('canplay', onCanPlay);
+      video.removeEventListener('playing', onPlaying);
+      video.removeEventListener('play', onPlay);
       window.removeEventListener('touchstart', onFirstGesture as EventListener);
       window.removeEventListener('scroll', onFirstGesture as EventListener);
       window.removeEventListener('click', onFirstGesture as EventListener);
+      const styleEl = document.getElementById('hide-video-controls');
+      if (styleEl) {
+        styleEl.remove();
+      }
     };
   }, [onVideoLoaded, isMobile]);
 
