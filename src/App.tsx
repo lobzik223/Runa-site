@@ -22,6 +22,7 @@ const App: React.FC = () => {
   useEffect(() => {
     loadingStartTimeRef.current = Date.now();
     console.log('App mounted, isIOS:', isIOS, 'isLoading:', isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
@@ -151,7 +152,8 @@ const App: React.FC = () => {
     }, minDisplayTime);
     
     return () => clearTimeout(iosTimeout);
-  }, [isIOS, isLoading]); // Зависимость от isIOS и isLoading
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]); // Зависимость от isLoading
 
   // Отслеживание прокрутки мимо hero section для показа header на мобильной версии
   useEffect(() => {
@@ -221,19 +223,7 @@ const App: React.FC = () => {
     <div className="app">
       <LoadingView isLoading={isLoading} />
       {/* Блокируем весь контент до полной загрузки */}
-      <div 
-        className={isLoading ? 'app-content-blocked' : 'app-content-visible'}
-        style={{
-          opacity: isLoading ? 0 : 1,
-          pointerEvents: isLoading ? 'none' : 'auto',
-          overflow: isLoading ? 'hidden' : 'visible',
-          height: isLoading ? '100vh' : 'auto',
-          position: isLoading ? 'fixed' : 'relative',
-          width: isLoading ? '100%' : 'auto',
-          zIndex: isLoading ? -1 : 1,
-          visibility: isLoading ? 'hidden' : 'visible'
-        }}
-      >
+      <div className={isLoading ? 'app-content-blocked' : 'app-content-visible'}>
         <Header showOnMobile={showHeader} />
         <HeroSection onVideoLoaded={handleVideoLoaded} ref={heroSectionRef} />
         <main className="page-content">
