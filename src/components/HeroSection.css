@@ -197,51 +197,19 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   }
 
   .hero-video-container {
-    position: sticky; /* Используем sticky для контроля при скролле */
-    top: 0; /* Фиксируем сверху */
-    height: 100vh; /* Растягиваем видео на всю высоту экрана */
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    margin: 0;
-    border-radius: 0;
-    z-index: 5;
-    overflow: hidden; /* Предотвращаем переполнение */
-    border: none !important; /* Убираем любые границы */
-    box-shadow: none !important; /* Убираем тени */
-    outline: none !important; /* Убираем outline */
-    /* Предотвращаем увеличение при скролле вниз */
-    transform: translateZ(0) !important; /* Аппаратное ускорение */
-    will-change: auto !important; /* Отключаем автоматические изменения */
-    backface-visibility: hidden; /* Предотвращаем искажения */
-    -webkit-backface-visibility: hidden;
-    /* Фиксируем размер - не увеличивается при скролле */
-    max-width: 100% !important;
-    max-height: 100vh !important;
-    scale: 1 !important;
+    height: 100vh;
+    z-index: 1;
   }
 
   .hero-video {
-    border-radius: 0;
-    border: none !important; /* Убираем границы видео */
-    outline: none !important; /* Убираем outline */
-    pointer-events: none !important; /* Отключаем взаимодействие с видео */
-    -webkit-touch-callout: none !important; /* Отключаем контекстное меню на iOS */
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    /* Фиксируем размер видео - не увеличивается при скролле */
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    transform: translateZ(0) scale(1) !important; /* Аппаратное ускорение и фиксированный масштаб */
-    will-change: auto !important; /* Отключаем автоматические изменения */
-    max-width: 100% !important;
-    max-height: 100vh !important;
-    scale: 1 !important; /* Фиксируем масштаб */
-    /* Предотвращаем резиновый скролл и увеличение */
-    -webkit-transform: translateZ(0) scale(1) !important;
-    -moz-transform: translateZ(0) scale(1) !important;
-    -ms-transform: translateZ(0) scale(1) !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
   }
   
   /* Полное скрытие всех элементов управления на мобильных */
