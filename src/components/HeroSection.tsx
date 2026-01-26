@@ -29,10 +29,17 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const video = videoRef.current;
     if (!video) return;
 
+    // Базовые настройки видео
     video.muted = true;
     video.playsInline = true;
     video.autoplay = true;
     video.loop = true;
+    video.controls = false;
+    video.removeAttribute('controls');
+    
+    // Дополнительно для iOS - убеждаемся что controls полностью отсутствует
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
 
     const onLoad = () => onVideoLoaded();
     video.addEventListener('loadeddata', onLoad);

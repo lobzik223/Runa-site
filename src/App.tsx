@@ -136,32 +136,43 @@ const App: React.FC = () => {
   useEffect(() => {
     if (isLoading) return; // Не запускаем пока LoadingView показывается
     
-    const isMobile = window.innerWidth <= 768;
-    const observerOptions = {
-      threshold: isMobile ? 0.1 : 0.15,
-      rootMargin: isMobile ? '0px 0px -30px 0px' : '0px 0px -50px 0px'
-    };
+    let observer: IntersectionObserver | null = null;
+    
+    // Небольшая задержка чтобы элементы точно отрендерились
+    const timeoutId = setTimeout(() => {
+      const isMobile = window.innerWidth <= 768;
+      const observerOptions = {
+        threshold: isMobile ? 0.1 : 0.15,
+        rootMargin: isMobile ? '0px 0px -30px 0px' : '0px 0px -50px 0px'
+      };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
-        }
-      });
-    }, observerOptions);
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      }, observerOptions);
 
-    const elements = [
-      introTextRef.current, 
-      widgetRef.current,
-      problemsSectionRef.current,
-      appPreviewRef.current,
-      whySectionRef.current,
-      creditsSectionRef.current
-    ].filter(Boolean) as Element[];
-    elements.forEach((el) => observer.observe(el));
+      const elements = [
+        introTextRef.current, 
+        widgetRef.current,
+        problemsSectionRef.current,
+        appPreviewRef.current,
+        whySectionRef.current,
+        creditsSectionRef.current
+      ].filter(Boolean) as Element[];
+      
+      if (elements.length > 0) {
+        elements.forEach((el) => observer!.observe(el));
+      }
+    }, 100);
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
+      clearTimeout(timeoutId);
+      if (observer) {
+        observer.disconnect();
+      }
     };
   }, [isLoading]);
 

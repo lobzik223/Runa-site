@@ -151,6 +151,12 @@ video.hero-video::-webkit-media-controls-overlay-play-button {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
 }
 
 .hero-video::-webkit-media-controls-overlay-enclosure,
@@ -159,6 +165,11 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
 }
 
 /* Дополнительные правила для полного скрытия элементов управления */
@@ -190,7 +201,6 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
   .hero-section {
     padding-top: 0; /* Убираем отступ сверху, чтобы видео начиналось выше */
     min-height: 100vh; /* Растягиваем видео на всю высоту экрана */
-    overflow: hidden; /* Предотвращаем скролл внутри секции */
     margin-top: -15px; /* Поднимаем секцию выше */
     border: none !important; /* Убираем границы, которые могут создавать линию */
     position: relative; /* Фиксируем позицию секции */
@@ -300,12 +310,37 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
   }
   
   .hero-video::-webkit-media-controls-overlay-enclosure {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+  }
+  
+  /* Дополнительное скрытие для всех возможных кнопок воспроизведения на мобильных */
+  .hero-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
   }
   
   /* Дополнительные правила для iOS Safari */
