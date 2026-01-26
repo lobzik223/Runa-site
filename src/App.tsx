@@ -5,24 +5,18 @@ import LoadingView from './components/LoadingView';
 import logoImage from './components/images/runalogo.png';
 import './App.css';
 
-// Определяем iOS синхронно ДО первого рендера
-const isIOS = typeof window !== 'undefined' && 
-  (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
-   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [showHeader, setShowHeader] = useState(false);
-  const videoLoadedRef = useRef(false);
-  const loadingStartTimeRef = useRef<number>(Date.now());
   
-  console.log('App render, isIOS:', isIOS, 'isLoading:', isLoading);
-  
+  // Жесткий таймаут - всегда снимаем лоадер через 2.5 сек
   useEffect(() => {
-    loadingStartTimeRef.current = Date.now();
-    console.log('App mounted, isIOS:', isIOS, 'isLoading:', isLoading);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const hardTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500); // всегда снимаем лоадер через 2.5 сек на iOS
+
+    return () => clearTimeout(hardTimeout);
   }, []);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
@@ -100,60 +94,9 @@ const App: React.FC = () => {
   };
 
   const handleVideoLoaded = () => {
-    videoLoadedRef.current = true;
-    console.log('handleVideoLoaded вызван, isLoading:', isLoading, 'isIOS:', isIOS);
-    
-    // Для iOS НЕ скрываем сразу - ждем минимальное время через отдельный useEffect
-    // Для других устройств сразу скрываем
-    if (!isIOS) {
-      setIsLoading(false);
-      console.log('Не iOS: Скрываем LoadingView сразу');
-    } else {
-      console.log('iOS: handleVideoLoaded вызван, но ждем минимальное время');
-    }
+    setIsLoading(false);
   };
 
-  // КРИТИЧНО: Для iOS гарантируем минимальное время показа LoadingView (2 секунды)
-  useEffect(() => {
-    // Убеждаемся, что isLoading = true в начале на iOS
-    if (isIOS && !isLoading) {
-      console.log('iOS: isLoading был false, устанавливаем в true');
-      setIsLoading(true);
-    }
-  }, []); // Только при монтировании
-  
-  useEffect(() => {
-    if (!isIOS) {
-      // Для не-iOS устройств - обычный таймаут безопасности
-      const safetyTimeoutMs = 8000;
-      const safetyTimeout = setTimeout(() => {
-        if (isLoading) {
-          console.warn('Принудительное скрытие загрузочного экрана по таймауту безопасности');
-          setIsLoading(false);
-        }
-      }, safetyTimeoutMs);
-      return () => clearTimeout(safetyTimeout);
-    }
-    
-    // Для iOS: LoadingView должен показываться минимум 2 секунды
-    console.log('iOS: Установлен таймаут для минимального времени показа LoadingView (2 секунды), isLoading:', isLoading);
-    
-    // Убеждаемся, что isLoading = true
-    if (!isLoading) {
-      console.log('iOS: isLoading был false, устанавливаем в true для показа LoadingView');
-      setIsLoading(true);
-    }
-    
-    const minDisplayTime = 2000;
-    
-    const iosTimeout = setTimeout(() => {
-      console.log('iOS: Скрываем LoadingView после минимального времени показа (2 секунды)');
-      setIsLoading(false);
-    }, minDisplayTime);
-    
-    return () => clearTimeout(iosTimeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]); // Зависимость от isLoading
 
   // Отслеживание прокрутки мимо hero section для показа header на мобильной версии
   useEffect(() => {
@@ -216,8 +159,6 @@ const App: React.FC = () => {
       elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
-
-  console.log('App render, isLoading:', isLoading, 'isIOS:', isIOS);
 
   return (
     <div className="app">

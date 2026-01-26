@@ -29,27 +29,20 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const video = videoRef.current;
     if (!video) return;
     
-    // Определяем iOS один раз для всего useEffect
+    // Определяем iOS один раз для всего useEffect (только для настроек видео)
     const isIOS = typeof window !== 'undefined' && 
       (/iPhone|iPod|iPad/.test(navigator.userAgent) || 
        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
     
-    // КРИТИЧНО ДЛЯ iOS: НЕ вызываем onVideoLoaded сразу - пусть App.tsx управляет временем показа
-    // Для iOS просто отмечаем, что видео готово, но не скрываем LoadingView
-    if (isIOS) {
-      // На iOS просто отмечаем, что видео загружено, но не скрываем LoadingView
-      // App.tsx будет управлять временем показа LoadingView
-      setTimeout(() => {
-        if (!hasCalledCallback.current) {
-          hasCalledCallback.current = true;
-          console.log('iOS: Видео готово, но LoadingView будет скрыт через минимальное время');
-          onVideoLoaded(); // Просто отмечаем, что видео готово
-        }
-      }, 100); // Небольшая задержка для инициализации видео
-    } else {
-      // Для не-iOS устройств - вызываем onVideoLoaded когда видео готово
-      // Это будет обработано через события видео ниже
-    }
+    // Обработчик события loadeddata - вызываем onVideoLoaded когда видео загружено
+    const handleLoadedDataCallback = () => {
+      if (!hasCalledCallback.current) {
+        hasCalledCallback.current = true;
+        onVideoLoaded();
+      }
+    };
+    
+    video.addEventListener('loadeddata', handleLoadedDataCallback);
     
     // Полностью отключаем элементы управления
     video.controls = false;
@@ -420,29 +413,15 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
       handleVideoReady();
     };
     
-    // Обработчик для проверки загруженных данных
-    const handleLoadedData = () => {
-      handleVideoReady();
-    };
-    
     // Обработчик для проверки метаданных
     const handleLoadedMetadata = () => {
-      // Для iOS - уже скрыли LoadingView выше, просто пытаемся запустить видео
-      if (isIOS) {
-        attemptPlay();
-        return;
-      }
-      // Для других устройств - readyState >= 4
-      if (!isIOS && video.readyState >= 4) {
-        handleVideoReady();
-      }
+      attemptPlay();
     };
 
     // Добавляем обработчики событий для полной загрузки
     video.addEventListener('canplaythrough', handleCanPlayThrough);
-    video.addEventListener('canplay', handleCanPlay); // Для iOS
+    video.addEventListener('canplay', handleCanPlay);
     video.addEventListener('progress', handleProgress);
-    video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
     
     // Предзагрузка видео
@@ -492,10 +471,11 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     }
 
     return () => {
+      // Удаляем обработчик loadeddata
+      video.removeEventListener('loadeddata', handleLoadedDataCallback);
       video.removeEventListener('canplaythrough', handleCanPlayThrough);
       video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('progress', handleProgress);
-      video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       if (isMobile) {
         // Удаляем все обработчики событий
