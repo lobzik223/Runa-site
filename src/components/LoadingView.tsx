@@ -7,13 +7,10 @@ interface LoadingViewProps {
 }
 
 const LoadingView: React.FC<LoadingViewProps> = ({ isLoading }) => {
-  // Всегда рендерим LoadingView если isLoading = true
   if (!isLoading) return null;
 
-  console.log('LoadingView рендерится, isLoading:', isLoading);
-
   return (
-    <div className="loading-view" style={{ display: 'flex' }}>
+    <div className="loading-view">
       <div className="loading-content">
         <div className="loading-logo-container">
           <img src={logo} alt="RUNA" className="loading-logo" />

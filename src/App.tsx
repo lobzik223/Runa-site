@@ -12,6 +12,7 @@ const App: React.FC = () => {
   
   useEffect(() => {
     const t = setTimeout(() => {
+      console.log('Таймаут сработал, скрываем LoadingView');
       setIsLoading(false);
     }, 2000);
     return () => clearTimeout(t);
@@ -94,11 +95,14 @@ const App: React.FC = () => {
   const handleVideoLoaded = () => {
     // Видео загружено, но это не влияет на лоадер
     // Лоадер управляется только таймаутом
+    console.log('handleVideoLoaded вызван (не влияет на лоадер)');
   };
 
 
   // Отслеживание прокрутки мимо hero section для показа header на мобильной версии
   useEffect(() => {
+    if (isLoading) return; // Не запускаем пока LoadingView показывается
+    
     const isMobile = window.innerWidth <= 768;
     if (!isMobile || !heroSectionRef.current) {
       setShowHeader(true); // На ПК всегда показываем header
@@ -127,9 +131,11 @@ const App: React.FC = () => {
     return () => {
       heroObserver.disconnect();
     };
-  }, []);
+  }, [isLoading]);
 
   useEffect(() => {
+    if (isLoading) return; // Не запускаем пока LoadingView показывается
+    
     const isMobile = window.innerWidth <= 768;
     const observerOptions = {
       threshold: isMobile ? 0.1 : 0.15,
@@ -157,7 +163,9 @@ const App: React.FC = () => {
     return () => {
       elements.forEach((el) => observer.unobserve(el));
     };
-  }, []);
+  }, [isLoading]);
+
+  console.log('App render, isLoading:', isLoading);
 
   return (
     <div className="app">
@@ -540,7 +548,7 @@ const App: React.FC = () => {
           <p className="footer-inn">ИНН: 660609610617</p>
         </div>
       </footer>
-        </>
+      </>
       )}
     </div>
   );
