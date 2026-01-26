@@ -10,13 +10,11 @@ const App: React.FC = () => {
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [showHeader, setShowHeader] = useState(false);
   
-  // Жесткий таймаут - всегда снимаем лоадер через 2.5 сек
   useEffect(() => {
-    const hardTimeout = setTimeout(() => {
+    const t = setTimeout(() => {
       setIsLoading(false);
-    }, 2500); // всегда снимаем лоадер через 2.5 сек на iOS
-
-    return () => clearTimeout(hardTimeout);
+    }, 2000);
+    return () => clearTimeout(t);
   }, []);
   const introSectionRef = useRef<HTMLElement>(null);
   const introTextRef = useRef<HTMLDivElement>(null);
@@ -94,7 +92,8 @@ const App: React.FC = () => {
   };
 
   const handleVideoLoaded = () => {
-    setIsLoading(false);
+    // Видео загружено, но это не влияет на лоадер
+    // Лоадер управляется только таймаутом
   };
 
 
@@ -163,11 +162,11 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <LoadingView isLoading={isLoading} />
-      {/* Блокируем весь контент до полной загрузки */}
-      <div className={isLoading ? 'app-content-blocked' : 'app-content-visible'}>
-        <Header showOnMobile={showHeader} />
-        <HeroSection onVideoLoaded={handleVideoLoaded} ref={heroSectionRef} />
-        <main className="page-content">
+      {!isLoading && (
+        <>
+          <Header showOnMobile={showHeader} />
+          <HeroSection onVideoLoaded={handleVideoLoaded} ref={heroSectionRef} />
+          <main className="page-content">
         <section className="runa-intro-features" id="about-runa" ref={introSectionRef}>
           <div className="eyebrow-widget">
             <p className="eyebrow">Что такое R<span className="logo-u">U</span>NA</p>
@@ -541,7 +540,8 @@ const App: React.FC = () => {
           <p className="footer-inn">ИНН: 660609610617</p>
         </div>
       </footer>
-      </div>
+        </>
+      )}
     </div>
   );
 };

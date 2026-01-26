@@ -1,31 +1,11 @@
 .loading-view {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100vh !important;
-  height: 100dvh !important; /* Для мобильных устройств с динамическим viewport */
-  background-color: #768993 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 999999 !important; /* Максимальный z-index для гарантии отображения */
-  opacity: 1 !important;
-  transition: opacity 0.3s ease-out;
-  pointer-events: auto !important;
-  overflow: hidden !important;
-  /* Блокируем весь контент */
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  touch-action: none !important;
-  /* Гарантируем отображение на всех устройствах */
-  visibility: visible !important;
-  -webkit-transform: translateZ(0) !important; /* Аппаратное ускорение для iOS */
-  transform: translateZ(0) !important;
-  /* Дополнительные гарантии для iOS */
-  -webkit-backface-visibility: visible !important;
-  backface-visibility: visible !important;
-  will-change: auto !important;
+  position: fixed;
+  inset: 0;
+  background: #768993;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
 }
 
 .loading-view.fade-out {

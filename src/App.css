@@ -8,6 +8,7 @@
 }
 
 /* Блокировка контента до полной загрузки */
+/* Временно закомментировано - используем условный рендеринг
 .app-content-blocked {
   opacity: 0;
   pointer-events: none;
@@ -21,6 +22,7 @@
   pointer-events: auto;
   position: relative;
 }
+*/
 
 /* Плавный скролл для мобильной версии */
 @media (max-width: 768px) {
