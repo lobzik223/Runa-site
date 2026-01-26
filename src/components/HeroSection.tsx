@@ -75,6 +75,7 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
+        {isMobile && <div className="hero-video-touch-blocker"></div>}
         <div className="hero-gradient-transition"></div>
       </div>
       {isMobile && (

@@ -38,6 +38,19 @@
   pointer-events: none;
 }
 
+/* Overlay для блокировки touch событий на видео на мобильных */
+.hero-video-touch-blocker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: auto;
+  touch-action: pan-y; /* Разрешаем вертикальный скролл */
+  -webkit-overflow-scrolling: touch;
+}
+
 .hero-gradient-transition {
   position: absolute;
   bottom: 0;
@@ -68,15 +81,20 @@ video.hero-video::-webkit-media-controls {
 }
 
 .hero-video::-webkit-media-controls-start-playback-button,
-video.hero-video::-webkit-media-controls-start-playback-button {
-  display: none !important;
-  -webkit-appearance: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
+video  .hero-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(100%) !important;
+  }
 
 .hero-video::-webkit-media-controls-panel,
 video.hero-video::-webkit-media-controls-panel {
@@ -219,7 +237,23 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    pointer-events: none;
+    pointer-events: none !important;
+    touch-action: none !important;
+    -webkit-touch-callout: none !important;
+  }
+  
+  /* Overlay для блокировки touch событий на видео на мобильных */
+  .hero-video-touch-blocker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: auto;
+    touch-action: pan-y; /* Разрешаем вертикальный скролл */
+    -webkit-overflow-scrolling: touch;
+    background: transparent;
   }
   
   /* Полное скрытие всех элементов управления на мобильных */
@@ -260,6 +294,11 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     pointer-events: none !important;
     width: 0 !important;
     height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(100%) !important;
   }
   
   .hero-video::-webkit-media-controls-play-button {
@@ -267,6 +306,11 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
   }
   
   .hero-video::-webkit-media-controls-timeline {
@@ -330,17 +374,36 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     top: -9999px !important;
   }
   
-  /* Дополнительное скрытие для всех возможных кнопок воспроизведения на мобильных */
-  .hero-video::-webkit-media-controls-start-playback-button {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    position: absolute !important;
-    left: -9999px !important;
-    top: -9999px !important;
+  /* Дополнительный overlay поверх всего видео для блокировки кнопки play и разрешения скролла */
+  .hero-video-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999; /* Высокий z-index чтобы перекрыть кнопку play */
+    pointer-events: auto;
+    touch-action: pan-y pan-x; /* Разрешаем скролл во всех направлениях */
+    -webkit-overflow-scrolling: touch;
+    background: transparent;
+  }
+  
+  /* Overlay через класс для более надежной работы - блокирует кнопку play и разрешает скролл */
+  .hero-video-touch-blocker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999; /* Высокий z-index чтобы перекрыть кнопку play */
+    pointer-events: auto;
+    touch-action: pan-y pan-x pinch-zoom; /* Разрешаем скролл во всех направлениях и зум */
+    -webkit-overflow-scrolling: touch;
+    background: transparent;
+    /* Блокируем все взаимодействия с видео, но разрешаем скролл */
+    -webkit-touch-callout: none;
+    user-select: none;
   }
   
   /* Дополнительные правила для iOS Safari */
@@ -455,38 +518,6 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
     pointer-events: none !important;
   }
   
-  /* Дополнительное скрытие через overlay - только на мобильных */
-  .hero-video-container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1000 !important; /* Высокий z-index для перекрытия элементов управления */
-    pointer-events: auto !important; /* Разрешаем pointer-events для перехвата кликов на iOS */
-    background: transparent;
-    /* Перехватываем клики на элементах управления */
-    touch-action: none !important;
-    -webkit-touch-callout: none !important;
-  }
-  
-  /* Дополнительный слой для полного скрытия элементов управления */
-  .hero-video-container {
-    position: relative;
-  }
-  
-  .hero-video-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 999 !important; /* Высокий z-index для перекрытия */
-    pointer-events: none;
-    background: transparent;
-  }
   
   /* Скрытие всех возможных элементов управления через селекторы по атрибутам */
   .hero-video[controls],
@@ -559,11 +590,6 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
       appearance: none !important;
     }
     
-    /* Дополнительный overlay для iOS - перекрывает все элементы управления */
-    .hero-video-container::after {
-      z-index: 10000 !important; /* Максимальный z-index для iOS */
-      pointer-events: auto !important;
-    }
   }
   
   /* Дополнительное скрытие для всех возможных состояний видео на iPhone */
