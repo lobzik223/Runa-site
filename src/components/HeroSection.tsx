@@ -32,11 +32,6 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     // Сбрасываем флаг при смене источника (mobile/desktop)
     hasCalledCallback.current = false;
 
-    // Скрываем видео до начала реального воспроизведения:
-    // это убирает "большую кнопку Play" (Safari рисует её поверх видео, пока оно не играет).
-    video.style.opacity = '0';
-    video.style.transition = 'opacity 150ms ease';
-
     // Базовые настройки видео (без "магии")
     video.muted = true;
     video.setAttribute('muted', '');
@@ -50,10 +45,9 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
 
     const attemptPlay = () => {
       try {
-        const p = video.play();
-        if (p && typeof (p as Promise<void>).catch === 'function') {
-          (p as Promise<void>).catch(() => {});
-        }
+        video.play().catch(() => {
+          // ignore - autoplay может быть заблокирован
+        });
       } catch {
         // ignore
       }
@@ -72,33 +66,35 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     };
 
     const onCanPlay = () => {
-      // Иногда iOS рисует "Play" пока play() не вызван — пробуем ещё раз
+      // Пробуем запустить видео - это скроет кнопку Play на iOS
       attemptPlay();
-    };
-
-    const onPlaying = () => {
-      video.style.opacity = '1';
     };
 
     video.addEventListener('loadeddata', onLoadedData);
     video.addEventListener('canplay', onCanPlay);
-    video.addEventListener('playing', onPlaying);
 
     // Пробуем стартануть сразу после монтирования
     attemptPlay();
-    const rafId = requestAnimationFrame(attemptPlay);
+    
+    // Несколько попыток с интервалами для гарантии запуска и скрытия кнопки Play
+    const timeout1 = setTimeout(attemptPlay, 50);
+    const timeout2 = setTimeout(attemptPlay, 150);
+    const timeout3 = setTimeout(attemptPlay, 300);
+    const timeout4 = setTimeout(attemptPlay, 500);
 
-    // Если autoplay всё же заблокирован — одна попытка на первом жесте пользователя
+    // Если autoplay заблокирован — попытка на первом жесте пользователя
     const onFirstGesture = () => attemptPlay();
     window.addEventListener('touchstart', onFirstGesture, { passive: true, once: true });
     window.addEventListener('scroll', onFirstGesture, { passive: true, once: true });
     window.addEventListener('click', onFirstGesture, { passive: true, once: true });
 
     return () => {
-      cancelAnimationFrame(rafId);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
+      clearTimeout(timeout4);
       video.removeEventListener('loadeddata', onLoadedData);
       video.removeEventListener('canplay', onCanPlay);
-      video.removeEventListener('playing', onPlaying);
       window.removeEventListener('touchstart', onFirstGesture as EventListener);
       window.removeEventListener('scroll', onFirstGesture as EventListener);
       window.removeEventListener('click', onFirstGesture as EventListener);
