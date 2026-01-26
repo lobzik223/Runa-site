@@ -12,7 +12,6 @@ const App: React.FC = () => {
   
   useEffect(() => {
     const t = setTimeout(() => {
-      console.log('Таймаут сработал, скрываем LoadingView');
       setIsLoading(false);
     }, 2000);
     return () => clearTimeout(t);
@@ -93,9 +92,7 @@ const App: React.FC = () => {
   };
 
   const handleVideoLoaded = () => {
-    // Видео загружено, но это не влияет на лоадер
-    // Лоадер управляется только таймаутом
-    console.log('handleVideoLoaded вызван (не влияет на лоадер)');
+    // Видео живёт отдельно от лоадера (лоадер = только таймер)
   };
 
 
@@ -175,8 +172,6 @@ const App: React.FC = () => {
       }
     };
   }, [isLoading]);
-
-  console.log('App render, isLoading:', isLoading);
 
   return (
     <div className="app">

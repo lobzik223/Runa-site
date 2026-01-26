@@ -29,23 +29,81 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
     const video = videoRef.current;
     if (!video) return;
 
-    // Базовые настройки видео
+    // Сбрасываем флаг при смене источника (mobile/desktop)
+    hasCalledCallback.current = false;
+
+    // Скрываем видео до начала реального воспроизведения:
+    // это убирает "большую кнопку Play" (Safari рисует её поверх видео, пока оно не играет).
+    video.style.opacity = '0';
+    video.style.transition = 'opacity 150ms ease';
+
+    // Базовые настройки видео (без "магии")
     video.muted = true;
+    video.setAttribute('muted', '');
     video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
     video.autoplay = true;
     video.loop = true;
     video.controls = false;
     video.removeAttribute('controls');
-    
-    // Дополнительно для iOS - убеждаемся что controls полностью отсутствует
-    video.setAttribute('playsinline', 'true');
-    video.setAttribute('webkit-playsinline', 'true');
 
-    const onLoad = () => onVideoLoaded();
-    video.addEventListener('loadeddata', onLoad);
+    const attemptPlay = () => {
+      try {
+        const p = video.play();
+        if (p && typeof (p as Promise<void>).catch === 'function') {
+          (p as Promise<void>).catch(() => {});
+        }
+      } catch {
+        // ignore
+      }
+    };
 
-    return () => video.removeEventListener('loadeddata', onLoad);
-  }, [onVideoLoaded]);
+    const markLoadedOnce = () => {
+      if (!hasCalledCallback.current) {
+        hasCalledCallback.current = true;
+        onVideoLoaded();
+      }
+    };
+
+    const onLoadedData = () => {
+      markLoadedOnce();
+      attemptPlay();
+    };
+
+    const onCanPlay = () => {
+      // Иногда iOS рисует "Play" пока play() не вызван — пробуем ещё раз
+      attemptPlay();
+    };
+
+    const onPlaying = () => {
+      video.style.opacity = '1';
+    };
+
+    video.addEventListener('loadeddata', onLoadedData);
+    video.addEventListener('canplay', onCanPlay);
+    video.addEventListener('playing', onPlaying);
+
+    // Пробуем стартануть сразу после монтирования
+    attemptPlay();
+    const rafId = requestAnimationFrame(attemptPlay);
+
+    // Если autoplay всё же заблокирован — одна попытка на первом жесте пользователя
+    const onFirstGesture = () => attemptPlay();
+    window.addEventListener('touchstart', onFirstGesture, { passive: true, once: true });
+    window.addEventListener('scroll', onFirstGesture, { passive: true, once: true });
+    window.addEventListener('click', onFirstGesture, { passive: true, once: true });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      video.removeEventListener('loadeddata', onLoadedData);
+      video.removeEventListener('canplay', onCanPlay);
+      video.removeEventListener('playing', onPlaying);
+      window.removeEventListener('touchstart', onFirstGesture as EventListener);
+      window.removeEventListener('scroll', onFirstGesture as EventListener);
+      window.removeEventListener('click', onFirstGesture as EventListener);
+    };
+  }, [onVideoLoaded, isMobile]);
 
   const handleScrollDown = () => {
     window.scrollTo({
@@ -75,7 +133,6 @@ const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(({ onVideoLoaded }
           Ваш браузер не поддерживает видео.
         </video>
         <div className="hero-video-overlay"></div>
-        {isMobile && <div className="hero-video-touch-blocker"></div>}
         <div className="hero-gradient-transition"></div>
       </div>
       {isMobile && (

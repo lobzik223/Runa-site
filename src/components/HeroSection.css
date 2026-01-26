@@ -38,19 +38,6 @@
   pointer-events: none;
 }
 
-/* Overlay для блокировки touch событий на видео на мобильных */
-.hero-video-touch-blocker {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  pointer-events: auto;
-  touch-action: pan-y; /* Разрешаем вертикальный скролл */
-  -webkit-overflow-scrolling: touch;
-}
-
 .hero-gradient-transition {
   position: absolute;
   bottom: 0;
@@ -62,6 +49,20 @@
   pointer-events: none;
 }
 
+/* Важно для iOS:
+   "Play" рисуется Safari поверх видео, пока оно не играет.
+   Мы НЕ перехватываем touch оверлеями (чтобы не ломать скролл),
+   а запускаем видео через play() в JS.
+*/
+
+/* На всякий случай вырубаем старые оверлеи, если где-то остались */
+.hero-video-touch-blocker {
+  display: none !important;
+}
+
+.hero-video-container::after {
+  content: none !important;
+}
 
 /* Полное скрытие всех элементов управления видео */
 .hero-video,
