@@ -6,9 +6,13 @@ import './PremiumView.css';
 
 const PremiumView: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>('6months');
-  const [emailOrId, setEmailOrId] = useState<string>('');
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [accountId, setAccountId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const plans = [
     { id: '1month', duration: '1 месяц', price: '400', description: 'Месяц полного доступа' },
@@ -16,9 +20,16 @@ const PremiumView: React.FC = () => {
     { id: '1year', duration: '1 год', price: '2500', description: 'Экономия 2300 ₽', badge: 'Максимальная выгода', best: true }
   ];
 
-  const handleSubscribe = async () => {
-    if (!emailOrId.trim()) {
-      setError('Пожалуйста, введите Email или ID аккаунта из приложения');
+  const handleOpenForm = () => {
+    setError(null);
+    setSuccess(false);
+    setShowForm(true);
+  };
+
+  const handleDemoPayment = async () => {
+    const emailOrId = accountId.trim() || email.trim();
+    if (!emailOrId) {
+      setError('Введите Email или ID аккаунта из приложения');
       return;
     }
 
@@ -26,32 +37,35 @@ const PremiumView: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_CREATE}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_DEMO}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-runa-site-key': API_CONFIG.SITE_KEY,
+          'X-Runa-Site-Key': API_CONFIG.SITE_KEY,
         },
         body: JSON.stringify({
-          emailOrId: emailOrId.trim(),
+          name: name.trim() || undefined,
+          email: email.trim() || undefined,
+          emailOrId,
           planId: selectedPlan,
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.message || 'Ошибка при создании платежа');
+        throw new Error(data.message || 'Ошибка при оформлении подписки');
       }
 
-      if (data.url) {
-        // Перенаправляем на Robokassa
-        window.location.href = data.url;
-      } else {
-        throw new Error('Не удалось получить ссылку на оплату');
-      }
+      setSuccess(true);
+      setTimeout(() => {
+        setShowForm(false);
+        setName('');
+        setEmail('');
+        setAccountId('');
+        setSuccess(false);
+      }, 2500);
     } catch (err: any) {
-      console.error('Payment error:', err);
       setError(err.message || 'Произошла ошибка. Попробуйте позже.');
     } finally {
       setLoading(false);
@@ -66,8 +80,8 @@ const PremiumView: React.FC = () => {
           <div className="pricing-header">
             <h2>R<span className="logo-u">U</span>NA Premium</h2>
             <p className="pricing-intro">
-              Выберите подписку R<span className="logo-u">U</span>NA Premium и получите полный контроль над вашими финансами. 
-              Отслеживайте доходы и расходы, получайте персональные рекомендации от ИИ и принимайте обоснованные финансовые решения. 
+              Выберите подписку R<span className="logo-u">U</span>NA Premium и получите полный контроль над вашими финансами.
+              Отслеживайте доходы и расходы, получайте персональные рекомендации от ИИ и принимайте обоснованные финансовые решения.
               Вы можете отменить подписку в любое время.
             </p>
           </div>
@@ -102,33 +116,6 @@ const PremiumView: React.FC = () => {
             </div>
           </div>
 
-          <div className="payment-methods">
-            <h3>Способы оплаты</h3>
-            <div className="payment-icons">
-              <div className="payment-icon">МИР</div>
-              <div className="payment-icon">Visa / MasterCard</div>
-              <div className="payment-icon">СБП</div>
-            </div>
-          </div>
-
-          <div className="user-identification">
-            <h3>Ваш аккаунт</h3>
-            <p className="id-instruction">
-              Введите Email или ID аккаунта (можно найти в профиле приложения), чтобы мы знали, кому выдать подписку.
-            </p>
-            <div className="input-group">
-              <input 
-                type="text" 
-                placeholder="Email или ID аккаунта" 
-                value={emailOrId}
-                onChange={(e) => setEmailOrId(e.target.value)}
-                className={`id-input ${error ? 'input-error' : ''}`}
-                disabled={loading}
-              />
-              {error && <p className="error-message">{error}</p>}
-            </div>
-          </div>
-
           <div className="pricing-plans">
             <h3>Выберите тариф</h3>
             <div className="plans-grid">
@@ -136,13 +123,13 @@ const PremiumView: React.FC = () => {
                 <div
                   key={plan.id}
                   className={`plan-card ${plan.recommended ? 'plan-card-recommended' : ''} ${plan.best ? 'plan-card-best' : ''} ${selectedPlan === plan.id ? 'plan-card-selected' : ''}`}
-                  onClick={() => !loading && setSelectedPlan(plan.id)}
+                  onClick={() => setSelectedPlan(plan.id)}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      if (!loading) setSelectedPlan(plan.id);
+                      setSelectedPlan(plan.id);
                     }
                   }}
                   aria-label={`Выбрать тариф ${plan.duration}`}
@@ -172,23 +159,77 @@ const PremiumView: React.FC = () => {
 
           <div className="pricing-cta">
             <p className="pricing-note">
-              Здесь вы официально можете получить подписку R<span className="logo-u">U</span>NA Premium. 
-              Все платежи защищены и обрабатываются безопасно через Robokassa.
+              Здесь вы официально можете получить подписку R<span className="logo-u">U</span>NA Premium.
+              Все платежи защищены и обрабатываются безопасно.
             </p>
-            <button 
-              className="btn-subscribe" 
-              onClick={handleSubscribe}
+            <button
+              className="btn-subscribe"
+              onClick={handleOpenForm}
               disabled={loading}
             >
-              {loading ? 'Обработка...' : 'Оформить подписку'}
+              Оформить подписку
             </button>
             <p className="pricing-disclaimer">
-              При оформлении подписки применяются условия использования. 
-              Подписка активируется автоматически в приложении после оплаты.
+              При оформлении подписки применяются условия использования.
+              Подписка активируется автоматически в приложении.
             </p>
           </div>
         </div>
       </main>
+
+      {/* Модальное окно: данные для подписки + демо оплата */}
+      {showForm && (
+        <div className="modal-overlay" onClick={() => !loading && setShowForm(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="modal-title">Данные для подписки</h3>
+            <p className="modal-subtitle">
+              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Введите данные — подписка будет привязана к вашему аккаунту в приложении.
+            </p>
+            <div className="modal-fields">
+              <input
+                type="text"
+                placeholder="Имя (необязательно)"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="modal-input"
+                disabled={loading}
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="modal-input"
+                disabled={loading}
+              />
+              <input
+                type="text"
+                placeholder="ID аккаунта (из профиля в приложении)"
+                value={accountId}
+                onChange={(e) => setAccountId(e.target.value)}
+                className="modal-input"
+                disabled={loading}
+              />
+            </div>
+            {error && <p className="modal-error">{error}</p>}
+            {success && <p className="modal-success">Подписка оформлена. Откройте приложение — статус обновится.</p>}
+            <div className="modal-actions">
+              <button type="button" className="btn-modal-cancel" onClick={() => !loading && setShowForm(false)} disabled={loading}>
+                Отмена
+              </button>
+              <button
+                type="button"
+                className="btn-modal-demo"
+                onClick={handleDemoPayment}
+                disabled={loading}
+              >
+                {loading ? 'Обработка...' : 'Демо оплата'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <footer className="site-footer">
         <div className="footer-grid">
           <div>

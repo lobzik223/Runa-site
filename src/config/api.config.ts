@@ -16,7 +16,7 @@ export const API_CONFIG = {
   // Эндпоинты API
   ENDPOINTS: {
     // Платежи
-    PAYMENTS_CREATE: '/payments/create',
+    PAYMENTS_DEMO: '/payments/demo',
     PAYMENTS_PLANS: '/payments/plans',
     
     // Пользователи
