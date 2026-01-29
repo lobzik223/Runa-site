@@ -5,13 +5,20 @@
 
 export const API_CONFIG = {
   // Базовый URL API (изменить при подключении реального бэкенда)
-  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+  BASE_URL: import.meta.env.VITE_API_URL || 'https://api.runafinance.online/api',
   
+  // Ключ для безопасного общения с бэкендом (должен совпадать с SITE_API_KEY на бэкенде)
+  SITE_KEY: import.meta.env.VITE_SITE_KEY || 'runa-site-secret-key-change-me-in-prod',
+
   // Таймаут запросов (в миллисекундах)
   TIMEOUT: 30000,
   
   // Эндпоинты API
   ENDPOINTS: {
+    // Платежи
+    PAYMENTS_CREATE: '/payments/create',
+    PAYMENTS_PLANS: '/payments/plans',
+    
     // Пользователи
     USERS: '/users',
     USER_BY_ID: (id: string) => `/users/${id}`,

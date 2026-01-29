@@ -1,16 +1,62 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import logoImage from './images/runalogo.png';
+import { API_CONFIG } from '../config/api.config';
 import './PremiumView.css';
 
 const PremiumView: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>('6months');
+  const [emailOrId, setEmailOrId] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const plans = [
     { id: '1month', duration: '1 месяц', price: '400', description: 'Месяц полного доступа' },
     { id: '6months', duration: '6 месяцев', price: '1800', description: 'Экономия 600 ₽', badge: 'Лучший выбор', recommended: true },
     { id: '1year', duration: '1 год', price: '2500', description: 'Экономия 2300 ₽', badge: 'Максимальная выгода', best: true }
   ];
+
+  const handleSubscribe = async () => {
+    if (!emailOrId.trim()) {
+      setError('Пожалуйста, введите Email или ID аккаунта из приложения');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_CREATE}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-runa-site-key': API_CONFIG.SITE_KEY,
+        },
+        body: JSON.stringify({
+          emailOrId: emailOrId.trim(),
+          planId: selectedPlan,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Ошибка при создании платежа');
+      }
+
+      if (data.url) {
+        // Перенаправляем на Robokassa
+        window.location.href = data.url;
+      } else {
+        throw new Error('Не удалось получить ссылку на оплату');
+      }
+    } catch (err: any) {
+      console.error('Payment error:', err);
+      setError(err.message || 'Произошла ошибка. Попробуйте позже.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="premium-view">
@@ -60,7 +106,26 @@ const PremiumView: React.FC = () => {
             <h3>Способы оплаты</h3>
             <div className="payment-icons">
               <div className="payment-icon">МИР</div>
-              <div className="payment-icon">ЮMoney</div>
+              <div className="payment-icon">Visa / MasterCard</div>
+              <div className="payment-icon">СБП</div>
+            </div>
+          </div>
+
+          <div className="user-identification">
+            <h3>Ваш аккаунт</h3>
+            <p className="id-instruction">
+              Введите Email или ID аккаунта (можно найти в профиле приложения), чтобы мы знали, кому выдать подписку.
+            </p>
+            <div className="input-group">
+              <input 
+                type="text" 
+                placeholder="Email или ID аккаунта" 
+                value={emailOrId}
+                onChange={(e) => setEmailOrId(e.target.value)}
+                className={`id-input ${error ? 'input-error' : ''}`}
+                disabled={loading}
+              />
+              {error && <p className="error-message">{error}</p>}
             </div>
           </div>
 
@@ -71,13 +136,13 @@ const PremiumView: React.FC = () => {
                 <div
                   key={plan.id}
                   className={`plan-card ${plan.recommended ? 'plan-card-recommended' : ''} ${plan.best ? 'plan-card-best' : ''} ${selectedPlan === plan.id ? 'plan-card-selected' : ''}`}
-                  onClick={() => setSelectedPlan(plan.id)}
+                  onClick={() => !loading && setSelectedPlan(plan.id)}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      setSelectedPlan(plan.id);
+                      if (!loading) setSelectedPlan(plan.id);
                     }
                   }}
                   aria-label={`Выбрать тариф ${plan.duration}`}
@@ -108,12 +173,18 @@ const PremiumView: React.FC = () => {
           <div className="pricing-cta">
             <p className="pricing-note">
               Здесь вы официально можете получить подписку R<span className="logo-u">U</span>NA Premium. 
-              Все платежи защищены и обрабатываются безопасно.
+              Все платежи защищены и обрабатываются безопасно через Robokassa.
             </p>
-            <button className="btn-subscribe">Оформить подписку</button>
+            <button 
+              className="btn-subscribe" 
+              onClick={handleSubscribe}
+              disabled={loading}
+            >
+              {loading ? 'Обработка...' : 'Оформить подписку'}
+            </button>
             <p className="pricing-disclaimer">
               При оформлении подписки применяются условия использования. 
-              Вы можете отменить подписку в любое время в настройках приложения.
+              Подписка активируется автоматически в приложении после оплаты.
             </p>
           </div>
         </div>
