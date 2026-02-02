@@ -161,7 +161,7 @@ const PremiumView: React.FC = () => {
             <h3>Способы оплаты</h3>
             <div className="payment-icons">
               <span className="payment-icon">Яндекс Pay</span>
-              <span className="payment-icon">мир</span>
+              <span className="payment-icon">Мир</span>
               <span className="payment-icon">SberPay</span>
               <span className="payment-icon">T-Pay</span>
               <span className="payment-icon">MTS Pay</span>
