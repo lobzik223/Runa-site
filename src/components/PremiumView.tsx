@@ -168,8 +168,8 @@ const PremiumView: React.FC = () => {
               <span className="payment-icon">СБП</span>
               <span className="payment-icon">Мокка</span>
               <span className="payment-icon">Альфа Pay</span>
-              <span className="payment-icon">VISA</span>
-              <span className="payment-icon">mastercard</span>
+              <span className="payment-icon">Visa</span>
+              <span className="payment-icon">Mastercard</span>
             </div>
           </div>
 
