@@ -157,10 +157,26 @@ const PremiumView: React.FC = () => {
             </div>
           </div>
 
+          <div className="payment-methods">
+            <h3>Способы оплаты</h3>
+            <div className="payment-icons">
+              <span className="payment-icon">Яндекс Pay</span>
+              <span className="payment-icon">мир</span>
+              <span className="payment-icon">SberPay</span>
+              <span className="payment-icon">T-Pay</span>
+              <span className="payment-icon">MTS Pay</span>
+              <span className="payment-icon">СБП</span>
+              <span className="payment-icon">Мокка</span>
+              <span className="payment-icon">Альфа Pay</span>
+              <span className="payment-icon">VISA</span>
+              <span className="payment-icon">mastercard</span>
+            </div>
+          </div>
+
           <div className="pricing-cta">
             <p className="pricing-note">
               Здесь вы официально можете получить подписку R<span className="logo-u">U</span>NA Premium.
-              Все платежи защищены и обрабатываются безопасно.
+              Все платежи защищены и обрабатываются безопасно через Robokassa.
             </p>
             <button
               className="btn-subscribe"
@@ -260,6 +276,7 @@ const PremiumView: React.FC = () => {
         </div>
         <div className="footer-bottom">
           <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — Ваша уверенность в деньгах</p>
+          <p className="footer-fio">Попков Фёдор Анатольевич</p>
           <p className="footer-inn">ИНН: 660609610617</p>
         </div>
       </footer>

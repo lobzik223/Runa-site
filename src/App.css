@@ -1622,6 +1622,15 @@
   padding-right: 20px;
 }
 
+.footer-fio {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: #253550;
+  font-size: 0.85rem;
+  margin: 0;
+  opacity: 0.85;
+}
+
 .footer-inn {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
@@ -2717,6 +2726,13 @@
   .footer-note {
     font-size: 0.85rem;
     line-height: 1.5;
+    padding: 0 15px;
+  }
+  
+  .footer-fio {
+    font-size: 0.75rem;
+    text-align: center;
+    opacity: 0.8;
     padding: 0 15px;
   }
   

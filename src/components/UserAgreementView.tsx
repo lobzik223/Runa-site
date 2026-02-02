@@ -30,6 +30,7 @@ const UserAgreementView: React.FC = () => {
             <p><strong>1.1.</strong> Сайт R<span className="logo-u">U</span>NA предоставляет информацию о сервисе, а также возможность оплаты подписки на мобильное приложение R<span className="logo-u">U</span>NA.</p>
             
             <p><strong>1.2.</strong> Оператор — самозанятый, осуществляющий управление и поддержку Сайта.</p>
+            <p>Попков Фёдор Анатольевич</p>
             <p>ИНН: 660609610617</p>
             <p>Контактный email: <a href="mailto:runa.fintech@bk.ru" className="agreement-link">runa.fintech@bk.ru</a></p>
             
@@ -51,7 +52,7 @@ const UserAgreementView: React.FC = () => {
           <div className="user-agreement-section">
             <h2>3. Оплата подписки</h2>
             
-            <p><strong>3.1.</strong> На Сайте предоставляется возможность оплаты подписки на мобильное приложение R<span className="logo-u">U</span>NA через платёжный сервис ЮKassa.</p>
+            <p><strong>3.1.</strong> На Сайте предоставляется возможность оплаты подписки на мобильное приложение R<span className="logo-u">U</span>NA через платёжный сервис Robokassa.</p>
             
             <p><strong>3.2.</strong> Варианты подписки:</p>
             <ul>
@@ -60,7 +61,7 @@ const UserAgreementView: React.FC = () => {
               <li>12 месяцев — 2500 рублей.</li>
             </ul>
             
-            <p><strong>3.3.</strong> Оплата осуществляется через ЮKassa. Сайт не хранит и не обрабатывает данные банковских карт Пользователя.</p>
+            <p><strong>3.3.</strong> Оплата осуществляется через Robokassa. Сайт не хранит и не обрабатывает данные банковских карт Пользователя.</p>
             
             <p><strong>3.4.</strong> Возврат денежных средств осуществляется в порядке, предусмотренном законодательством Российской Федерации.</p>
           </div>
@@ -83,7 +84,7 @@ const UserAgreementView: React.FC = () => {
             <ul>
               <li>финансовые последствия оплаты подписки;</li>
               <li>убытки или упущенную выгоду Пользователя;</li>
-              <li>технические сбои платежной системы, находящейся под управлением ЮKassa.</li>
+              <li>технические сбои платежной системы, находящейся под управлением Robokassa.</li>
             </ul>
             
             <p><strong>5.2.</strong> Сайт предоставляется на принципе «как есть» (as is).</p>
@@ -140,6 +141,7 @@ const UserAgreementView: React.FC = () => {
         </div>
         <div className="footer-bottom">
           <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — Ваша уверенность в деньгах</p>
+          <p className="footer-fio">Попков Фёдор Анатольевич</p>
           <p className="footer-inn">ИНН: 660609610617</p>
         </div>
       </footer>
