@@ -12,7 +12,6 @@ const PremiumView: React.FC = () => {
   const [accountId, setAccountId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
 
   const plans = [
     { id: '1month', duration: '1 месяц', price: '400', description: 'Месяц полного доступа' },
@@ -22,11 +21,10 @@ const PremiumView: React.FC = () => {
 
   const handleOpenForm = () => {
     setError(null);
-    setSuccess(false);
     setShowForm(true);
   };
 
-  const handleDemoPayment = async () => {
+  const handlePayment = async () => {
     const emailOrId = accountId.trim() || email.trim();
     if (!emailOrId) {
       setError('Введите Email или ID аккаунта из приложения');
@@ -37,34 +35,35 @@ const PremiumView: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_DEMO}`, {
+      const origin = window.location.origin;
+      const returnUrl = `${origin}/premium/success`;
+      const cancelUrl = `${origin}/premium/cancel`;
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_CREATE}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-Runa-Site-Key': API_CONFIG.SITE_KEY,
         },
         body: JSON.stringify({
-          name: name.trim() || undefined,
-          email: email.trim() || undefined,
-          emailOrId,
           planId: selectedPlan,
+          emailOrId,
+          returnUrl,
+          cancelUrl,
         }),
       });
 
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.message || 'Ошибка при оформлении подписки');
+        throw new Error(data.message || 'Ошибка при создании платежа');
       }
 
-      setSuccess(true);
-      setTimeout(() => {
-        setShowForm(false);
-        setName('');
-        setEmail('');
-        setAccountId('');
-        setSuccess(false);
-      }, 2500);
+      if (data.confirmationUrl) {
+        window.location.href = data.confirmationUrl;
+        return;
+      }
+      throw new Error('Не получена ссылка на оплату');
     } catch (err: any) {
       setError(err.message || 'Произошла ошибка. Попробуйте позже.');
     } finally {
@@ -176,7 +175,7 @@ const PremiumView: React.FC = () => {
           <div className="pricing-cta">
             <p className="pricing-note">
               Здесь вы официально можете получить подписку R<span className="logo-u">U</span>NA Premium.
-              Все платежи защищены и обрабатываются безопасно через Robokassa.
+              Все платежи защищены и обрабатываются безопасно через ЮKassa.
             </p>
             <button
               className="btn-subscribe"
@@ -187,19 +186,19 @@ const PremiumView: React.FC = () => {
             </button>
             <p className="pricing-disclaimer">
               При оформлении подписки применяются условия использования.
-              Подписка активируется автоматически в приложении.
+              Подписка активируется в приложении после успешной оплаты (обычно в течение минуты).
             </p>
           </div>
         </div>
       </main>
 
-      {/* Модальное окно: данные для подписки + демо оплата */}
+      {/* Модальное окно: Email/ID и переход к оплате в ЮKassa */}
       {showForm && (
         <div className="modal-overlay" onClick={() => !loading && setShowForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 className="modal-title">Данные для подписки</h3>
             <p className="modal-subtitle">
-              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Введите данные — подписка будет привязана к вашему аккаунту в приложении.
+              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Введите Email или ID аккаунта из приложения — подписка будет привязана после оплаты.
             </p>
             <div className="modal-fields">
               <input
@@ -228,7 +227,6 @@ const PremiumView: React.FC = () => {
               />
             </div>
             {error && <p className="modal-error">{error}</p>}
-            {success && <p className="modal-success">Подписка оформлена. Откройте приложение — статус обновится.</p>}
             <div className="modal-actions">
               <button type="button" className="btn-modal-cancel" onClick={() => !loading && setShowForm(false)} disabled={loading}>
                 Отмена
@@ -236,10 +234,10 @@ const PremiumView: React.FC = () => {
               <button
                 type="button"
                 className="btn-modal-demo"
-                onClick={handleDemoPayment}
+                onClick={handlePayment}
                 disabled={loading}
               >
-                {loading ? 'Обработка...' : 'Демо оплата'}
+                {loading ? 'Переход к оплате...' : 'Перейти к оплате'}
               </button>
             </div>
           </div>

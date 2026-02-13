@@ -1,183 +1,120 @@
 import React from 'react';
 import Header from './Header';
 import logoImage from './images/runalogo.png';
+import { getLang, t } from '../i18n';
 import './PrivacyPolicyView.css';
 
+const CONTACT_EMAIL = 'runa.fintech@bk.ru';
+
 const PrivacyPolicyView: React.FC = () => {
+  const isEn = getLang() === 'en';
+
   return (
     <div className="privacy-policy-view">
       <Header showOnMobile={true} />
       <main className="privacy-policy-content">
         <div className="privacy-policy-container">
           <div className="privacy-policy-header">
-            <h1>ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</h1>
-            <p className="privacy-policy-date">Дата вступления в силу: 25.01.2026</p>
+            <h1>{t('privacy.title')}</h1>
+            <p className="privacy-policy-date">{t('privacy.effectiveDate')}</p>
+            <p className="privacy-lang-switch">
+              {isEn ? (
+                <>
+                  <a href="/privacy" className="privacy-link">{t('privacy.langRu')}</a>
+                  <span className="privacy-lang-sep"> | </span>
+                  <strong>{t('privacy.langEn')}</strong>
+                </>
+              ) : (
+                <>
+                  <strong>{t('privacy.langRu')}</strong>
+                  <span className="privacy-lang-sep"> | </span>
+                  <a href="/privacy-en" className="privacy-link">{t('privacy.langEn')}</a>
+                </>
+              )}
+            </p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>1. Общие положения</h2>
-            
-            <p><strong>1.1.</strong> Настоящая Политика конфиденциальности (далее — Политика) определяет порядок обработки и защиты персональных данных пользователей сайта RUNA (далее — Сайт, Сервис).</p>
-            
-            <p><strong>1.2.</strong> Оператором персональных данных является физическое лицо, осуществляющее деятельность в статусе самозанятого (далее — Оператор).</p>
-            
-            <p><strong>1.3.</strong> Контактный адрес электронной почты для обращений пользователей и органов государственной власти: <a href="mailto:runa.fintech@bk.ru" className="privacy-link">runa.fintech@bk.ru</a>.</p>
-            
-            <p><strong>1.4.</strong> Используя Сайт, пользователь подтверждает, что ознакомился с настоящей Политикой, понимает её положения и соглашается с условиями обработки персональных данных.</p>
-            
-            <p><strong>1.5.</strong> В случае несогласия с условиями настоящей Политики пользователь обязан прекратить использование Сайта.</p>
-            
-            <p><strong>1.6.</strong> Настоящая Политика разработана в соответствии с:</p>
-            <ul>
-              <li>Конституцией Российской Федерации;</li>
-              <li>Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных»;</li>
-              <li>Иными нормативными правовыми актами Российской Федерации в области защиты персональных данных.</li>
-            </ul>
-            
-            <p><strong>1.7.</strong> Сайт RUNA не является:</p>
-            <ul>
-              <li>кредитной организацией;</li>
-              <li>банком;</li>
-              <li>брокером;</li>
-              <li>инвестиционным советником;</li>
-              <li>профессиональным участником финансового рынка.</li>
-            </ul>
-            
-            <p>Информация, предоставляемая на Сайте, носит справочно-информационный характер и не является индивидуальной инвестиционной рекомендацией.</p>
+            <h2>{t('privacy.s1Title')}</h2>
+            <p><strong>1.1.</strong> {t('privacy.s1_1')}</p>
+            <p><strong>1.2.</strong> {t('privacy.s1_2')}</p>
+            <p><strong>1.3.</strong> {t('privacy.s1_3')}<a href={`mailto:${CONTACT_EMAIL}`} className="privacy-link">{CONTACT_EMAIL}</a>.</p>
+            <p><strong>1.4.</strong> {t('privacy.s1_4')}</p>
+            <p><strong>1.5.</strong> {t('privacy.s1_5')}</p>
+            <p><strong>1.6.</strong> {t('privacy.s1_6')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>2. Область действия Политики</h2>
-            
-            <p><strong>2.1.</strong> Настоящая Политика применяется к пользователям, находящимся на территории Российской Федерации.</p>
-            
-            <p><strong>2.2.</strong> Сайт предназначен для использования лицами, достигшими возраста 16 лет. Использование Сайта лицами младше указанного возраста запрещено.</p>
-            
-            <p><strong>2.3.</strong> Политика распространяется на персональные данные, которые Оператор может получить о пользователе при:</p>
-            <ul>
-              <li>использовании функционала Сайта;</li>
-              <li>оформлении и оплате подписки через платёжный сервис Robokassa;</li>
-              <li>взаимодействии с технической поддержкой (если предусмотрено).</li>
-            </ul>
-            
-            <p><strong>2.4.</strong> Настоящая Политика не распространяется на сторонние сайты и сервисы, на которые пользователь может перейти по ссылкам на Сайте. Оператор не несёт ответственности за действия таких третьих лиц.</p>
+            <h2>{t('privacy.s2Title')}</h2>
+            <p><strong>2.1.</strong> {t('privacy.s2_1')}</p>
+            <p><strong>2.2.</strong> {t('privacy.s2_2')}</p>
+            <p><strong>2.3.</strong> {t('privacy.s2_3')}</p>
+            <p><strong>2.4.</strong> {t('privacy.s2_4')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>3. Персональные данные пользователей</h2>
-            
-            <p><strong>3.1.</strong> Оператор обрабатывает персональные данные пользователей исключительно в объёме, необходимом для функционирования Сайта и исполнения обязательств перед пользователями.</p>
-            
-            <p><strong>3.2.</strong> На Сайте обрабатываются следующие категории персональных данных:</p>
+            <h2>{t('privacy.s3Title')}</h2>
+            <p><strong>3.1.</strong> {t('privacy.s3_1')}</p>
             <ul>
-              <li>Данные, вводимые пользователем: действия на Сайте, включая просмотр страниц, использование функционала, взаимодействие с формами и платёжной системой.</li>
-              <li>Данные при оплате подписки через Robokassa: Оператор не хранит и не имеет доступа к полным платёжным данным пользователей (данные банковских карт).</li>
+              <li><strong>{t('privacy.s3CameraLabel')}</strong> — {t('privacy.s3CameraText')}</li>
+              <li><strong>{t('privacy.s3PhotosLabel')}</strong> — {t('privacy.s3PhotosText')}</li>
+              <li><strong>{t('privacy.s3NotificationsLabel')}</strong> — {t('privacy.s3NotificationsText')}</li>
             </ul>
-            
-            <p><strong>3.3.</strong> Оператор не обрабатывает специальные категории персональных данных, включая сведения о расовой или национальной принадлежности, политических взглядах, религиозных убеждениях, состоянии здоровья и интимной жизни.</p>
-            
-            <p><strong>3.4.</strong> Оператор не обрабатывает биометрические данные.</p>
-            
-            <p><strong>3.5.</strong> Персональные данные не используются для принятия решений, которые порождают юридические последствия для пользователя.</p>
+            <p><strong>3.2.</strong> {t('privacy.s3_2')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>4. Цели обработки персональных данных</h2>
-            
-            <p><strong>4.1.</strong> Цели обработки:</p>
-            <ul>
-              <li>обеспечение корректной работы Сайта;</li>
-              <li>приём платежей и обработка подписок через Robokassa;</li>
-              <li>ведение статистики действий пользователей для улучшения функционала Сайта;</li>
-              <li>выполнение требований законодательства РФ.</li>
-            </ul>
-            
-            <p><strong>4.2.</strong> Передача персональных данных третьим лицам осуществляется только в случаях, прямо предусмотренных настоящей Политикой или законодательством РФ.</p>
+            <h2>{t('privacy.s4Title')}</h2>
+            <p><strong>4.1.</strong> {t('privacy.s4_1')}</p>
+            <p><strong>4.2.</strong> {t('privacy.s4_2')}</p>
+            <p><strong>4.3.</strong> {t('privacy.s4_3')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>5. Использование сторонних сервисов</h2>
-            
-            <p><strong>5.1.</strong> Для обработки платежей Сайт использует Robokassa.</p>
-            
-            <p><strong>5.2.</strong> Оператор не хранит полные платёжные данные пользователей. Обработка информации осуществляется Robokassa в соответствии с её политикой конфиденциальности и законодательством РФ.</p>
-            
-            <p><strong>5.3.</strong> Сайт размещён на сервере TimewebCloud (Нидерланды). Передача данных за рубеж осуществляется с соблюдением мер по защите прав субъектов персональных данных в соответствии с законодательством РФ.</p>
+            <h2>{t('privacy.s5Title')}</h2>
+            <p><strong>5.1.</strong> {t('privacy.s5_1')}</p>
+            <p><strong>5.2.</strong> {t('privacy.s5_2')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>6. Подписка и оплата</h2>
-            
-            <p><strong>6.1.</strong> Сайт предоставляет платный доступ к расширенному функционалу через подписку.</p>
-            
-            <p><strong>6.2.</strong> Варианты подписки:</p>
-            <ul>
-              <li>1 месяц — 400 рублей;</li>
-              <li>6 месяцев — 1800 рублей;</li>
-              <li>12 месяцев — 2500 рублей.</li>
-            </ul>
-            
-            <p><strong>6.3.</strong> Оплата осуществляется через Robokassa.</p>
-            
-            <p><strong>6.4.</strong> Возврат средств возможен в порядке, предусмотренном законодательством РФ.</p>
+            <h2>{t('privacy.s6Title')}</h2>
+            <p><strong>6.1.</strong> {t('privacy.s6_1')}</p>
+            <p><strong>6.2.</strong> {t('privacy.s6_2')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>7. Права и обязанности пользователя</h2>
-            
-            <p><strong>7.1.</strong> Пользователь имеет право:</p>
-            <ul>
-              <li>получать информацию о факте, целях и способах обработки персональных данных;</li>
-              <li>требовать уточнения, блокирования или уничтожения данных при нарушении законодательства;</li>
-              <li>отозвать согласие на обработку данных;</li>
-              <li>прекратить использование Сайта.</li>
-            </ul>
-            
-            <p><strong>7.2.</strong> Пользователь обязуется:</p>
-            <ul>
-              <li>предоставлять достоверную информацию;</li>
-              <li>не использовать Сайт в целях, противоречащих законодательству РФ;</li>
-              <li>не нарушать работоспособность Сайта.</li>
-            </ul>
+            <h2>{t('privacy.s7Title')}</h2>
+            <p><strong>7.1.</strong> {t('privacy.s7_1')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>8. Меры по защите персональных данных</h2>
-            
-            <p><strong>8.1.</strong> Оператор принимает правовые, организационные и технические меры для защиты данных пользователей от неправомерного доступа, изменения, уничтожения, копирования или распространения.</p>
-            
-            <p><strong>8.2.</strong> К мерам относятся:</p>
-            <ul>
-              <li>ограничение доступа к данным;</li>
-              <li>использование защищённых каналов передачи данных;</li>
-              <li>контроль действий лиц с доступом к данным;</li>
-              <li>регулярное обновление программного обеспечения.</li>
-            </ul>
-            
-            <p><strong>8.3.</strong> Персональные данные хранятся не дольше, чем требуется целями их обработки, либо до момента отзыва согласия пользователя.</p>
+            <h2>{t('privacy.s8Title')}</h2>
+            <p><strong>8.1.</strong> {t('privacy.s8_1')}</p>
+            <p><strong>8.2.</strong> {t('privacy.s8_2')}</p>
           </div>
 
           <div className="privacy-policy-section">
-            <h2>9. Заключительные положения</h2>
-            
-            <p><strong>9.1.</strong> Настоящая Политика является общедоступным документом и размещается на Сайте RUNA.</p>
-            
-            <p><strong>9.2.</strong> Оператор вправе вносить изменения в Политику в одностороннем порядке.</p>
-            
-            <p><strong>9.3.</strong> Продолжение использования Сайта после внесения изменений означает согласие пользователя с новой редакцией.</p>
-            
-            <p><strong>9.4.</strong> Вопросы по обработке персональных данных направляются на <a href="mailto:runa.fintech@bk.ru" className="privacy-link">runa.fintech@bk.ru</a>.</p>
+            <h2>{t('privacy.s9Title')}</h2>
+            <p><strong>9.1.</strong> {t('privacy.s9_1')}</p>
+            <p><strong>9.2.</strong> {t('privacy.s9_2')}</p>
+          </div>
+
+          <div className="privacy-policy-section">
+            <h2>{t('privacy.s10Title')}</h2>
+            <p><strong>10.1.</strong> {t('privacy.s10_1')}</p>
+            <p><strong>10.2.</strong> {t('privacy.s10_2')}</p>
+            <p><strong>10.3.</strong> {t('privacy.s10_3')}<a href={`mailto:${CONTACT_EMAIL}`} className="privacy-link">{CONTACT_EMAIL}</a>{t('privacy.s10_3DataProtection')}</p>
           </div>
         </div>
       </main>
       <footer className="site-footer">
         <div className="footer-grid">
           <div>
-            <h4>Контакты</h4>
+            <h4>{t('privacy.footerContact')}</h4>
             <div className="footer-contacts">
               <p>
-                <span className="footer-label">Почта:</span>{' '}
-                <a href="mailto:runa.fintech@bk.ru" className="footer-link">runa.fintech@bk.ru</a>
+                <span className="footer-label">{t('privacy.footerEmail')}</span>{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="footer-link">{CONTACT_EMAIL}</a>
               </p>
               <p>
                 <span className="footer-label">Telegram:</span>{' '}
@@ -189,18 +126,19 @@ const PrivacyPolicyView: React.FC = () => {
             <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
           </div>
           <div>
-            <h5>Ссылки</h5>
+            <h5>{t('privacy.footerLinks')}</h5>
             <ul>
               <li><a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">Telegram</a></li>
-              <li><a href="mailto:runa.fintech@bk.ru" className="footer-link">Email</a></li>
-              <li><a href="/privacy" className="footer-link">Политика конфиденциальности</a></li>
-              <li><a href="/user-agreement" className="footer-link">Пользовательское соглашение</a></li>
+              <li><a href={`mailto:${CONTACT_EMAIL}`} className="footer-link">Email</a></li>
+              <li><a href="/privacy" className="footer-link">{t('privacy.footerPrivacyRu')}</a></li>
+              <li><a href="/privacy-en" className="footer-link">{t('privacy.footerPrivacyEn')}</a></li>
+              <li><a href="/user-agreement" className="footer-link">{t('privacy.footerUserAgreement')}</a></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — Ваша уверенность в деньгах</p>
-          <p className="footer-fio">Попков Фёдор Анатольевич</p>
+          <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — {t('privacy.footerTagline')}</p>
+          <p className="footer-fio">{t('privacy.footerFio')}</p>
           <p className="footer-inn">ИНН: 660609610617</p>
         </div>
       </footer>
