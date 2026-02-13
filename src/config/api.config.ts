@@ -17,6 +17,7 @@ export const API_CONFIG = {
   ENDPOINTS: {
     // Платежи (ЮKassa: создание платежа, подписка выдаётся только после успешной оплаты)
     PAYMENTS_CREATE: '/payments/create',
+    PAYMENTS_CONFIRM_RETURN: '/payments/confirm-return',
     PAYMENTS_PLANS: '/payments/plans',
     
     // Пользователи

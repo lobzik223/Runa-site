@@ -59,6 +59,13 @@ const PremiumView: React.FC = () => {
         throw new Error(data.message || 'Ошибка при создании платежа');
       }
 
+      if (data.confirmationUrl && data.paymentId) {
+        try {
+          sessionStorage.setItem('runa_payment_id', data.paymentId);
+        } catch (_) {}
+        window.location.href = data.confirmationUrl;
+        return;
+      }
       if (data.confirmationUrl) {
         window.location.href = data.confirmationUrl;
         return;
