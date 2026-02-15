@@ -142,10 +142,25 @@
   padding: 36px 40px;
   max-width: 520px;
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 92vh;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  padding-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.modal-content .modal-actions {
+  margin-top: auto;
+  flex-shrink: 0;
+  padding-bottom: 4px;
 }
 
 .modal-title {
@@ -235,7 +250,7 @@
 .modal-actions {
   display: flex;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .btn-modal-cancel {
@@ -530,16 +545,17 @@
 /* Модалка на мобильных */
 @media (max-width: 600px) {
   .modal-overlay {
-    padding: 12px;
-    align-items: flex-start;
-    padding-top: max(12px, env(safe-area-inset-top));
+    align-items: center;
+    justify-content: center;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px;
   }
 
   .modal-content {
     max-width: 100%;
-    padding: 24px 20px 28px;
+    padding: 24px 20px 32px;
     border-radius: 20px;
-    max-height: 85vh;
+    max-height: 90vh;
+    min-height: min(560px, 85vh);
   }
 
   .modal-title {

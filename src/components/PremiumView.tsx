@@ -319,14 +319,15 @@ const PremiumView: React.FC = () => {
       {showForm && (
         <div className="modal-overlay" onClick={() => !loading && setShowForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title">Данные для подписки</h3>
-            <p className="modal-subtitle">
-              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Укажите Email и ID аккаунта из профиля в приложении.
-            </p>
-            <div className="modal-rules">
-              <strong>Правила оплаты:</strong> Вводите точные данные — почту и ID, указанные в вашем профиле в приложении. Если указать их с ошибкой, платёж может уйти на другой аккаунт, и вернуть средства будет сложно.
-            </div>
-            <div className="modal-fields">
+            <div className="modal-body">
+              <h3 className="modal-title">Данные для подписки</h3>
+              <p className="modal-subtitle">
+                Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Укажите Email и ID аккаунта из профиля в приложении.
+              </p>
+              <div className="modal-rules">
+                <strong>Правила оплаты:</strong> Вводите точные данные — почту и ID, указанные в вашем профиле в приложении. Если указать их с ошибкой, платёж может уйти на другой аккаунт, и вернуть средства будет сложно.
+              </div>
+              <div className="modal-fields">
               <input
                 type="email"
                 placeholder="Email *"
@@ -355,11 +356,12 @@ const PremiumView: React.FC = () => {
                 disabled={loading}
               />
             </div>
-            {error && (
-              <p className="modal-error" role="alert">
-                {error}
-              </p>
-            )}
+              {error && (
+                <p className="modal-error" role="alert">
+                  {error}
+                </p>
+              )}
+            </div>
             <div className="modal-actions">
               <button type="button" className="btn-modal-cancel" onClick={() => !loading && setShowForm(false)} disabled={loading}>
                 Отмена
