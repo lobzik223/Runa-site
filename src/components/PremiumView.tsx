@@ -253,7 +253,7 @@ const PremiumView: React.FC = () => {
               Все платежи защищены и обрабатываются безопасно через ЮKassa.
             </p>
             <button
-              className="btn-subscribe"
+              className="btn-subscribe btn-subscribe-desktop"
               onClick={handleOpenForm}
               disabled={loading}
             >
@@ -266,6 +266,18 @@ const PremiumView: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Только для мобилки: прилипающая кнопка внизу, появляется при выборе тарифа */}
+      <div className={`mobile-cta-bar ${selectedPlan ? 'mobile-cta-bar-visible' : ''}`} aria-hidden="true">
+        <button
+          type="button"
+          className="btn-subscribe btn-subscribe-mobile"
+          onClick={handleOpenForm}
+          disabled={loading}
+        >
+          Оформить подписку
+        </button>
+      </div>
 
       {/* Модальное окно: Email/ID и переход к оплате в ЮKassa */}
       {showForm && (

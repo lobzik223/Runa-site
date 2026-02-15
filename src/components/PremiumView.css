@@ -478,6 +478,55 @@
   margin: 0 auto;
 }
 
+/* Нижняя прилипающая панель только для мобилки — скрыта на ПК */
+.mobile-cta-bar {
+  display: none;
+}
+
+/* Мобильная прилипающая кнопка «Оформить подписку» */
+@media (max-width: 768px) {
+  .mobile-cta-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    background: rgba(118, 137, 147, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.35s ease, opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .mobile-cta-bar-visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .btn-subscribe-mobile {
+    width: 100%;
+    max-width: 320px;
+    padding: 16px 24px;
+    font-size: 1.05rem;
+    border-radius: 16px;
+    margin: 0;
+  }
+
+  .pricing-cta .btn-subscribe-desktop {
+    display: none;
+  }
+}
+
 /* Модалка на мобильных */
 @media (max-width: 600px) {
   .modal-overlay {
@@ -535,7 +584,7 @@
 /* Мобильная версия */
 @media (max-width: 768px) {
   .premium-content {
-    padding: 80px 4vw 40px;
+    padding: 80px 4vw 88px;
   }
   
   .pricing-header {
