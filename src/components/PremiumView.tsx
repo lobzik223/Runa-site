@@ -4,6 +4,40 @@ import logoImage from './images/runalogo.png';
 import { API_CONFIG } from '../config/api.config';
 import './PremiumView.css';
 
+/** Преобразует ответ API и исключения в понятное сообщение об ошибке на русском */
+function getPaymentErrorMessage(
+  response: Response | null,
+  data: { message?: string | string[] },
+  err: unknown
+): string {
+  if (response && !response.ok) {
+    const msg = data?.message;
+    const text = Array.isArray(msg) ? msg.join('. ') : (msg || '');
+    if (text) return text;
+    switch (response.status) {
+      case 400:
+        return 'Неверные данные. Проверьте Email или ID аккаунта и попробуйте снова.';
+      case 401:
+        return 'Ошибка доступа к серверу оплаты. Обратитесь в поддержку.';
+      case 404:
+        return 'Сервис оплаты временно недоступен. Попробуйте позже.';
+      case 429:
+        return 'Слишком много попыток. Подождите минуту и попробуйте снова.';
+      case 502:
+      case 503:
+        return 'Сервер временно недоступен. Попробуйте через несколько минут.';
+      default:
+        return `Ошибка сервера (${response.status}). Попробуйте позже или обратитесь в поддержку.`;
+    }
+  }
+  const message = err instanceof Error ? err.message : String(err);
+  if (/fetch|network|failed to fetch/i.test(message)) {
+    return 'Нет связи с сервером. Проверьте интернет и попробуйте снова.';
+  }
+  if (message && message !== 'Error') return message;
+  return 'Произошла ошибка. Попробуйте ещё раз или обратитесь в поддержку.';
+}
+
 const PremiumView: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>('6months');
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -25,9 +59,17 @@ const PremiumView: React.FC = () => {
   };
 
   const handlePayment = async () => {
-    const emailOrId = accountId.trim() || email.trim();
+    const trimmedEmail = email.trim();
+    const trimmedAccountId = accountId.trim();
+    const emailOrId = trimmedAccountId || trimmedEmail;
+
     if (!emailOrId) {
-      setError('Введите Email или ID аккаунта из приложения');
+      setError('Укажите Email или ID аккаунта из приложения. Без этого к оплате перейти нельзя.');
+      return;
+    }
+
+    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setError('Введите корректный адрес электронной почты.');
       return;
     }
 
@@ -56,7 +98,8 @@ const PremiumView: React.FC = () => {
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.message || 'Ошибка при создании платежа');
+        setError(getPaymentErrorMessage(response, data, null));
+        return;
       }
 
       if (data.confirmationUrl && data.paymentId) {
@@ -70,9 +113,9 @@ const PremiumView: React.FC = () => {
         window.location.href = data.confirmationUrl;
         return;
       }
-      throw new Error('Не получена ссылка на оплату');
-    } catch (err: any) {
-      setError(err.message || 'Произошла ошибка. Попробуйте позже.');
+      setError('Сервер не вернул ссылку на оплату. Попробуйте снова или обратитесь в поддержку.');
+    } catch (err) {
+      setError(getPaymentErrorMessage(null, {}, err));
     } finally {
       setLoading(false);
     }
@@ -201,7 +244,7 @@ const PremiumView: React.FC = () => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 className="modal-title">Данные для подписки</h3>
             <p className="modal-subtitle">
-              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Введите Email или ID аккаунта из приложения — подписка будет привязана после оплаты.
+              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Обязательно укажите Email или ID аккаунта из приложения — без этого к оплате не перейти.
             </p>
             <div className="modal-fields">
               <input
@@ -214,22 +257,28 @@ const PremiumView: React.FC = () => {
               />
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Email *"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setError(null); }}
                 className="modal-input"
                 disabled={loading}
+                aria-required="true"
               />
               <input
                 type="text"
-                placeholder="ID аккаунта (из профиля в приложении)"
+                placeholder="ID аккаунта из приложения *"
                 value={accountId}
-                onChange={(e) => setAccountId(e.target.value)}
+                onChange={(e) => { setAccountId(e.target.value); setError(null); }}
                 className="modal-input"
                 disabled={loading}
+                aria-required="true"
               />
             </div>
-            {error && <p className="modal-error">{error}</p>}
+            {error && (
+              <p className="modal-error" role="alert">
+                {error}
+              </p>
+            )}
             <div className="modal-actions">
               <button type="button" className="btn-modal-cancel" onClick={() => !loading && setShowForm(false)} disabled={loading}>
                 Отмена
