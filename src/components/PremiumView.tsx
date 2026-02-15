@@ -83,6 +83,16 @@ const PremiumView: React.FC = () => {
   };
 
   const handlePayment = async () => {
+    if (!selectedPlan) {
+      setError('Выберите тариф перед оплатой.');
+      return;
+    }
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    if (!origin) {
+      setError('Не удалось определить адрес возврата. Откройте страницу с сайта.');
+      return;
+    }
+
     const trimmedEmail = email.trim();
     const trimmedAccountId = accountId.trim();
     const emailOrId = trimmedAccountId || trimmedEmail;
@@ -126,7 +136,6 @@ const PremiumView: React.FC = () => {
     setError(null);
 
     try {
-      const origin = window.location.origin;
       const returnUrl = `${origin}/premium/success`;
       const cancelUrl = `${origin}/premium/cancel`;
 
