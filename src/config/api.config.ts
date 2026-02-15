@@ -19,6 +19,7 @@ export const API_CONFIG = {
     PAYMENTS_CREATE: '/payments/create',
     PAYMENTS_CONFIRM_RETURN: '/payments/confirm-return',
     PAYMENTS_PLANS: '/payments/plans',
+    PAYMENTS_VERIFY_ACCOUNT: '/payments/verify-account',
     
     // Пользователи
     USERS: '/users',

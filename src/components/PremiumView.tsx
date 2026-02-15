@@ -13,6 +13,10 @@ function getPaymentErrorMessage(
   if (response && !response.ok) {
     const msg = data?.message;
     const text = Array.isArray(msg) ? msg.join('. ') : (msg || '');
+    const lower = (text || '').toLowerCase();
+    if (lower.includes('shopid') || lower.includes('secret key') || lower.includes('reissue')) {
+      return 'Оплата временно недоступна. Обратитесь в поддержку.';
+    }
     if (text) return text;
     switch (response.status) {
       case 400:
@@ -41,9 +45,9 @@ function getPaymentErrorMessage(
 const PremiumView: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>('6months');
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [accountId, setAccountId] = useState<string>('');
+  const [promoCode, setPromoCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -71,6 +75,31 @@ const PremiumView: React.FC = () => {
     if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       setError('Введите корректный адрес электронной почты.');
       return;
+    }
+
+    if (trimmedEmail && trimmedAccountId) {
+      setLoading(true);
+      setError(null);
+      try {
+        const verifyRes = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_VERIFY_ACCOUNT}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Runa-Site-Key': API_CONFIG.SITE_KEY,
+          },
+          body: JSON.stringify({ email: trimmedEmail, accountId: trimmedAccountId }),
+        });
+        const verifyData = await verifyRes.json().catch(() => ({}));
+        if (!verifyData.valid) {
+          setError(verifyData.message || 'Почта не совпадает с ID вашего аккаунта. Укажите данные из профиля в приложении.');
+          setLoading(false);
+          return;
+        }
+      } catch (_) {
+        setError('Не удалось проверить данные. Попробуйте снова.');
+        setLoading(false);
+        return;
+      }
     }
 
     setLoading(true);
@@ -244,17 +273,12 @@ const PremiumView: React.FC = () => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3 className="modal-title">Данные для подписки</h3>
             <p className="modal-subtitle">
-              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Обязательно укажите Email или ID аккаунта из приложения — без этого к оплате не перейти.
+              Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Укажите Email и ID аккаунта из профиля в приложении.
             </p>
+            <div className="modal-rules">
+              <strong>Правила оплаты:</strong> Вводите точные данные — почту и ID, указанные в вашем профиле в приложении. Если указать их с ошибкой, платёж может уйти на другой аккаунт, и вернуть средства будет сложно.
+            </div>
             <div className="modal-fields">
-              <input
-                type="text"
-                placeholder="Имя (необязательно)"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="modal-input"
-                disabled={loading}
-              />
               <input
                 type="email"
                 placeholder="Email *"
@@ -266,12 +290,21 @@ const PremiumView: React.FC = () => {
               />
               <input
                 type="text"
+                inputMode="numeric"
                 placeholder="ID аккаунта из приложения *"
                 value={accountId}
                 onChange={(e) => { setAccountId(e.target.value); setError(null); }}
                 className="modal-input"
                 disabled={loading}
                 aria-required="true"
+              />
+              <input
+                type="text"
+                placeholder="Промокод (необязательно)"
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+                className="modal-input modal-input-promo"
+                disabled={loading}
               />
             </div>
             {error && (
