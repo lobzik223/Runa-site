@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import logoImage from './images/runalogo.png';
 import { API_CONFIG } from '../config/api.config';
@@ -42,14 +42,33 @@ function getPaymentErrorMessage(
   return 'Произошла ошибка. Попробуйте ещё раз или обратитесь в поддержку.';
 }
 
+const MOBILE_BREAKPOINT = 768;
+
 const PremiumView: React.FC = () => {
-  const [selectedPlan, setSelectedPlan] = useState<string>('6months');
+  const [selectedPlan, setSelectedPlan] = useState<string>(() =>
+    typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT ? '' : '6months'
+  );
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT
+  );
   const [showForm, setShowForm] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [accountId, setAccountId] = useState<string>('');
   const [promoCode, setPromoCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  // При смене ширины: мобилка — сброс выбора, ПК — по умолчанию 6 месяцев
+  useEffect(() => {
+    const check = () => {
+      const m = window.innerWidth <= MOBILE_BREAKPOINT;
+      setIsMobile(m);
+      if (m) setSelectedPlan('');
+      else setSelectedPlan((prev) => prev || '6months');
+    };
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const plans = [
     { id: '1month', duration: '1 месяц', price: '400', description: 'Месяц полного доступа' },
@@ -58,6 +77,7 @@ const PremiumView: React.FC = () => {
   ];
 
   const handleOpenForm = () => {
+    if (!selectedPlan) return;
     setError(null);
     setShowForm(true);
   };
@@ -201,16 +221,23 @@ const PremiumView: React.FC = () => {
                 <div
                   key={plan.id}
                   className={`plan-card ${plan.recommended ? 'plan-card-recommended' : ''} ${plan.best ? 'plan-card-best' : ''} ${selectedPlan === plan.id ? 'plan-card-selected' : ''}`}
-                  onClick={() => setSelectedPlan(plan.id)}
+                  onClick={() => {
+                    if (isMobile && selectedPlan === plan.id) {
+                      setSelectedPlan('');
+                    } else {
+                      setSelectedPlan(plan.id);
+                    }
+                  }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      setSelectedPlan(plan.id);
+                      if (isMobile && selectedPlan === plan.id) setSelectedPlan('');
+                      else setSelectedPlan(plan.id);
                     }
                   }}
-                  aria-label={`Выбрать тариф ${plan.duration}`}
+                  aria-label={selectedPlan === plan.id && isMobile ? `Снять выбор тарифа ${plan.duration}` : `Выбрать тариф ${plan.duration}`}
                 >
                   {plan.badge && (
                     <div className="plan-badge">{plan.badge}</div>
