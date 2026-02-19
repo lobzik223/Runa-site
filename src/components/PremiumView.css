@@ -232,6 +232,36 @@
   opacity: 0.9;
 }
 
+.modal-promo-hint {
+  font-size: 0.9rem;
+  color: #253550;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.modal-promo-ok {
+  font-size: 0.9rem;
+  color: #2e7d32;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.modal-promo-err {
+  font-size: 0.9rem;
+  color: #c62828;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.modal-amount {
+  font-size: 1rem;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: rgba(205, 111, 66, 0.12);
+  border-radius: 10px;
+  color: #253550;
+}
+
 .modal-error {
   color: #c62828;
   font-size: 0.9rem;

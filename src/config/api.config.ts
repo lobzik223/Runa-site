@@ -20,6 +20,7 @@ export const API_CONFIG = {
     PAYMENTS_CONFIRM_RETURN: '/payments/confirm-return',
     PAYMENTS_PLANS: '/payments/plans',
     PAYMENTS_VERIFY_ACCOUNT: '/payments/verify-account',
+    PAYMENTS_VALIDATE_PROMO: '/payments/validate-promo',
     
     // Пользователи
     USERS: '/users',

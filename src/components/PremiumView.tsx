@@ -57,6 +57,45 @@ const PremiumView: React.FC = () => {
   const [promoCode, setPromoCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [promoResult, setPromoResult] = useState<{
+    valid: boolean;
+    message?: string;
+    prices?: { '1month': number; '6months': number; '1year': number };
+  } | null>(null);
+  const [promoChecking, setPromoChecking] = useState<boolean>(false);
+
+  // Валидация промокода при вводе (с задержкой)
+  useEffect(() => {
+    const trimmed = promoCode.trim().toUpperCase();
+    if (!trimmed) {
+      setPromoResult(null);
+      return;
+    }
+    const t = setTimeout(async () => {
+      setPromoChecking(true);
+      try {
+        const res = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PAYMENTS_VALIDATE_PROMO}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Runa-Site-Key': API_CONFIG.SITE_KEY,
+          },
+          body: JSON.stringify({ code: trimmed }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (data.valid && data.prices) {
+          setPromoResult({ valid: true, prices: data.prices });
+        } else {
+          setPromoResult({ valid: false, message: data.message || 'Промокод не найден или недействителен' });
+        }
+      } catch {
+        setPromoResult({ valid: false, message: 'Не удалось проверить промокод' });
+      } finally {
+        setPromoChecking(false);
+      }
+    }, 500);
+    return () => clearTimeout(t);
+  }, [promoCode]);
 
   // При смене ширины: мобилка — сброс выбора, ПК — по умолчанию 6 месяцев
   useEffect(() => {
@@ -150,6 +189,7 @@ const PremiumView: React.FC = () => {
           emailOrId,
           returnUrl,
           cancelUrl,
+          ...(promoCode.trim() ? { promoCode: promoCode.trim() } : {}),
         }),
       });
 
@@ -255,7 +295,14 @@ const PremiumView: React.FC = () => {
                     <span className="plan-duration">{plan.duration}</span>
                   </div>
                   <div className={`plan-price ${plan.recommended || plan.best ? 'plan-price-special' : ''}`}>
-                    {plan.price} ₽
+                    {(() => {
+                      const base = Number(plan.price) || 0;
+                      const discounted = promoResult?.valid && promoResult.prices
+                        ? promoResult.prices[plan.id as keyof typeof promoResult.prices]
+                        : null;
+                      const display = discounted != null ? Math.max(1, discounted) : base;
+                      return <>{display} ₽</>;
+                    })()}
                   </div>
                   <div className="plan-description">{plan.description}</div>
                   {selectedPlan === plan.id && (
@@ -324,6 +371,20 @@ const PremiumView: React.FC = () => {
               <p className="modal-subtitle">
                 Тариф: {plans.find((p) => p.id === selectedPlan)?.duration}. Укажите Email и ID аккаунта из профиля в приложении.
               </p>
+              {selectedPlan && (
+                <p className="modal-amount">
+                  <strong>К оплате:</strong>{' '}
+                  {(() => {
+                    const plan = plans.find((p) => p.id === selectedPlan);
+                    const base = plan ? Number(plan.price) : 0;
+                    const discounted = promoResult?.valid && promoResult.prices && plan
+                      ? promoResult.prices[plan.id as keyof typeof promoResult.prices]
+                      : null;
+                    const amount = discounted != null ? Math.max(1, discounted) : base;
+                    return <>{amount} ₽</>;
+                  })()}
+                </p>
+              )}
               <div className="modal-rules">
                 <strong>Правила оплаты:</strong> Вводите точные данные — почту и ID, указанные в вашем профиле в приложении. Если указать их с ошибкой, платёж может уйти на другой аккаунт, и вернуть средства будет сложно.
               </div>
@@ -351,10 +412,16 @@ const PremiumView: React.FC = () => {
                 type="text"
                 placeholder="Промокод (необязательно)"
                 value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
+                onChange={(e) => { setPromoCode(e.target.value); setError(null); }}
                 className="modal-input modal-input-promo"
                 disabled={loading}
               />
+              {promoChecking && <p className="modal-promo-hint">Проверка промокода...</p>}
+              {!promoChecking && promoResult && (
+                <p className={promoResult.valid ? 'modal-promo-ok' : 'modal-promo-err'} role="status">
+                  {promoResult.valid ? 'Промокод применён — цены обновлены' : promoResult.message}
+                </p>
+              )}
             </div>
               {error && (
                 <p className="modal-error" role="alert">
