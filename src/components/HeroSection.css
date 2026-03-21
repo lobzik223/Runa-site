@@ -748,10 +748,7 @@ video.hero-video::-webkit-media-controls-overlay-enclosure {
 /* Поддержка safe-area для iOS Safari */
 @supports (padding: max(0px)) {
   @media (max-width: 768px) {
-    .header {
-      padding-top: max(12px, env(safe-area-inset-top));
-    }
-    
+    /* Шапка на мобильных без полосы — отступы задаёт только кнопка меню (Header.css) */
     .hero-section {
       padding-top: 0; /* Видео начинается с самого верха на мобильной версии */
     }

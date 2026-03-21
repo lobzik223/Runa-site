@@ -57,6 +57,7 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const downloadWrapRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
@@ -70,9 +71,10 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
   // Закрытие меню при клике вне его
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        closeMenu();
-      }
+      const t = event.target as Node;
+      if (menuRef.current?.contains(t)) return;
+      if (menuButtonRef.current?.contains(t)) return;
+      closeMenu();
     };
 
     if (isMenuOpen) {
@@ -171,34 +173,14 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
           )}
         </div>
 
-        <div className="header-mobile-stores" aria-label="Скачать приложение">
-          <a
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="header-mobile-store-btn header-mobile-store-btn--apple"
-            title="Загрузите в App Store"
-          >
-            <AppleStoreIcon />
-            <span className="header-mobile-store-label">App Store</span>
-          </a>
-          <a
-            href={PLAY_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="header-mobile-store-btn header-mobile-store-btn--google"
-            title="Доступно в Google Play"
-          >
-            <GooglePlayIcon />
-            <span className="header-mobile-store-label">Google Play</span>
-          </a>
-        </div>
-        
-        {/* Гамбургер-меню для мобильной версии */}
+        {/* Гамбургер-меню для мобильной версии (на экране — только эта кнопка, без полосы шапки) */}
         <button 
+          ref={menuButtonRef}
+          type="button"
           className="header-menu-btn"
           onClick={toggleMenu}
-          aria-label="Открыть меню"
+          aria-expanded={isMenuOpen}
+          aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
         >
           <span className={`menu-line ${isMenuOpen ? 'menu-line-open' : ''}`}></span>
           <span className={`menu-line ${isMenuOpen ? 'menu-line-open' : ''}`}></span>
@@ -226,6 +208,9 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
           ref={menuRef}
           className={`mobile-menu ${isMenuOpen ? 'mobile-menu-open' : ''}`}
         >
+          <div className="mobile-menu-brand">
+            <img src={logoImage} alt="RUNA Finance" className="mobile-menu-logo" />
+          </div>
           <a href="/" className="mobile-nav-link" onClick={closeMenu}>Главная</a>
           <a href="/#about-runa" className="mobile-nav-link" onClick={closeMenu}>Что такое RUNA</a>
           <a href="/#problems" className="mobile-nav-link" onClick={closeMenu}>Проблемы и потери</a>

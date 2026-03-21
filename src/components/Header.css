@@ -88,9 +88,6 @@
   flex-shrink: 0;
 }
 
-.header-mobile-stores {
-  display: none;
-}
 
 .header-download-dropdown {
   position: absolute;
@@ -237,90 +234,42 @@
 }
 
 @media (max-width: 768px) {
+  /* Полоса шапки снаружи не показываем — только плавающая кнопка меню */
   .header {
-    padding: 12px 20px;
-    padding-top: calc(12px + env(safe-area-inset-top));
-    background: rgba(118, 137, 147, 0.35);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    pointer-events: none;
+    transition: none;
   }
 
-  /* Скрываем header на мобильной версии, когда пользователь еще не прокрутил мимо видео */
-  .header-hidden-mobile {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-100%);
-    pointer-events: none;
-  }
-  
-  /* Фон для области статус-бара на мобильных - такой же как шапка */
   .header::before {
-    height: env(safe-area-inset-top);
-    background: rgba(118, 137, 147, 0.35);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    display: none;
   }
-  
+
+  /* Кнопка меню должна быть доступна даже при классе header-hidden-mobile (над hero) */
+  .header.header-hidden-mobile {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
   .header-nav {
+    display: none;
+  }
+
+  .header-logo {
     display: none;
   }
 
   .logo-image {
     height: 20px;
   }
-  
+
   .header-download-wrap {
     display: none !important;
-  }
-
-  .header-mobile-stores {
-    display: flex !important;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-    margin-right: 10px;
-  }
-
-  .header-mobile-store-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-    border: 1px solid rgba(237, 229, 208, 0.35);
-  }
-
-  .header-mobile-store-btn--apple {
-    background: #0d0d0d;
-    color: #fff;
-  }
-
-  .header-mobile-store-btn--google {
-    background: #fff;
-    color: #202124;
-  }
-
-  .header-mobile-store-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .header-mobile-store-btn .store-badge-icon {
-    width: 22px;
-    height: 22px;
-  }
-
-  .header-mobile-store-label {
-    max-width: 62px;
-    line-height: 1.1;
   }
 
   .mobile-download-block {
@@ -347,20 +296,26 @@
     box-sizing: border-box;
   }
 
-  /* Гамбургер-меню */
+  /* Гамбургер — единственный видимый элемент, фиксирован у края экрана */
   .header-menu-btn {
-    display: flex !important; /* Показываем гамбургер-меню на мобильной версии */
+    display: flex !important;
     flex-direction: column;
     justify-content: space-between;
     width: 32px;
     height: 24px;
-    background: transparent;
-    border: none;
+    background: rgba(118, 137, 147, 0.55);
+    border: 1px solid rgba(237, 229, 208, 0.25);
+    border-radius: 10px;
     cursor: pointer;
-    padding: 0;
-    z-index: 1001;
-    position: relative;
+    padding: 10px 8px;
+    box-sizing: content-box;
+    z-index: 1002;
+    position: fixed;
+    top: calc(12px + env(safe-area-inset-top));
+    right: 16px;
     gap: 5px;
+    pointer-events: auto;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   }
 
   .menu-line {
@@ -384,6 +339,18 @@
     transform: rotate(-45deg) translate(8px, -8px);
   }
 
+  .mobile-menu-brand {
+    margin-bottom: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(237, 229, 208, 0.2);
+  }
+
+  .mobile-menu-logo {
+    height: 26px;
+    width: auto;
+    display: block;
+  }
+
   /* Выпадающее меню */
   .mobile-menu {
     position: fixed;
@@ -391,11 +358,12 @@
     right: -100%;
     width: 280px;
     height: 100vh;
+    height: 100dvh;
     background: rgba(118, 137, 147, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid rgba(237, 229, 208, 0.2);
-    padding: 80px 24px 24px;
+    padding: calc(20px + env(safe-area-inset-top)) 24px 24px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -403,6 +371,7 @@
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
+    pointer-events: auto;
   }
 
   .mobile-menu-open {
@@ -440,9 +409,11 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background: rgba(0, 0, 0, 0.4);
     z-index: 999;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
+    pointer-events: auto;
   }
 }
