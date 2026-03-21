@@ -2,13 +2,62 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Header.css';
 import logoImage from './images/runalogo.png';
 
+const APP_STORE_URL =
+  'https://apps.apple.com/ru/app/runa-finance/id6758866400';
+const PLAY_STORE_URL =
+  'https://play.google.com/store/apps/details?id=com.runafinance.app';
+
 interface HeaderProps {
   showOnMobile?: boolean;
 }
 
+const AppleStoreIcon = () => (
+  <svg
+    className="store-badge-icon store-badge-icon--apple"
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      fill="currentColor"
+      d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+    />
+  </svg>
+);
+
+const GooglePlayIcon = () => (
+  <svg
+    className="store-badge-icon store-badge-icon--google"
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      fill="#00D9FF"
+      d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5Z"
+    />
+    <path
+      fill="#00F076"
+      d="M3.84,2.15L13.69,12L24,6.5V4.5C24,3.67 23.33,3 22.5,3H5C4.31,3 3.7,3.4 3.4,4L3.84,2.15Z"
+    />
+    <path
+      fill="#FF3A44"
+      d="M3.84,21.85L13.69,12L24,17.5V19.5C24,20.33 23.33,21 22.5,21H5C4.31,21 3.7,20.6 3.4,20L3.84,21.85Z"
+    />
+    <path
+      fill="#FFD400"
+      d="M24,6.5L13.69,12L24,17.5V6.5Z"
+    />
+  </svg>
+);
+
 const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
+  const downloadWrapRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -35,6 +84,30 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        downloadWrapRef.current &&
+        !downloadWrapRef.current.contains(event.target as Node)
+      ) {
+        setIsDownloadOpen(false);
+      }
+    };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsDownloadOpen(false);
+      }
+    };
+    if (isDownloadOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isDownloadOpen]);
+
   return (
     <header className={`header ${!showOnMobile ? 'header-hidden-mobile' : ''}`}>
       <div className="header-container">
@@ -50,7 +123,76 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
           <a href="/premium" className="nav-link">Подписка</a>
         </nav>
         
-        <button className="header-download-btn">Скачать</button>
+        <div className="header-download-wrap" ref={downloadWrapRef}>
+          <button
+            type="button"
+            className="header-download-btn"
+            aria-expanded={isDownloadOpen}
+            aria-haspopup="true"
+            aria-controls="header-download-panel"
+            onClick={() => setIsDownloadOpen((v) => !v)}
+          >
+            Скачать
+          </button>
+          {isDownloadOpen && (
+            <div
+              id="header-download-panel"
+              className="header-download-dropdown"
+              role="region"
+              aria-label="Ссылки на магазины приложений"
+            >
+              <a
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="store-badge-link store-badge-link--apple"
+                onClick={() => setIsDownloadOpen(false)}
+              >
+                <AppleStoreIcon />
+                <span className="store-badge-text">
+                  <span className="store-badge-kicker">Загрузите в</span>
+                  <span className="store-badge-title">App Store</span>
+                </span>
+              </a>
+              <a
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="store-badge-link store-badge-link--google"
+                onClick={() => setIsDownloadOpen(false)}
+              >
+                <GooglePlayIcon />
+                <span className="store-badge-text">
+                  <span className="store-badge-kicker">Доступно в</span>
+                  <span className="store-badge-title">Google Play</span>
+                </span>
+              </a>
+            </div>
+          )}
+        </div>
+
+        <div className="header-mobile-stores" aria-label="Скачать приложение">
+          <a
+            href={APP_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-mobile-store-btn header-mobile-store-btn--apple"
+            title="Загрузите в App Store"
+          >
+            <AppleStoreIcon />
+            <span className="header-mobile-store-label">App Store</span>
+          </a>
+          <a
+            href={PLAY_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-mobile-store-btn header-mobile-store-btn--google"
+            title="Доступно в Google Play"
+          >
+            <GooglePlayIcon />
+            <span className="header-mobile-store-label">Google Play</span>
+          </a>
+        </div>
         
         {/* Гамбургер-меню для мобильной версии */}
         <button 
@@ -89,6 +231,35 @@ const Header: React.FC<HeaderProps> = ({ showOnMobile = true }) => {
           <a href="/#problems" className="mobile-nav-link" onClick={closeMenu}>Проблемы и потери</a>
           <a href="/#why-runa" className="mobile-nav-link" onClick={closeMenu}>Почему RUNA</a>
           <a href="/premium" className="mobile-nav-link" onClick={closeMenu}>Подписка</a>
+          <div className="mobile-download-block">
+            <p className="mobile-download-heading">Скачать приложение</p>
+            <a
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="store-badge-link store-badge-link--apple mobile-store-badge"
+              onClick={closeMenu}
+            >
+              <AppleStoreIcon />
+              <span className="store-badge-text">
+                <span className="store-badge-kicker">Загрузите в</span>
+                <span className="store-badge-title">App Store</span>
+              </span>
+            </a>
+            <a
+              href={PLAY_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="store-badge-link store-badge-link--google mobile-store-badge"
+              onClick={closeMenu}
+            >
+              <GooglePlayIcon />
+              <span className="store-badge-text">
+                <span className="store-badge-kicker">Доступно в</span>
+                <span className="store-badge-title">Google Play</span>
+              </span>
+            </a>
+          </div>
         </nav>
       </div>
     </header>

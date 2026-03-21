@@ -83,6 +83,118 @@
   text-decoration: none !important;
 }
 
+.header-download-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.header-mobile-stores {
+  display: none;
+}
+
+.header-download-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 268px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 253, 248, 0.98);
+  border: 1px solid rgba(122, 79, 67, 0.15);
+  border-radius: 14px;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  z-index: 1100;
+  animation: downloadPanelIn 0.22s ease-out;
+}
+
+@keyframes downloadPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.store-badge-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.store-badge-link--apple {
+  background: #0d0d0d;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.store-badge-link--apple:hover {
+  background: #1a1a1a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.store-badge-link--google {
+  background: #fff;
+  color: #202124;
+  border: 1px solid rgba(32, 33, 36, 0.12);
+}
+
+.store-badge-link--google:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.store-badge-icon {
+  flex-shrink: 0;
+}
+
+.store-badge-icon--apple {
+  color: #fff;
+}
+
+.store-badge-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.store-badge-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+
+.store-badge-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.store-badge-link--google .store-badge-kicker {
+  color: #5f6368;
+}
+
 .header-download-btn {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
@@ -158,8 +270,81 @@
     height: 20px;
   }
   
-  .header-download-btn {
-    display: none !important; /* Скрываем кнопку "Скачать" на мобильной версии */
+  .header-download-wrap {
+    display: none !important;
+  }
+
+  .header-mobile-stores {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .header-mobile-store-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    border: 1px solid rgba(237, 229, 208, 0.35);
+  }
+
+  .header-mobile-store-btn--apple {
+    background: #0d0d0d;
+    color: #fff;
+  }
+
+  .header-mobile-store-btn--google {
+    background: #fff;
+    color: #202124;
+  }
+
+  .header-mobile-store-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .header-mobile-store-btn .store-badge-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .header-mobile-store-label {
+    max-width: 62px;
+    line-height: 1.1;
+  }
+
+  .mobile-download-block {
+    margin-top: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(237, 229, 208, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobile-download-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(237, 229, 208, 0.75);
+    margin: 0;
+  }
+
+  .mobile-store-badge {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   /* Гамбургер-меню */
