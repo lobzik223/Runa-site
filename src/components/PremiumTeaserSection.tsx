@@ -44,7 +44,7 @@ export default function PremiumTeaserSection() {
         </ul>
         <div className="premium-teaser-actions">
           <a href="/premium" className="premium-teaser-btn">Выбрать тариф</a>
-          <p className="premium-teaser-note">от 400 ₽ / месяц · оплата через ЮKassa</p>
+          <p className="premium-teaser-note">от 350 ₽ / месяц · оплата через ЮKassa</p>
         </div>
       </div>
     </section>

@@ -123,9 +123,9 @@ const PremiumView: React.FC = () => {
   }, []);
 
   const plans = [
-    { id: '1month', duration: '1 месяц', price: '400', description: 'Месяц полного доступа' },
-    { id: '6months', duration: '6 месяцев', price: '1800', description: 'Экономия 600 ₽', badge: 'Лучший выбор', recommended: true },
-    { id: '1year', duration: '1 год', price: '2500', description: 'Экономия 2300 ₽', badge: 'Максимальная выгода', best: true }
+    { id: '1month', duration: '1 месяц', price: '350', description: 'Месяц полного доступа' },
+    { id: '6months', duration: '6 месяцев', price: '2000', description: 'Экономия 100 ₽', badge: 'Лучший выбор', recommended: true },
+    { id: '1year', duration: '1 год', price: '3000', description: 'Экономия 1200 ₽', badge: 'Максимальная выгода', best: true }
   ];
 
   const handleOpenForm = () => {
