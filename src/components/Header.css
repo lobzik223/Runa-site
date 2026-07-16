@@ -98,6 +98,11 @@
 
 .ios-header-logo {
   display: block;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
 .ios-header-nav {
@@ -201,8 +206,8 @@
   }
 
   .ios-header-logo {
-    width: 76px !important;
-    height: auto !important;
+    width: 34px !important;
+    height: 34px !important;
   }
 
   .ios-header-nav,

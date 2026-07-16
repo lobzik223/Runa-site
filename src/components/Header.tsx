@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Header.css';
-import RunaLogo from './RunaLogo';
 import StoreDownloadLink from './StoreDownloadLink';
 
 const NAV_ITEMS = [
@@ -138,11 +137,13 @@ const Header: React.FC<HeaderProps> = () => {
     <header className={`ios-header${light ? ' ios-header--light' : ''}`}>
       <div className="ios-header-pill">
         <a href="/" className="ios-header-brand" aria-label="RUNA Finance">
-          <RunaLogo
-            width={92}
-            height={23}
-            variant={light ? 'light' : 'header'}
+          <img
+            src="/logo-mark.png"
+            alt="RUNA Finance"
+            width={36}
+            height={36}
             className="ios-header-logo"
+            draggable={false}
           />
         </a>
 
