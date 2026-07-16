@@ -1,16 +1,28 @@
 .premium-view {
   width: 100%;
   min-height: 100vh;
-  background-color: #768993;
-  color: #253550;
+  background: linear-gradient(180deg, #eceff6 0%, #e9ebf4 50%, #e6e9f2 100%);
+  color: #12101c;
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   position: relative;
   overflow-x: hidden;
 }
 
+.premium-view::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 20% 20%, rgba(146, 169, 236, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 80% 80%, rgba(180, 175, 230, 0.1) 0%, transparent 72%);
+  pointer-events: none;
+}
+
 .premium-content {
-  padding: 100px 5vw 60px;
+  position: relative;
+  z-index: 1;
+  padding: 100px 5vw 48px;
   min-height: calc(100vh - 100px);
 }
 
@@ -25,44 +37,63 @@
   margin-bottom: 48px;
 }
 
-.pricing-header h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  font-size: clamp(2rem, 5vw, 3rem);
+.pricing-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
   margin-bottom: 20px;
-  color: #253550;
+}
+
+.pricing-brand-logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+.pricing-brand-suffix {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+  color: #12101c;
+  line-height: 1;
+}
+
+.pricing-runa-inline {
+  display: inline-block;
+  vertical-align: -0.12em;
+  margin: 0 1px;
 }
 
 .pricing-intro {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  font-size: 1.1rem;
+  font-weight: 400;
+  font-size: 1.05rem;
   line-height: 1.7;
-  color: #253550;
+  color: rgba(18, 16, 28, 0.62);
   max-width: 700px;
   margin: 0 auto;
 }
 
-.logo-u {
-  color: #253550;
-}
-
 .pricing-features {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 24px;
   padding: 32px;
   margin-bottom: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 8px 32px rgba(73, 90, 238, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .pricing-features h3 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  font-size: 1.5rem;
+  font-weight: 700;
+  font-size: 1.4rem;
   margin-bottom: 24px;
-  color: #253550;
+  color: #12101c;
   text-align: center;
 }
 
@@ -77,16 +108,16 @@
   align-items: flex-start;
   gap: 12px;
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  font-size: 1rem;
-  color: #253550;
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: rgba(18, 16, 28, 0.65);
   line-height: 1.6;
 }
 
 .feature-check {
-  font-weight: 600;
-  color: #CD6F42;
-  font-size: 1.2rem;
+  font-weight: 700;
+  color: #495aee;
+  font-size: 1.1rem;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -98,10 +129,10 @@
 
 .payment-methods h3 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  font-size: 1.5rem;
+  font-weight: 700;
+  font-size: 1.4rem;
   margin-bottom: 20px;
-  color: #253550;
+  color: #12101c;
 }
 
 .payment-icons {
@@ -112,16 +143,17 @@
 }
 
 .payment-icon {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 12px;
   padding: 12px 24px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
-  color: #253550;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  color: rgba(18, 16, 28, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(73, 90, 238, 0.06);
 }
 
 /* Модальное окно: данные для подписки + демо оплата */
@@ -137,15 +169,15 @@
 }
 
 .modal-content {
-  background: #768993;
+  background: rgba(255, 255, 255, 0.96);
   border-radius: 24px;
   padding: 36px 40px;
   max-width: 520px;
   width: 100%;
   max-height: 92vh;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 56px rgba(73, 90, 238, 0.14);
   padding-bottom: 28px;
   display: flex;
   flex-direction: column;
@@ -165,16 +197,16 @@
 
 .modal-title {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.5rem;
-  color: #253550;
+  color: #12101c;
   margin-bottom: 8px;
   text-align: center;
 }
 
 .modal-subtitle {
   font-size: 0.95rem;
-  color: #253550;
+  color: rgba(18, 16, 28, 0.62);
   margin-bottom: 16px;
   text-align: center;
   line-height: 1.5;
@@ -184,9 +216,9 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #253550;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(18, 16, 28, 0.65);
+  background: rgba(73, 90, 238, 0.06);
+  border: 1px solid rgba(73, 90, 238, 0.12);
   border-radius: 12px;
   padding: 14px 16px;
   margin-bottom: 20px;
@@ -209,9 +241,9 @@
   width: 100%;
   padding: 14px 18px;
   border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.2);
-  color: #253550;
+  border: 1px solid rgba(18, 16, 28, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  color: #12101c;
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   box-sizing: border-box;
@@ -219,13 +251,12 @@
 
 .modal-input:focus {
   outline: none;
-  border-color: #CD6F42;
-  background: rgba(255, 255, 255, 0.3);
+  border-color: #495aee;
+  background: #fff;
 }
 
 .modal-input::placeholder {
-  color: #253550;
-  opacity: 0.7;
+  color: rgba(18, 16, 28, 0.4);
 }
 
 .modal-input-promo {
@@ -234,7 +265,7 @@
 
 .modal-promo-hint {
   font-size: 0.9rem;
-  color: #253550;
+  color: rgba(18, 16, 28, 0.55);
   margin-top: 4px;
   margin-bottom: 0;
 }
@@ -257,9 +288,9 @@
   font-size: 1rem;
   margin: 0 0 12px;
   padding: 10px 12px;
-  background: rgba(205, 111, 66, 0.12);
+  background: rgba(73, 90, 238, 0.08);
   border-radius: 10px;
-  color: #253550;
+  color: #12101c;
 }
 
 .modal-error {
@@ -287,9 +318,9 @@
   flex: 1;
   padding: 14px 20px;
   border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(18, 16, 28, 0.14);
   background: transparent;
-  color: #253550;
+  color: #12101c;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -298,7 +329,7 @@
 }
 
 .btn-modal-cancel:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(18, 16, 28, 0.04);
 }
 
 .btn-modal-demo {
@@ -306,8 +337,8 @@
   padding: 14px 20px;
   border-radius: 12px;
   border: none;
-  background: #CD6F42;
-  color: #FFFFFF;
+  background: #12101c;
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -316,7 +347,7 @@
 }
 
 .btn-modal-demo:hover:not(:disabled) {
-  background: #b85d36;
+  background: #2a2838;
 }
 
 .btn-modal-demo:disabled,
@@ -331,10 +362,10 @@
 
 .pricing-plans h3 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  font-size: 1.5rem;
+  font-weight: 700;
+  font-size: 1.4rem;
   margin-bottom: 24px;
-  color: #253550;
+  color: #12101c;
   text-align: center;
 }
 
@@ -347,12 +378,13 @@
 }
 
 .plan-card {
-  background: rgba(255, 255, 255, 0.15); /* Светлый прозрачный фон вместо серого */
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 22px;
   padding: 24px;
-  border: 2px solid rgba(205, 111, 66, 0.3); /* Полупрозрачная оранжевая граница по умолчанию */
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 28px rgba(73, 90, 238, 0.06);
   text-align: center;
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
@@ -362,9 +394,9 @@
 
 .plan-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(205, 111, 66, 0.2);
-  border-color: rgba(205, 111, 66, 0.5);
-  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(73, 90, 238, 0.12);
+  border-color: rgba(73, 90, 238, 0.25);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .plan-card:active {
@@ -372,35 +404,27 @@
 }
 
 .plan-card-selected {
-  border: 2px solid #CD6F42 !important; /* Яркая оранжевая граница при выборе */
-  background: rgba(205, 111, 66, 0.25) !important; /* Оранжевый фон при выборе */
-  box-shadow: 0 8px 24px rgba(205, 111, 66, 0.4) !important;
+  border: 2px solid #495aee !important;
+  background: rgba(73, 90, 238, 0.1) !important;
+  box-shadow: 0 12px 32px rgba(73, 90, 238, 0.18) !important;
 }
 
 .plan-card-selected:hover {
-  border-color: #CD6F42 !important;
-  background: rgba(205, 111, 66, 0.3) !important; /* Более яркий оранжевый при наведении на выбранный */
-  box-shadow: 0 10px 28px rgba(205, 111, 66, 0.5) !important;
+  border-color: #495aee !important;
+  background: rgba(73, 90, 238, 0.14) !important;
+  box-shadow: 0 14px 36px rgba(73, 90, 238, 0.22) !important;
 }
 
-.plan-card-recommended {
-  background: rgba(255, 255, 255, 0.15); /* Светлый фон вместо серого */
-  border: 2px solid rgba(205, 111, 66, 0.3); /* Полупрозрачная граница по умолчанию */
-}
-
-.plan-card-recommended.plan-card-selected {
-  background: rgba(205, 111, 66, 0.25) !important; /* Оранжевый только при выборе */
-  border: 2px solid #CD6F42 !important;
-}
-
+.plan-card-recommended,
 .plan-card-best {
-  background: rgba(255, 255, 255, 0.15); /* Светлый фон вместо серого */
-  border: 2px solid rgba(205, 111, 66, 0.3); /* Полупрозрачная граница по умолчанию */
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
+.plan-card-recommended.plan-card-selected,
 .plan-card-best.plan-card-selected {
-  background: rgba(205, 111, 66, 0.25) !important; /* Оранжевый только при выборе */
-  border: 2px solid #CD6F42 !important;
+  background: rgba(73, 90, 238, 0.1) !important;
+  border: 2px solid #495aee !important;
 }
 
 .plan-badge {
@@ -408,8 +432,8 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: #CD6F42;
-  color: #FFFFFF;
+  background: #495aee;
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 0.75rem;
@@ -424,36 +448,36 @@
   margin-top: 0;
 }
 
-.plan-duration {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #253550;
-}
-
 .plan-card-best .plan-header,
 .plan-card-recommended .plan-header {
   margin-top: 8px;
 }
 
-.plan-price {
+.plan-duration {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
+  font-size: 1rem;
+  color: #12101c;
+}
+
+.plan-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
   font-size: 2rem;
-  color: #CD6F42; /* Оранжевый цвет для всех цен */
+  color: #495aee;
   margin-bottom: 12px;
 }
 
 .plan-price-special {
-  color: #CD6F42;
+  color: #495aee;
   font-size: 2.2rem;
 }
 
 .plan-description {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.9rem;
-  color: #253550;
+  color: rgba(18, 16, 28, 0.58);
   line-height: 1.5;
 }
 
@@ -484,40 +508,39 @@
 
 .pricing-note {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1rem;
-  color: #253550;
+  color: rgba(18, 16, 28, 0.62);
   margin-bottom: 24px;
   line-height: 1.6;
 }
 
 .btn-subscribe {
-  background: #253550;
-  color: #FFFFFF;
+  background: #12101c;
+  color: #fff;
   border: none;
-  border-radius: 24px;
+  border-radius: 999px;
   padding: 16px 48px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(37, 53, 80, 0.3);
+  box-shadow: 0 8px 24px rgba(18, 16, 28, 0.18);
   margin-bottom: 20px;
 }
 
 .btn-subscribe:hover {
-  background: #1a2d3f;
+  background: #2a2838;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 53, 80, 0.4);
+  box-shadow: 0 10px 28px rgba(18, 16, 28, 0.22);
 }
 
 .pricing-disclaimer {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.85rem;
-  color: #253550;
-  opacity: 0.7;
+  color: rgba(18, 16, 28, 0.48);
   line-height: 1.5;
   max-width: 600px;
   margin: 0 auto;
@@ -541,11 +564,11 @@
     z-index: 500;
     padding: 12px 16px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
-    background: rgba(118, 137, 147, 0.98);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+    border-top: 1px solid rgba(18, 16, 28, 0.08);
+    box-shadow: 0 -4px 24px rgba(73, 90, 238, 0.08);
     transform: translateY(100%);
     opacity: 0;
     visibility: hidden;
@@ -704,7 +727,7 @@
   }
   
   .plan-card:focus {
-    outline: 2px solid #CD6F42;
+    outline: 2px solid #495aee;
     outline-offset: 2px;
   }
   
@@ -751,153 +774,8 @@
   }
 }
 
-/* Стили футера для PremiumView */
-.site-footer {
-  margin-top: 40px;
-  padding: 48px 5vw 32px;
-  background: transparent;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.footer-grid h4,
-.footer-grid h5 {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #253550;
-}
-
-.footer-contacts {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.footer-contacts p {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #253550;
-  margin: 0;
-  line-height: 1.6;
-}
-
-.footer-label {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  color: #253550;
-}
-
-.footer-link {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #253550;
-  text-decoration: none;
-  transition: opacity 0.3s ease;
-}
-
-.footer-link:hover {
-  opacity: 0.7;
-  text-decoration: underline;
-}
-
-.footer-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 24px;
-}
-
-.footer-fio {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #253550;
-  font-size: 0.85rem;
-  margin: 0;
-  opacity: 0.8;
-}
-
-.footer-inn {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #253550;
-  font-size: 0.85rem;
-  margin: 0;
-  opacity: 0.8;
-}
-
-.footer-grid ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.footer-grid li {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #253550;
-}
-
-.footer-note {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #253550;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.logo-u {
-  color: #253550;
-}
-
-/* Мобильная версия футера */
-@media (max-width: 768px) {
-  .site-footer {
-    padding: 32px 4vw 24px;
-  }
-  
-  .footer-grid {
-    flex-direction: column;
-    gap: 24px;
-    margin-bottom: 32px;
-  }
-  
-  .footer-contacts {
-    gap: 12px;
-  }
-  
-  .footer-contacts p {
-    font-size: 0.95rem;
-  }
-  
-  .footer-bottom {
-    margin-top: 32px;
-    gap: 12px;
-  }
-  
-  .footer-note {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-  
-  .footer-fio {
-    font-size: 0.8rem;
-    text-align: center;
-  }
-  
-  .footer-inn {
-    font-size: 0.8rem;
-    text-align: center;
-  }
+.premium-view .site-footer {
+  position: relative;
+  z-index: 1;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
 }

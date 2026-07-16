@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import logoImage from './images/runalogo.png';
+import SiteFooter from './SiteFooter';
+import RunaLogo from './RunaLogo';
 import { API_CONFIG } from '../config/api.config';
 import './PremiumView.css';
 
@@ -43,6 +44,18 @@ function getPaymentErrorMessage(
 }
 
 const MOBILE_BREAKPOINT = 768;
+
+function PremiumRunaInline() {
+  return (
+    <RunaLogo
+      width={58}
+      height={14}
+      variant="header"
+      className="pricing-runa-inline"
+      aria-hidden
+    />
+  );
+}
 
 const PremiumView: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>(() =>
@@ -225,9 +238,12 @@ const PremiumView: React.FC = () => {
       <main className="premium-content">
         <div className="pricing-container">
           <div className="pricing-header">
-            <h2>R<span className="logo-u">U</span>NA Premium</h2>
+            <div className="pricing-brand">
+              <RunaLogo width={168} height={41} variant="header" className="pricing-brand-logo" />
+              <span className="pricing-brand-suffix">Premium</span>
+            </div>
             <p className="pricing-intro">
-              Выберите подписку R<span className="logo-u">U</span>NA Premium и получите полный контроль над вашими финансами.
+              Выберите подписку <PremiumRunaInline /> Premium и получите полный контроль над вашими финансами.
               Отслеживайте доходы и расходы, получайте персональные рекомендации от ИИ и принимайте обоснованные финансовые решения.
               Вы можете отменить подписку в любое время.
             </p>
@@ -332,7 +348,7 @@ const PremiumView: React.FC = () => {
 
           <div className="pricing-cta">
             <p className="pricing-note">
-              Здесь вы официально можете получить подписку R<span className="logo-u">U</span>NA Premium.
+              Здесь вы официально можете получить подписку <PremiumRunaInline /> Premium.
               Все платежи защищены и обрабатываются безопасно через ЮKassa.
             </p>
             <button
@@ -351,12 +367,15 @@ const PremiumView: React.FC = () => {
       </main>
 
       {/* Только для мобилки: прилипающая кнопка внизу, появляется при выборе тарифа */}
-      <div className={`mobile-cta-bar ${selectedPlan ? 'mobile-cta-bar-visible' : ''}`} aria-hidden="true">
+      <div
+        className={`mobile-cta-bar ${selectedPlan ? 'mobile-cta-bar-visible' : ''}`}
+        aria-hidden={!selectedPlan}
+      >
         <button
           type="button"
           className="btn-subscribe btn-subscribe-mobile"
           onClick={handleOpenForm}
-          disabled={loading}
+          disabled={loading || !selectedPlan}
         >
           Оформить подписку
         </button>
@@ -446,40 +465,7 @@ const PremiumView: React.FC = () => {
         </div>
       )}
 
-      <footer className="site-footer">
-        <div className="footer-grid">
-          <div>
-            <h4>Контакты</h4>
-            <div className="footer-contacts">
-              <p>
-                <span className="footer-label">Почта:</span>{' '}
-                <a href="mailto:runa.fintech@bk.ru" className="footer-link">runa.fintech@bk.ru</a>
-              </p>
-              <p>
-                <span className="footer-label">Telegram:</span>{' '}
-                <a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">@RUNAfinance</a>
-              </p>
-            </div>
-          </div>
-          <div className="footer-logo-container">
-            <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
-          </div>
-          <div>
-            <h5>Ссылки</h5>
-            <ul>
-              <li><a href="https://t.me/RUNAfinance" target="_blank" rel="noopener noreferrer" className="footer-link">Telegram</a></li>
-              <li><a href="mailto:runa.fintech@bk.ru" className="footer-link">Email</a></li>
-              <li><a href="/privacy" className="footer-link">Политика конфиденциальности</a></li>
-              <li><a href="/user-agreement" className="footer-link">Пользовательское соглашение</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p className="footer-note">© R<span className="logo-u">U</span>NA Finance — Ваша уверенность в деньгах</p>
-          <p className="footer-fio">Попков Фёдор Анатольевич</p>
-          <p className="footer-inn">ИНН: 660609610617</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Header';
-import logoImage from './images/runalogo.png';
+import RunaLogo from './RunaLogo';
 import { getLang, t } from '../i18n';
 import './PrivacyPolicyView.css';
 
@@ -123,7 +123,7 @@ const PrivacyPolicyView: React.FC = () => {
             </div>
           </div>
           <div className="footer-logo-container">
-            <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
+            <RunaLogo width={140} height={36} variant="footer" className="footer-logo" />
           </div>
           <div>
             <h5>{t('privacy.footerLinks')}</h5>

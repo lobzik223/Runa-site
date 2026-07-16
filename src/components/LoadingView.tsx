@@ -1,6 +1,6 @@
 import React from 'react';
 import './LoadingView.css';
-import logo from './images/runalogo.png';
+import RunaLogo from './RunaLogo';
 
 interface LoadingViewProps {
   isLoading: boolean;
@@ -12,15 +12,12 @@ const LoadingView: React.FC<LoadingViewProps> = ({ isLoading }) => {
   return (
     <div className="loading-view">
       <div className="loading-content">
-        <div className="loading-logo-container">
-          <img src={logo} alt="RUNA" className="loading-logo" />
-        </div>
+        <RunaLogo width={160} height={40} variant="light" className="loading-logo-svg" />
         <div className="loading-spinner">
-          <div className="spinner-ring"></div>
-          <div className="spinner-ring"></div>
-          <div className="spinner-ring"></div>
+          <div className="spinner-ring" />
+          <div className="spinner-ring" />
+          <div className="spinner-ring" />
         </div>
-        <p className="loading-text">Загрузка...</p>
       </div>
     </div>
   );

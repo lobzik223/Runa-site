@@ -21,6 +21,9 @@ export const API_CONFIG = {
     PAYMENTS_PLANS: '/payments/plans',
     PAYMENTS_VERIFY_ACCOUNT: '/payments/verify-account',
     PAYMENTS_VALIDATE_PROMO: '/payments/validate-promo',
+
+    // Поддержка (тикет с сайта)
+    SUPPORT_TICKET: '/support/ticket',
     
     // Пользователи
     USERS: '/users',

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Header';
-import logoImage from './images/runalogo.png';
+import RunaLogo from './RunaLogo';
 import './UserAgreementView.css';
 
 const UserAgreementView: React.FC = () => {
@@ -127,7 +127,7 @@ const UserAgreementView: React.FC = () => {
             </div>
           </div>
           <div className="footer-logo-container">
-            <img src={logoImage} alt="RUNA Finance" className="footer-logo" />
+            <RunaLogo width={140} height={36} variant="footer" className="footer-logo" />
           </div>
           <div>
             <h5>Ссылки</h5>

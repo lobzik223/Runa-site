@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
+import RunaLogo from './RunaLogo';
 import { API_CONFIG } from '../config/api.config';
 import './PremiumView.css';
 
@@ -71,7 +72,9 @@ const PremiumSuccessView: React.FC = () => {
             )}
             {status === 'granted' && (
               <p className="pricing-intro">
-                Подписка R<span className="logo-u">U</span>NA Premium активирована. Откройте приложение — статус «Премиум» уже действует.
+                Подписка{' '}
+                <RunaLogo width={58} height={14} variant="header" className="pricing-runa-inline" aria-hidden />
+                {' '}Premium активирована. Откройте приложение — статус «Премиум» уже действует.
               </p>
             )}
             {(status === 'not_granted' || status === 'error') && (

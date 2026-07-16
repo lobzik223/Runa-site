@@ -1,0 +1,116 @@
+.download-cta {
+  padding: 0 24px 40px;
+}
+
+.download-cta-card {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 40px 44px;
+  border-radius: 32px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 60px rgba(73, 90, 238, 0.1);
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.runa-section.is-visible .download-cta-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.download-cta-stores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.download-store-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  border-radius: 14px;
+  background: #12101c;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.download-store-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(18, 16, 28, 0.25);
+}
+
+.download-store-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.download-store-btn span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.download-store-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 300;
+  opacity: 0.85;
+}
+
+.download-store-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .download-cta {
+    padding: 0 16px 48px;
+  }
+
+  .download-cta-card {
+    padding: 28px 20px 24px;
+    border-radius: 22px;
+  }
+
+  .download-cta .runa-section-title {
+    font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+  }
+
+  .download-cta .runa-section-desc {
+    margin-bottom: 18px;
+  }
+
+  .download-cta-stores {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .download-store-btn {
+    justify-content: center;
+    min-height: 52px;
+    padding: 14px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .download-cta {
+    padding: 0 12px 40px;
+  }
+
+  .download-cta-card {
+    padding: 24px 16px 20px;
+  }
+}

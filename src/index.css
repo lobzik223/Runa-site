@@ -1,3 +1,5 @@
+@import './theme.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -16,44 +18,18 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  background-color: #768993;
+  background-color: #e9ebf3;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  color: #253550;
-}
-
-/* Фон для области статус-бара на мобильных */
-@supports (padding: env(safe-area-inset-top)) {
-  @media (max-width: 768px) {
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: env(safe-area-inset-top);
-      background: rgba(118, 137, 147, 0.65);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      z-index: 999;
-      pointer-events: none;
-    }
-  }
+  color: #12101c;
 }
 
 #root {
   width: 100%;
 }
 
-/* Обеспечение правильного отображения видео на всех устройствах */
-video {
-  display: block;
-  max-width: 100%;
-}
-
-/* Предотвращение ошибок загрузки при медленном соединении */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

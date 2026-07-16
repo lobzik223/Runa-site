@@ -1,0 +1,17 @@
+:root {
+  --runa-purple: #1f0280;
+  --runa-blue: #495aee;
+  --runa-blue-light: #92a9ec;
+  --runa-cream: #f4ecd7;
+  --runa-green: #3cbb75;
+  --runa-text-on-dark: #ffffff;
+  --runa-text-muted: rgba(255, 255, 255, 0.78);
+  --runa-text-card: #1a1a3e;
+  --runa-glass: rgba(220, 225, 244, 0.55);
+  --runa-glass-strong: rgba(252, 253, 255, 0.92);
+  --runa-glass-border: rgba(255, 255, 255, 0.48);
+  --runa-card-dark: rgba(14, 12, 54, 0.72);
+  --runa-gradient: linear-gradient(135deg, #92a9ec 0%, #495aee 45%, #1f0280 100%);
+  --runa-gradient-btn: linear-gradient(90deg, #495aee 0%, #1f0280 100%);
+  --runa-shadow: 0 8px 32px rgba(31, 2, 128, 0.35);
+}

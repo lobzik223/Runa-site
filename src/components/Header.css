@@ -1,419 +1,321 @@
-.header {
+/* iOS26 floating pill header — OPTICORE-style */
+
+.ios-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 20px 40px;
-  padding-top: calc(20px + env(safe-area-inset-top));
-  background: rgba(118, 137, 147, 0.4);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-/* Фон для области статус-бара на мобильных (время, Wi-Fi) */
-.header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: env(safe-area-inset-top);
-  background: rgba(118, 137, 147, 0.4);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  z-index: -1;
-}
-
-.header-container {
-  max-width: 1400px;
-  margin: 0 auto;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
+  justify-content: center;
+  padding: 14px 20px;
+  padding-top: calc(14px + env(safe-area-inset-top));
+  pointer-events: none;
 }
 
-.logo-image {
-  height: 28px;
-  width: auto;
-  transition: transform 0.3s ease;
-}
-
-.logo-image:hover {
-  transform: scale(1.05);
-}
-
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 32px; /* Нормальное расстояние между ссылками */
-}
-
-.nav-link {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  color: #EDE5D0 !important; /* Нормальный цвет текста - кремовый (белый) */
-  text-decoration: none !important; /* Убираем подчеркивания */
-  font-size: 15px;
-  padding: 6px 0;
-  position: relative;
-  transition: opacity 0.3s ease;
-  white-space: nowrap; /* Предотвращаем перенос текста */
-}
-
-/* Убираем все цветовые состояния ссылок - только белый цвет */
-.nav-link:link,
-.nav-link:visited,
-.nav-link:active,
-.nav-link:focus {
-  color: #EDE5D0 !important;
-  text-decoration: none !important;
-}
-
-.nav-link::after {
-  display: none !important; /* Убираем подчеркивание при hover */
-}
-
-.nav-link:hover {
-  color: #EDE5D0 !important;
-  opacity: 0.8; /* Легкое затемнение при hover */
-  text-decoration: none !important;
-}
-
-.header-download-wrap {
-  position: relative;
-  flex-shrink: 0;
-}
-
-
-.header-download-dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  min-width: 268px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: rgba(255, 253, 248, 0.98);
-  border: 1px solid rgba(122, 79, 67, 0.15);
-  border-radius: 14px;
+.ios-header--light .ios-header-pill {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(31, 2, 128, 0.12);
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.18),
-    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
-  z-index: 1100;
-  animation: downloadPanelIn 0.22s ease-out;
+    0 8px 28px rgba(31, 2, 128, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-@keyframes downloadPanelIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.ios-header--light .ios-nav-link {
+  color: rgba(26, 26, 62, 0.62);
 }
 
-.store-badge-link {
+.ios-header--light .ios-nav-link:hover,
+.ios-header--light .ios-nav-link--active {
+  color: #1a1a3e;
+}
+
+.ios-header--light .ios-header-cta {
+  color: #1f0280;
+  border-color: rgba(31, 2, 128, 0.35);
+}
+
+.ios-header--light .ios-header-cta:hover {
+  background: rgba(73, 90, 238, 0.08);
+  border-color: rgba(31, 2, 128, 0.55);
+}
+
+.ios-header--light .ios-header-burger {
+  background: rgba(31, 2, 128, 0.06);
+}
+
+.ios-header--light .ios-header-burger span {
+  background: #1f0280;
+}
+
+.ios-header--light .ios-mobile-menu {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(31, 2, 128, 0.1);
+  box-shadow: 0 16px 48px rgba(31, 2, 128, 0.14);
+}
+
+.ios-header--light .ios-mobile-link {
+  color: rgba(26, 26, 62, 0.78);
+}
+
+.ios-header--light .ios-mobile-link:hover,
+.ios-header--light .ios-mobile-link--active {
+  background: rgba(73, 90, 238, 0.08);
+  color: #1a1a3e;
+}
+
+.ios-header--light .ios-mobile-cta {
+  color: #fff;
+  background: #1f0280;
+  border-color: #1f0280;
+}
+
+.ios-header-pill {
+  pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  text-decoration: none;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  gap: 6px;
+  width: max-content;
+  max-width: min(960px, calc(100vw - 40px));
+  padding: 9px 14px 9px 20px;
+  border-radius: 999px;
+  background: rgba(18, 16, 28, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
 }
 
-.store-badge-link--apple {
-  background: #0d0d0d;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.store-badge-link--apple:hover {
-  background: #1a1a1a;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
-.store-badge-link--google {
-  background: #fff;
-  color: #202124;
-  border: 1px solid rgba(32, 33, 36, 0.12);
-}
-
-.store-badge-link--google:hover {
-  background: #f8f9fa;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.store-badge-icon {
-  flex-shrink: 0;
-}
-
-.store-badge-icon--apple {
-  color: #fff;
-}
-
-.store-badge-text {
+.ios-header-brand {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 1.15;
-  text-align: left;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  margin-right: 6px;
 }
 
-.store-badge-kicker {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  opacity: 0.85;
-  text-transform: uppercase;
+.ios-header-logo {
+  display: block;
 }
 
-.store-badge-title {
+.ios-header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.ios-nav-link {
+  position: relative;
+  padding: 7px 11px;
   font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
   letter-spacing: 0.01em;
 }
 
-.store-badge-link--google .store-badge-kicker {
-  color: #5f6368;
+.ios-nav-link:hover {
+  color: rgba(255, 255, 255, 0.95);
 }
 
-.header-download-btn {
+.ios-nav-link--active {
+  color: #fff;
+  font-weight: 500;
+}
+
+.ios-nav-link--active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--runa-blue, #495aee);
+}
+
+.ios-header-cta {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: transparent;
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  padding: 8px 18px;
-  background: #FFFFFF;
-  color: #7A4F43;
-  border: none;
-  border-radius: 8px;
   font-size: 13px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.header-download-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.ios-header-cta:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
 }
 
-.header-download-btn:active {
-  transform: translateY(0);
-  background: rgba(255, 255, 255, 0.9);
-}
-
-/* Гамбургер-меню - скрыто на ПК */
-.header-menu-btn {
+.ios-header-burger {
   display: none;
 }
 
-/* Мобильное меню и оверлей - скрыты на ПК (показываются только на мобильной версии) */
-@media (min-width: 769px) {
-  .mobile-menu {
-    display: none !important;
+.ios-mobile-menu,
+.ios-mobile-overlay {
+  display: none;
+}
+
+@media (max-width: 960px) and (min-width: 769px) {
+  .ios-nav-link {
+    padding: 6px 8px;
+    font-size: 12px;
   }
 
-  .mobile-menu-overlay {
-    display: none !important;
+  .ios-header-cta {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
-  /* Полоса шапки снаружи не показываем — только плавающая кнопка меню */
-  .header {
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    pointer-events: none;
-    transition: none;
-  }
-
-  .header::before {
-    display: none;
-  }
-
-  /* Кнопка меню должна быть доступна даже при классе header-hidden-mobile (над hero) */
-  .header.header-hidden-mobile {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-  }
-
-  .header-nav {
-    display: none;
-  }
-
-  .header-logo {
-    display: none;
-  }
-
-  .logo-image {
-    height: 20px;
-  }
-
-  .header-download-wrap {
-    display: none !important;
-  }
-
-  .mobile-download-block {
-    margin-top: 12px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(237, 229, 208, 0.25);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .mobile-download-heading {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(237, 229, 208, 0.75);
-    margin: 0;
-  }
-
-  .mobile-store-badge {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Гамбургер — единственный видимый элемент, фиксирован у края экрана */
-  .header-menu-btn {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 32px;
-    height: 24px;
-    background: rgba(118, 137, 147, 0.55);
-    border: 1px solid rgba(237, 229, 208, 0.25);
-    border-radius: 10px;
-    cursor: pointer;
-    padding: 10px 8px;
-    box-sizing: content-box;
-    z-index: 1002;
-    position: fixed;
-    top: calc(12px + env(safe-area-inset-top));
-    right: 16px;
-    gap: 5px;
-    pointer-events: auto;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  }
-
-  .menu-line {
-    width: 100%;
-    height: 3px;
-    background: #EDE5D0;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-
-  .menu-line-open:nth-child(1) {
-    transform: rotate(45deg) translate(8px, 8px);
-  }
-
-  .menu-line-open:nth-child(2) {
-    opacity: 0;
-  }
-
-  .menu-line-open:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
-  }
-
-  .mobile-menu-brand {
-    margin-bottom: 8px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(237, 229, 208, 0.2);
-  }
-
-  .mobile-menu-logo {
-    height: 26px;
-    width: auto;
-    display: block;
-  }
-
-  /* Выпадающее меню */
-  .mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    height: 100dvh;
-    background: rgba(118, 137, 147, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-left: 1px solid rgba(237, 229, 208, 0.2);
-    padding: calc(20px + env(safe-area-inset-top)) 24px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    z-index: 1000;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-    overflow-y: auto;
-    pointer-events: auto;
-  }
-
-  .mobile-menu-open {
-    right: 0;
-  }
-
-  .mobile-nav-link {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
-    color: #EDE5D0;
-    text-decoration: none;
-    font-size: 1rem;
+  .ios-header {
     padding: 14px 16px;
-    border-radius: 12px;
-    background: rgba(237, 229, 208, 0.15);
-    border: 1px solid rgba(237, 229, 208, 0.3);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    padding-top: calc(14px + env(safe-area-inset-top));
+  }
+
+  .ios-header-pill {
+    padding: 8px 10px 8px 16px;
+    gap: 6px;
+  }
+
+  .ios-header-logo {
+    width: 76px !important;
+    height: auto !important;
+  }
+
+  .ios-header-nav,
+  .ios-header-cta {
+    display: none;
+  }
+
+  .ios-header-burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 40px;
+    height: 40px;
+    margin-left: auto;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+  }
+
+  .ios-header-burger span {
     display: block;
-    text-align: left;
+    width: 16px;
+    height: 1.5px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
   }
 
-  .mobile-nav-link:hover,
-  .mobile-nav-link:active {
-    background: rgba(237, 229, 208, 0.25);
-    transform: translateX(4px);
-    border-color: rgba(237, 229, 208, 0.5);
+  .ios-header-burger--open span:first-child {
+    transform: translateY(3.75px) rotate(45deg);
   }
 
-  /* Оверлей для закрытия меню */
-  .mobile-menu-overlay {
+  .ios-header-burger--open span:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  .ios-mobile-overlay {
+    display: block;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    background: rgba(0, 0, 0, 0.4);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 999;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
     pointer-events: auto;
+  }
+
+  .ios-mobile-menu {
+    display: flex;
+    position: fixed;
+    top: calc(72px + env(safe-area-inset-top));
+    left: 16px;
+    right: 16px;
+    padding: 12px;
+    border-radius: 24px;
+    background: rgba(18, 16, 28, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    flex-direction: column;
+    gap: 4px;
+    z-index: 1001;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    visibility: hidden;
+    transition:
+      opacity 0.22s ease,
+      transform 0.22s ease,
+      visibility 0.22s;
+  }
+
+  .ios-mobile-menu--open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+  }
+
+  .ios-mobile-link {
+    padding: 15px 16px;
+    min-height: 48px;
+    border-radius: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .ios-mobile-link:hover,
+  .ios-mobile-link--active {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+  }
+
+  .ios-mobile-cta {
+    margin-top: 6px;
+    padding: 14px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
   }
 }

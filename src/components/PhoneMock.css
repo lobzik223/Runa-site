@@ -1,0 +1,153 @@
+.phone-mock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+.phone-mock-bezel {
+  width: min(280px, 72vw);
+  aspect-ratio: 9 / 19;
+  border-radius: 36px;
+  padding: 10px;
+  background: linear-gradient(145deg, #2a2a3e, #0a0820);
+  box-shadow: var(--runa-shadow), inset 0 0 0 2px rgba(146, 169, 236, 0.25);
+}
+
+.phone-mock-notch {
+  width: 36%;
+  height: 22px;
+  margin: 0 auto 8px;
+  border-radius: 0 0 14px 14px;
+  background: #0a0820;
+}
+
+.phone-mock-screen {
+  height: calc(100% - 30px);
+  border-radius: 28px;
+  padding: 16px 14px;
+  background: linear-gradient(180deg, rgba(26, 14, 74, 0.95) 0%, rgba(10, 6, 32, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phone-mock-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--runa-cream);
+}
+
+.phone-mock-logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--runa-gradient);
+}
+
+.phone-mock-balance {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.phone-mock-sub {
+  font-size: 11px;
+  color: var(--runa-text-muted);
+}
+
+.phone-mock-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.phone-mock-chip {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.phone-mock-chip.income {
+  background: rgba(60, 187, 117, 0.2);
+  color: #7ae8a8;
+}
+
+.phone-mock-chip.expense {
+  background: rgba(224, 64, 96, 0.18);
+  color: #ff8fa8;
+}
+
+.phone-mock-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 8px;
+}
+
+.phone-mock-bar {
+  flex: 1;
+  border-radius: 6px 6px 2px 2px;
+  background: var(--runa-gradient);
+  opacity: 0.85;
+}
+
+.phone-mock-tabs {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--runa-text-muted);
+}
+
+.phone-mock-tabs .active {
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: rgba(73, 90, 238, 0.35);
+}
+
+.phone-mock-card-item {
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--runa-glass);
+  border: 1px solid var(--runa-glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--runa-text-card);
+}
+
+.phone-mock-card-item strong {
+  font-size: 14px;
+  color: var(--runa-purple);
+}
+
+.phone-mock-card-item strong.green {
+  color: var(--runa-green);
+}
+
+.phone-mock-progress {
+  height: 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  margin-top: auto;
+}
+
+.phone-mock-progress-fill {
+  width: 68%;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e8834a, #f4b942);
+}
